@@ -1,0 +1,24 @@
+{
+  "name": "mesh.scss",
+  "version": "0.0.1",
+  "description": "mesh.scss is a lightweight scss grid system",
+  "main": "mesh.scss",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SlimMarten/mesh.git"
+  },
+  "keywords": [
+    "scss",
+    "grid",
+    "layout"
+  ],
+  "author": "Marten Zander",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SlimMarten/mesh.scss/issues"
+  },
+  "homepage": "https://github.com/SlimMarten/mesh#readme"
+}
