@@ -1,0 +1,146 @@
+/*=====================================
+=            grid - system            =
+=====================================*/
+
+// viewport depending styles
+@each $breakpoint in xs, sm, md, lg, xlg{
+	@for $i from 1 to var(--columnCount) {
+		//base
+		.grid-column-$(breakpoint)-$(i){
+			@if $breakpoint == xs {
+				width: calc($i/(var(--columnCount)) * 100%);
+			}@else {
+				@media (min-width: $(breakpoint-$(breakpoint))px){
+					width: calc($i/(var(--columnCount)) * 100%);
+				}
+			}
+		}
+
+		// push
+		.grid-column-$(breakpoint)-push-$(i){
+			position: relative;
+
+			@if $breakpoint == xs {
+				left: calc($i/(var(--columnCount)) * 100%);
+			}@else {
+				@media (min-width: $(breakpoint-$(breakpoint))px){
+					left: calc($i/(var(--columnCount)) * 100%);
+				}
+			}
+		}
+
+		// pull
+		.grid-column-$(breakpoint)-pull-$(i){
+			position: relative;
+
+			@if $breakpoint == xs {
+				right: calc($i/(var(--columnCount)) * 100%);
+			}@else {
+				@media (min-width: $(breakpoint-$(breakpoint))px){
+					right: calc($i/(var(--columnCount)) * 100%);
+				}
+			}
+		}
+
+		// offset
+		.grid-column-$(breakpoint)-offset-$(i){
+			@if $breakpoint == xs {
+				margin-left: calc($i/(var(--columnCount)) * 100%);
+			}@else {
+				@media (min-width: $(breakpoint-$(breakpoint))px){
+					margin-left: calc($i/(var(--columnCount)) * 100%);
+				}
+			}
+		}
+	}
+}
+
+// base styles
+.grid{
+
+	// grid-column
+	&-column{
+		float: left;
+		padding: 0 calc($gutter-width/2)px 0 calc($gutter-width/2)px;
+		min-height: 1px;
+
+		^&-row--inline-block &{
+			float: none;
+			display: inline-block;
+		}
+
+		^&-row--flex &{
+			float: none;
+			display: flex;
+		}
+	}
+
+	// grid-row
+	&-row{
+		display: block;
+		margin: 0 calc($gutter-width/-2)px 0 calc($gutter-width/-2)px;
+		width: calc(100% + $(gutter-width)px);
+
+		&::after{
+			content:'';
+			display: block;
+			clear: both;
+		}
+
+		&--inline-block{
+			font-size: 0;
+		}
+
+		&--flex{
+			display: flex;
+		}
+	}
+
+	// grid-container
+	&-container{
+		margin: 0 auto;
+		max-width: calc($wrapper-size-xs + $gutter-width)px;
+		width: 100%;
+		padding: 0 calc($gutter-width/2)px 0 calc($gutter-width/2)px;
+
+		.is-desktop &{
+			max-width: calc($wrapper-size-sm + $gutter-width)px;
+		}
+
+		@media (min-width: $(breakpoint-sm)px){
+
+			.is-desktop &{
+				max-width: calc($wrapper-size-sm + $gutter-width)px;
+			}
+		}
+
+		@media (min-width: $(breakpoint-md)px){
+
+			.is-desktop &{
+				max-width: calc($wrapper-size-md + $gutter-width)px;
+			}
+		}
+
+		@media (min-width: $(breakpoint-lg)px){
+
+			.is-desktop &{
+				max-width: calc($wrapper-size-lg + $gutter-width)px;
+			}
+		}
+
+		@media (min-width: $(breakpoint-xlg)px){
+
+			.is-desktop &{
+				max-width: calc($wrapper-size-xlg + $gutter-width)px;
+			}
+		}
+
+		&::after{
+			content:'';
+			display: block;
+			clear: both;
+		}
+	}
+}
+
+/*=====  End of grid - system  ======*/
