@@ -2,7 +2,7 @@
   "name": "mesh.scss_examples",
   "version": "0.0.1",
   "description": "example environment for mesh.scss",
-  "main": "cfg/index.js",
+  "main": "index.js",
   "scripts": {
     "start": "postcss input/**/*.css --dir output --base input -w --config postcss.config.js"
   },
