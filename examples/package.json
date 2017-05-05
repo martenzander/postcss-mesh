@@ -1,7 +1,7 @@
 {
   "name": "mesh.scss_examples",
   "version": "0.0.1",
-  "description": "example environment for mesh.scss",
+  "description": "example environment for mesh.scss with a very basic postcss set up",
   "main": "index.js",
   "scripts": {
     "start": "postcss input/**/*.css --dir output --base input -w --config postcss.config.js"
@@ -9,7 +9,7 @@
   "author": "Marten Zander",
   "license": "MIT",
   "devDependencies": {
-    "postcss-cli": "^3.0.0",
+    "postcss-cli": "^3.2.0",
     "postcss-import": "^8.1.2",
     "postcss-load-config": "^1.2.0",
     "postcss-sassy-mixins": "^2.0.0",
