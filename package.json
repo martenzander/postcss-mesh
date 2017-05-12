@@ -4,7 +4,7 @@
   "description": "mesh.scss is a lightweight scss grid system",
   "main": "mesh.scss",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "postcss tests/input/**/*.css --dir tests/output --base tests/input -w --config postcss.config.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,13 @@
   ],
   "author": "Marten Zander",
   "license": "MIT",
+  "devDependencies": {
+    "postcss-cli": "^3.2.0",
+    "postcss-import": "^8.1.2",
+    "postcss-load-config": "^1.2.0",
+    "postcss-sassy-mixins": "^2.0.0",
+    "postcss-scss": "^0.1.7"
+  },
   "bugs": {
     "url": "https://github.com/SlimMarten/mesh.scss/issues"
   },
