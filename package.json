@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "mesh.scss is a lightweight scss grid system",
   "main": "mesh.scss",
+  "style": "mesh.scss",
+  "files": [
+    "mesh.css"
+  ],
   "scripts": {
     "test": "postcss tests/input/**/*.css --dir tests/output --base tests/input -w --config postcss.config.js"
   },
