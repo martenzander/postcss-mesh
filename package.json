@@ -1,35 +1,31 @@
 {
-  "name": "mesh.scss",
+  "name": "postcss-mesh",
   "version": "0.0.1",
-  "description": "mesh.scss is a lightweight scss grid system",
-  "main": "mesh.scss",
-  "style": "mesh.scss",
-  "files": [
-    "mesh.css"
-  ],
+  "description": "postcss-mesh is a work in progress grid system",
+  "main": "index.js",
   "scripts": {
-    "test": "postcss tests/input/**/*.css --dir tests/output --base tests/input -w --config postcss.config.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/SlimMarten/mesh.git"
+    "test": "eslint --config /Volumes/files/work/dev/_intern/postcss-random/src/.eslintrc.js index.js"
   },
   "keywords": [
     "scss",
     "grid",
     "layout"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SlimMarten/postcss-mesh.git"
+  },
   "author": "Marten Zander",
   "license": "MIT",
   "devDependencies": {
-    "postcss-cli": "^3.2.0",
-    "postcss-import": "^8.1.2",
-    "postcss-load-config": "^1.2.0",
-    "postcss-sassy-mixins": "^2.0.0",
-    "postcss-scss": "^0.1.7"
+    "eslint": "^3.8.1",
+    "eslint-config-standard": "^6.2.0",
+    "eslint-plugin-promise": "^3.3.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "postcss": "^6.0.8"
   },
   "bugs": {
-    "url": "https://github.com/SlimMarten/mesh.scss/issues"
+    "url": "https://github.com/SlimMarten/postcss-mesh.scss/issues"
   },
-  "homepage": "https://github.com/SlimMarten/mesh#readme"
+  "homepage": "https://github.com/SlimMarten/postcss-mesh#readme"
 }
