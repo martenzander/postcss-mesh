@@ -1,4 +1,4 @@
 node_modules/
 *.log
-package-lock.json
+*.json
 .DS_Store
