@@ -1,2 +1,2 @@
-# mesh.scss
+# postcss-mesh
 > yet another grid system in progress
