@@ -228,18 +228,29 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 		// generate rules for .mesh-column
 		function getMeshColumnRules(){
 			var rules = [];
-			var meshColumnRule = postcss.rule();
-				 meshColumnRule.selector = `[class*="mesh-column"]`;
+			var meshColumnBaseRule = postcss.rule();
+				 meshColumnBaseRule.selector = `[class*="mesh-column"]`;
 			var displayType = mergedSettings.display;
 			var columns = mergedSettings.columns;
 			var gutterSize = parseInt(mergedSettings['gutter'].substring(0,mergedSettings['gutter'].length - 1));
+			var columnSingleWidth = 100/columns;
 
 			// set display
-			meshColumnRule.append(postcss.decl({prop:'display', value: `${displayType}`}));
+			meshColumnBaseRule.append(postcss.decl({prop:'display', value: `${displayType}`}));
 			// set padding
-			meshColumnRule.append(postcss.decl({prop:'padding', value: `0 ${gutterSize/2}px`}));
+			meshColumnBaseRule.append(postcss.decl({prop:'padding', value: `0 ${gutterSize/2}px`}));
 
-			rules.push(meshColumnRule);
+			for(var i = 0; i < columns; i++){
+
+				var meshColumnDefaultRule = postcss.rule();
+				meshColumnDefaultRule.selector = `.mesh-column-${i+1}`;
+				// set width
+				meshColumnDefaultRule.append(postcss.decl({prop:'width',value: `${columnSingleWidth * (i+1)}%`}));
+
+				rules.push(meshColumnDefaultRule);
+			}
+
+			rules.push(meshColumnBaseRule);
 
 			for (var key in mergedSettings.sortedViewports){
 				var currentViewport = mergedSettings.sortedViewports[key];
@@ -260,7 +271,7 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 
 				atRule.append(meshColumnRule);
 
-				var columnSingleWidth = 100/columns;
+				columnSingleWidth = 100/columns;
 
 				for(var i = 0; i < columns; i++){
 
