@@ -1,4 +1,10 @@
 var postcss = require( 'postcss' );
+var meta = require('./package.json');
+var name = meta.name;
+var version = meta.version;
+var author = meta.author;
+var license = meta.license;
+
 module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 
 	return function ( input ) {
@@ -41,8 +47,8 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 		var inlineSettings = {};
 
 		// final grid settings
-		var mergedSettings = {};
-		mergedSettings.sortedViewports = {};
+		var mergedDefaultSettings = {};
+		mergedDefaultSettings.sortedViewports = {};
 
 		// viewport order reference
 		var tempSortedViewports = [];
@@ -61,18 +67,22 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 
 		// retrieve css inline settings
 		function getInlineSettings(){
-			inlineSettings.viewports = {};
 
 			input.walkAtRules( function ( rule ) {
-				// return if at-rule does not match 'mesh-settings'
-				if(!/^mesh-settings/.test(rule.name)) return;
+				// return if at-rule does not match 'mesh-grid-'
+				if(!/^mesh-grid-/.test(rule.name)) return;
+				var gridName = rule.name.split('-')[rule.name.split('-').length - 1];
+				inlineSettings[gridName] = {};
+				inlineSettings[gridName].name = gridName;
+				inlineSettings[gridName].viewports = {};
+
 				rule.walkDecls( function ( decl ) {
 					if(!/^mesh-viewport-/.test(decl.parent.name)){
-						inlineSettings[decl.prop] = decl.value;
+						inlineSettings[gridName][decl.prop] = decl.value;
 					}else{
 						var viewport = decl.parent.name.split('-')[decl.parent.name.split('-').length - 1];
-						inlineSettings.viewports[viewport] = inlineSettings.viewports[viewport] || {};
-						inlineSettings.viewports[viewport][decl.prop] = decl.value;
+						inlineSettings[gridName].viewports[viewport] = inlineSettings[gridName].viewports[viewport] || {};
+						inlineSettings[gridName].viewports[viewport][decl.prop] = decl.value;
 					}
 				});
 				// remove inline at-rules
@@ -83,37 +93,37 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 		}
 
 		// merge all setting inputs to final grid settings
-		function mergeFinalSettings(){
+		function mergeDefaultSettings(){
 			inlineSettings = getInlineSettings();
 
 			// merge settings
 			for( var key in defaultSettings){
 				var curDefaultProperty = defaultSettings[key];
 				var curConfigProperty = configSettings[key];
-				var curInlineProperty = inlineSettings[key];
+				var curInlineProperty = inlineSettings.default[key];
 
-				mergedSettings[key] = curDefaultProperty;
-				if( curConfigProperty !== undefined ) mergedSettings[key] = curConfigProperty;
-				if( curInlineProperty !== undefined ) mergedSettings[key] = curInlineProperty;
+				mergedDefaultSettings[key] = curDefaultProperty;
+				if( curConfigProperty !== undefined ) mergedDefaultSettings[key] = curConfigProperty;
+				if( curInlineProperty !== undefined ) mergedDefaultSettings[key] = curInlineProperty;
 			}
 
 			// sort viewports
-			for (var key in mergedSettings.viewports){
-				var currentViewport = mergedSettings.viewports[key];
+			for (var key in mergedDefaultSettings.viewports){
+				var currentViewport = mergedDefaultSettings.viewports[key];
 				var currentBreakpoint = currentViewport.viewport;
 					 currentBreakpoint = parseInt(currentBreakpoint.substring(0, currentBreakpoint.length - 2));
 				tempSortedViewports.push(currentBreakpoint);
 			}
 
-			tempSortedViewports = mergedSettings.mobileFirst === 'true' ? tempSortedViewports.sort(function(a, b){return a - b}) : tempSortedViewports.sort(function(a, b){return b - a});
+			tempSortedViewports = mergedDefaultSettings.mobileFirst === 'true' ? tempSortedViewports.sort(function(a, b){return a - b}) : tempSortedViewports.sort(function(a, b){return b - a});
 
 			for (var i = 0; i < tempSortedViewports.length; i++){
 				var breakpoint = tempSortedViewports[i];
 
 				var relatedViewport = {};
 
-				for(var key in mergedSettings.viewports){
-					var currentSetting = mergedSettings.viewports[key];
+				for(var key in mergedDefaultSettings.viewports){
+					var currentSetting = mergedDefaultSettings.viewports[key];
 					var currentViewport = currentSetting.viewport;
 					var currentBreakpoint = parseInt(currentViewport.substring(0,currentViewport.length - 2));
 
@@ -121,18 +131,20 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 						relatedViewport = currentSetting
 						relatedViewport.name = key;
 
-						mergedSettings.sortedViewports[key] = relatedViewport;
+						mergedDefaultSettings.sortedViewports[key] = relatedViewport;
 					};
 				}
 			}
 
+			console.log(mergedDefaultSettings);
+
 			// set queryCondition based on mobile first property
-			queryCondition = mergedSettings.mobileFirst === 'true' ? 'min-width' : 'max-width';
+			queryCondition = mergedDefaultSettings.mobileFirst === 'true' ? 'min-width' : 'max-width';
 		}
 
 		function getDisplaySettings(){
-			var displayProperty = mergedSettings.display === 'float' ? 'float' : 'display';
-			var displayValue = mergedSettings.display === 'float' ? 'left' : mergedSettings.display;
+			var displayProperty = mergedDefaultSettings.display === 'float' ? 'float' : 'display';
+			var displayValue = mergedDefaultSettings.display === 'float' ? 'left' : mergedDefaultSettings.display;
 
 			return {property : displayProperty, value : displayValue};
 		}
@@ -148,9 +160,9 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 			// set margin
 			meshContainerRules.append(postcss.decl({prop:'margin', value: '0 auto'}));
 			// set max-width
-			mergedSettings['containerWidth'] == 'fluid' ? meshContainerRules.append(postcss.decl({prop:'max-width', value: '100%'})) : meshContainerRules.append(postcss.decl({prop:'max-width', value: mergedSettings['width']}));
+			mergedDefaultSettings['containerWidth'] == 'fluid' ? meshContainerRules.append(postcss.decl({prop:'max-width', value: '100%'})) : meshContainerRules.append(postcss.decl({prop:'max-width', value: mergedDefaultSettings['width']}));
 			// set padding
-			var gutterSize = parseInt(mergedSettings['gutter'].substring(0,mergedSettings['gutter'].length - 1));
+			var gutterSize = parseInt(mergedDefaultSettings['gutter'].substring(0,mergedDefaultSettings['gutter'].length - 1));
 			meshContainerRules.append(postcss.decl({prop:'padding',value: `0 ${gutterSize/2}px` }));
 			// set position
 			meshContainerRules.append(postcss.decl({prop:'position',value:'relative'}));
@@ -159,8 +171,8 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 
 			rules.push(meshContainerRules);
 
-			for (var key in mergedSettings.sortedViewports){
-				var currentViewport = mergedSettings.sortedViewports[key];
+			for (var key in mergedDefaultSettings.sortedViewports){
+				var currentViewport = mergedDefaultSettings.sortedViewports[key];
 				var breakpoint = currentViewport.viewport;
 				var maxWidth = currentViewport.containerWidth;
 				var atRule = postcss.atRule();
@@ -201,7 +213,7 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 			meshVoidAfterRule.append(postcss.decl({prop:'display', value: 'block'}));
 			meshVoidRule.append(postcss.decl({prop:'display', value: 'block'}));
 			// set margin
-			var gutterSize = parseInt(mergedSettings['gutter'].substring(0,mergedSettings['gutter'].length - 1));
+			var gutterSize = parseInt(mergedDefaultSettings['gutter'].substring(0,mergedDefaultSettings['gutter'].length - 1));
 			meshVoidRule.append(postcss.decl({prop:'margin', value: `0 -${gutterSize/2}px`}));
 			// set font-size
 			if( getDisplaySettings().value === 'inline-block' ) meshVoidRule.append(postcss.decl({prop:'font-size', value: '0'}));
@@ -209,8 +221,8 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 			if( getDisplaySettings().property === 'float' ) rules.push(meshVoidAfterRule);
 			rules.push(meshVoidRule);
 
-			for (var key in mergedSettings.sortedViewports){
-				var currentViewport = mergedSettings.sortedViewports[key];
+			for (var key in mergedDefaultSettings.sortedViewports){
+				var currentViewport = mergedDefaultSettings.sortedViewports[key];
 				var breakpoint = currentViewport.viewport;
 				var atRule = postcss.atRule();
 				atRule.name = `media (${queryCondition} : ${breakpoint})`;
@@ -243,8 +255,8 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 				 meshPushRule.selector = `[class*="mesh-push"]`;
 				 meshPullRule.selector = `[class*="mesh-pull"]`;
 				 meshColumnRule.selector = `[class*="mesh-column"]`;
-			var columns = mergedSettings.columns;
-			var gutterSize = parseInt(mergedSettings['gutter'].substring(0,mergedSettings['gutter'].length - 1));
+			var columns = mergedDefaultSettings.columns;
+			var gutterSize = parseInt(mergedDefaultSettings['gutter'].substring(0,mergedDefaultSettings['gutter'].length - 1));
 			var columnSingleWidth = 100/columns;
 
 
@@ -283,8 +295,8 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 				rules.push(meshOffsetRule, meshPushRule, meshPullRule, meshColumnRule);
 			}
 
-			for (var key in mergedSettings.sortedViewports){
-				var currentViewport = mergedSettings.sortedViewports[key];
+			for (var key in mergedDefaultSettings.sortedViewports){
+				var currentViewport = mergedDefaultSettings.sortedViewports[key];
 				var viewportName = currentViewport.name;
 				var breakpoint = currentViewport.viewport;
 				var atRule = postcss.atRule();
@@ -329,29 +341,13 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 			return rules;
 		}
 
-		function getIncludeRules(){
-			var rules = [];
-
-			var prototype = postcss.atRule();
-				 prototype.name = `mixin test`;
-
-			var content = postcss.atRule();
-				 content.name = `content`;
-
-			prototype.append(content);
-
-			return prototype;
-		}
-
 		// generate styles for base classes
 		function generateCSS(){
 			var licenseNotification = postcss.comment();
-			 	 licenseNotification.text = "! Grid generated with postcss-mesh v1.0.0 | MIT License | github.com/SlimMarten/postcss-mesh "
+			 	 licenseNotification.text = `! Grid generated using ${name} v${version} | ${license} License | ${author} | github.com/SlimMarten/postcss-mesh `;
 
 		 	// append licenseNotification
 			mesh.append(licenseNotification);
-			// append includes
-			mesh.append(getIncludeRules());
 			// append .mesh-container base styles
 			mesh.append(getMeshContainerRules());
 			// append .mesh-void base styles
@@ -364,7 +360,7 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 
 		// main init
 		function init(){
-			mergeFinalSettings();
+			mergeDefaultSettings();
 			generateCSS();
 		}
 
