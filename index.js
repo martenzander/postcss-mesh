@@ -12,46 +12,8 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 		=            constants and variables            =
 		===============================================*/
 
-		// default settings
-		var defaultSettings = {
-			gutter: '30px',
-			display: 'inline-block',
-			columns: '12',
-			containerWidth: 'fluid',
-			mobileFirst : true,
-
-			viewports:{
-				xlg: {
-					containerWidth: '1440px',
-					viewport: '1560px',
-				},
-				lg: {
-					containerWidth: '1140px',
-					viewport: '1200px',
-				},
-				md: {
-					containerWidth: '930px',
-					viewport: '1024px',
-				},
-				sm: {
-					containerWidth: '510px',
-					viewport: '768px',
-				},
-			},
-		};
-
-		// postcss.config.js settings
-		var configSettings = options || {};
-
 		// inline css settings
 		var inlineSettings = {};
-
-		// final grid settings
-		var mergedDefaultSettings = {};
-		mergedDefaultSettings.sortedViewports = {};
-
-		// viewport order reference
-		var tempSortedViewports = [];
 
 		// generated CSS
 		var mesh = postcss.root();
@@ -89,80 +51,68 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 				rule.remove();
 			});
 
-			return inlineSettings;
-		}
-
-		// merge all setting inputs to final grid settings
-		function mergeDefaultSettings(){
-			inlineSettings = getInlineSettings();
-
-			// merge settings
-			for( var key in defaultSettings){
-				var curDefaultProperty = defaultSettings[key];
-				var curConfigProperty = configSettings[key];
-				var curInlineProperty = inlineSettings.default[key];
-
-				mergedDefaultSettings[key] = curDefaultProperty;
-				if( curConfigProperty !== undefined ) mergedDefaultSettings[key] = curConfigProperty;
-				if( curInlineProperty !== undefined ) mergedDefaultSettings[key] = curInlineProperty;
-			}
 
 			// sort viewports
-			for (var key in mergedDefaultSettings.viewports){
-				var currentViewport = mergedDefaultSettings.viewports[key];
-				var currentBreakpoint = currentViewport.viewport;
-					 currentBreakpoint = parseInt(currentBreakpoint.substring(0, currentBreakpoint.length - 2));
-				tempSortedViewports.push(currentBreakpoint);
-			}
+			for (var n in inlineSettings){
+				var currentGrid = inlineSettings[n];
+					 currentGrid.sortedViewports = {};
+				var tempSortedViewports = [];
 
-			tempSortedViewports = mergedDefaultSettings.mobileFirst === 'true' ? tempSortedViewports.sort(function(a, b){return a - b}) : tempSortedViewports.sort(function(a, b){return b - a});
+				for (var i in currentGrid.viewports){
+					var currentViewport = currentGrid.viewports[i];
+					var currentBreakpoint = currentViewport.viewport;
+						 currentBreakpoint = parseInt(currentBreakpoint.substring(0, currentBreakpoint.length - 2));
+					tempSortedViewports.push(currentBreakpoint);
+				}
 
-			for (var i = 0; i < tempSortedViewports.length; i++){
-				var breakpoint = tempSortedViewports[i];
+				tempSortedViewports = currentGrid.mobileFirst === 'true' ? tempSortedViewports.sort(function(a, b){return a - b}) : tempSortedViewports.sort(function(a, b){return b - a});
 
-				var relatedViewport = {};
+				for (var i = 0; i < tempSortedViewports.length; i++){
+					var breakpoint = tempSortedViewports[i];
 
-				for(var key in mergedDefaultSettings.viewports){
-					var currentSetting = mergedDefaultSettings.viewports[key];
-					var currentViewport = currentSetting.viewport;
-					var currentBreakpoint = parseInt(currentViewport.substring(0,currentViewport.length - 2));
+					var relatedViewport = {};
 
-					if(currentBreakpoint === breakpoint) {
-						relatedViewport = currentSetting
-						relatedViewport.name = key;
+					for(var j in currentGrid.viewports){
+						var currentSetting = currentGrid.viewports[j];
+						var currentViewport = currentSetting.viewport;
+						var currentBreakpoint = parseInt(currentViewport.substring(0,currentViewport.length - 2));
 
-						mergedDefaultSettings.sortedViewports[key] = relatedViewport;
-					};
+						if(currentBreakpoint === breakpoint) {
+							relatedViewport = currentSetting
+							relatedViewport.name = j;
+
+							currentGrid.sortedViewports[j] = relatedViewport;
+						};
+					}
 				}
 			}
 
-			console.log(mergedDefaultSettings);
-
-			// set queryCondition based on mobile first property
-			queryCondition = mergedDefaultSettings.mobileFirst === 'true' ? 'min-width' : 'max-width';
+			return inlineSettings;
 		}
 
-		function getDisplaySettings(){
-			var displayProperty = mergedDefaultSettings.display === 'float' ? 'float' : 'display';
-			var displayValue = mergedDefaultSettings.display === 'float' ? 'left' : mergedDefaultSettings.display;
+		// get display Type
+		function getDisplaySettings(grid){
+			var displayProperty = grid.display === 'float' ? 'float' : 'display';
+			var displayValue = grid.display === 'float' ? 'left' : grid.display;
 
 			return {property : displayProperty, value : displayValue};
 		}
 
 		// generate rules for .mesh-container
-		function getMeshContainerRules(){
+		function getMeshContainerRules(grid){
 			var rules = [];
 			var meshContainerRules = postcss.rule();
-			meshContainerRules.selector = '.mesh-container';
+			var name = grid.name;
+			meshContainerRules.selector = `.${name}-container`;
 
 			// set display
 			meshContainerRules.append(postcss.decl({prop:'display', value: 'block'}));
 			// set margin
 			meshContainerRules.append(postcss.decl({prop:'margin', value: '0 auto'}));
 			// set max-width
-			mergedDefaultSettings['containerWidth'] == 'fluid' ? meshContainerRules.append(postcss.decl({prop:'max-width', value: '100%'})) : meshContainerRules.append(postcss.decl({prop:'max-width', value: mergedDefaultSettings['width']}));
+			grid['containerWidth'] == 'fluid' ? meshContainerRules.append(postcss.decl({prop:'max-width', value: '100%'})) : meshContainerRules.append(postcss.decl({prop:'max-width', value: grid['containerWidth']}));
 			// set padding
-			var gutterSize = parseInt(mergedDefaultSettings['gutter'].substring(0,mergedDefaultSettings['gutter'].length - 1));
+			var gutterSize = parseInt(grid['gutter'].substring(0,grid['gutter'].length - 1));
 			meshContainerRules.append(postcss.decl({prop:'padding',value: `0 ${gutterSize/2}px` }));
 			// set position
 			meshContainerRules.append(postcss.decl({prop:'position',value:'relative'}));
@@ -171,8 +121,8 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 
 			rules.push(meshContainerRules);
 
-			for (var key in mergedDefaultSettings.sortedViewports){
-				var currentViewport = mergedDefaultSettings.sortedViewports[key];
+			for (var key in grid.sortedViewports){
+				var currentViewport = grid.sortedViewports[key];
 				var breakpoint = currentViewport.viewport;
 				var maxWidth = currentViewport.containerWidth;
 				var atRule = postcss.atRule();
@@ -182,7 +132,7 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 
 				// common viewport rules
 				var meshContainerRule = postcss.rule();
-					 meshContainerRule.selector = `.mesh-container`;
+					 meshContainerRule.selector = `.${name}-container`;
 
 				// set padding
 				meshContainerRule.append(postcss.decl({prop:'padding', value: `0 ${gutterSize/2}px`}));
@@ -198,12 +148,13 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 		}
 
 		// generate rules for .mesh-void
-		function getMeshVoidRules(){
+		function getMeshVoidRules(grid){
 			var rules = [];
+			var name = grid.name;
 			var meshVoidAfterRule = postcss.rule();
 			var meshVoidRule = postcss.rule();
-				 meshVoidAfterRule.selector = '.mesh-void:after';
-				 meshVoidRule.selector = '.mesh-void';
+				 meshVoidAfterRule.selector = `.${name}-void:after`;
+				 meshVoidRule.selector = `.${name}-void`;
 
 			// set content
 			meshVoidAfterRule.append(postcss.decl({prop:'content', value: ''}));
@@ -213,16 +164,16 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 			meshVoidAfterRule.append(postcss.decl({prop:'display', value: 'block'}));
 			meshVoidRule.append(postcss.decl({prop:'display', value: 'block'}));
 			// set margin
-			var gutterSize = parseInt(mergedDefaultSettings['gutter'].substring(0,mergedDefaultSettings['gutter'].length - 1));
+			var gutterSize = parseInt(grid['gutter'].substring(0,grid['gutter'].length - 1));
 			meshVoidRule.append(postcss.decl({prop:'margin', value: `0 -${gutterSize/2}px`}));
 			// set font-size
-			if( getDisplaySettings().value === 'inline-block' ) meshVoidRule.append(postcss.decl({prop:'font-size', value: '0'}));
+			if( getDisplaySettings(grid).value === 'inline-block' ) meshVoidRule.append(postcss.decl({prop:'font-size', value: '0'}));
 
-			if( getDisplaySettings().property === 'float' ) rules.push(meshVoidAfterRule);
+			if( getDisplaySettings(grid).property === 'float' ) rules.push(meshVoidAfterRule);
 			rules.push(meshVoidRule);
 
-			for (var key in mergedDefaultSettings.sortedViewports){
-				var currentViewport = mergedDefaultSettings.sortedViewports[key];
+			for (var key in grid.sortedViewports){
+				var currentViewport = grid.sortedViewports[key];
 				var breakpoint = currentViewport.viewport;
 				var atRule = postcss.atRule();
 				atRule.name = `media (${queryCondition} : ${breakpoint})`;
@@ -231,7 +182,7 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 
 				// common viewport rules
 				var meshVoidRule = postcss.rule();
-					 meshVoidRule.selector = `.mesh-void`;
+					 meshVoidRule.selector = `.${name}-void`;
 
 				// set margin
 				meshVoidRule.append(postcss.decl({prop:'margin', value: `0 -${gutterSize/2}px`}));
@@ -245,27 +196,28 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 		}
 
 		// generate rules for .mesh-column
-		function getMeshColumnRules(){
+		function getMeshColumnRules(grid){
 			var rules = [];
+			var name = grid.name;
 			var meshCenterRule = postcss.rule();
 			var meshPushRule = postcss.rule();
 			var meshPullRule = postcss.rule();
 			var meshColumnRule = postcss.rule();
-				 meshCenterRule.selector = `[class*="mesh-center"]`;
-				 meshPushRule.selector = `[class*="mesh-push"]`;
-				 meshPullRule.selector = `[class*="mesh-pull"]`;
-				 meshColumnRule.selector = `[class*="mesh-column"]`;
-			var columns = mergedDefaultSettings.columns;
-			var gutterSize = parseInt(mergedDefaultSettings['gutter'].substring(0,mergedDefaultSettings['gutter'].length - 1));
+				 meshCenterRule.selector = `[class*="${name}-center"]`;
+				 meshPushRule.selector = `[class*="${name}-push"]`;
+				 meshPullRule.selector = `[class*="${name}-pull"]`;
+				 meshColumnRule.selector = `[class*="${name}-column"]`;
+			var columns = grid.columns;
+			var gutterSize = parseInt(grid['gutter'].substring(0,grid['gutter'].length - 1));
 			var columnSingleWidth = 100/columns;
 
 
 			// set displayProperty
-			meshColumnRule.append(postcss.decl({prop: getDisplaySettings().property, value: getDisplaySettings().value}));
+			meshColumnRule.append(postcss.decl({prop: getDisplaySettings(grid).property, value: getDisplaySettings(grid).value}));
 			// set padding
 			meshColumnRule.append(postcss.decl({prop:'padding', value: `0 ${gutterSize/2}px`}));
 			// set vertical-align
-			if(getDisplaySettings().property === 'display') meshColumnRule.append(postcss.decl({prop:'vertical-align', value: `top`}));
+			if(getDisplaySettings(grid).property === 'display') meshColumnRule.append(postcss.decl({prop:'vertical-align', value: `top`}));
 			//set position
 			meshCenterRule.append(postcss.decl({prop:'position', value: `relative`}));
 			meshPushRule.append(postcss.decl({prop:'position', value: `relative`}));
@@ -282,10 +234,10 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 				var meshPushRule = postcss.rule();
 				var meshPullRule = postcss.rule();
 				var meshColumnRule = postcss.rule();
-				    meshOffsetRule.selector = `.mesh-offset-${i+1}`;
-				    meshPushRule.selector = `.mesh-push-${i+1}`;
-				    meshPullRule.selector = `.mesh-pull-${i+1}`;
-				    meshColumnRule.selector = `.mesh-column-${i+1}`;
+				    meshOffsetRule.selector = `.${name}-offset-${i+1}`;
+				    meshPushRule.selector = `.${name}-push-${i+1}`;
+				    meshPullRule.selector = `.${name}-pull-${i+1}`;
+				    meshColumnRule.selector = `.${name}-column-${i+1}`;
 				// set width
 				meshOffsetRule.append(postcss.decl({prop:'margin-left',value: `${columnSingleWidth * (i+1)}%`}));
 				meshPushRule.append(postcss.decl({prop:'left',value: `${columnSingleWidth * (i+1)}%`}));
@@ -295,8 +247,8 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 				rules.push(meshOffsetRule, meshPushRule, meshPullRule, meshColumnRule);
 			}
 
-			for (var key in mergedDefaultSettings.sortedViewports){
-				var currentViewport = mergedDefaultSettings.sortedViewports[key];
+			for (var key in grid.sortedViewports){
+				var currentViewport = grid.sortedViewports[key];
 				var viewportName = currentViewport.name;
 				var breakpoint = currentViewport.viewport;
 				var atRule = postcss.atRule();
@@ -308,7 +260,7 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 
 				// common viewport rules
 				var meshColumnRule = postcss.rule();
-					 meshColumnRule.selector = `[class*="mesh-column-${viewportName}"]`;
+					 meshColumnRule.selector = `[class*="${name}-column-${viewportName}"]`;
 
 				//set padding
 				meshColumnRule.append(postcss.decl({prop:'padding', value: `0 ${gutterSize/2}px`}));
@@ -321,10 +273,10 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 					var meshPushRule = postcss.rule();
 					var meshPullRule = postcss.rule();
 					var meshColumnRule = postcss.rule();
-					meshOffsetRule.selector = `[class*="mesh-offset-${viewportName}-${i+1}"]`;
-					meshPushRule.selector = `[class*="mesh-push-${viewportName}-${i+1}"]`;
-					meshPullRule.selector = `[class*="mesh-pull-${viewportName}-${i+1}"]`;
-					meshColumnRule.selector = `.mesh-column-${viewportName}-${i+1}`;
+					meshOffsetRule.selector = `[class*="${name}-offset-${viewportName}-${i+1}"]`;
+					meshPushRule.selector = `[class*="${name}-push-${viewportName}-${i+1}"]`;
+					meshPullRule.selector = `[class*="${name}-pull-${viewportName}-${i+1}"]`;
+					meshColumnRule.selector = `.${name}-column-${viewportName}-${i+1}`;
 
 					// set width/offset
 					meshOffsetRule.append(postcss.decl({prop:'margin-left',value: `${columnSingleWidth * (i+1)}%`}));
@@ -348,24 +300,32 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 
 		 	// append licenseNotification
 			mesh.append(licenseNotification);
-			// append .mesh-container base styles
-			mesh.append(getMeshContainerRules());
-			// append .mesh-void base styles
-			mesh.append(getMeshVoidRules());
-			// append .mesh-column base styles
-			mesh.append(getMeshColumnRules());
+
+			for(var key in inlineSettings){
+				var currentGrid = inlineSettings[key];
+				queryCondition = currentGrid.mobileFirst === 'true' ? 'min-width' : 'max-width';
+
+				if( JSON.parse(currentGrid.compileDefaultClasses) ){
+
+					// append .mesh-container base styles
+					mesh.append(getMeshContainerRules(currentGrid));
+					// append .mesh-void base styles
+					mesh.append(getMeshVoidRules(currentGrid));
+					// append .mesh-column base styles
+					mesh.append(getMeshColumnRules(currentGrid));
+				}
+			}
 
 			input.prepend(mesh);
 		}
 
 		// main init
 		function init(){
-			mergeDefaultSettings();
+			inlineSettings = getInlineSettings();
 			generateCSS();
 		}
 
 		/*=====  End of global function  ======*/
-
 		init();
 	};
 } );
