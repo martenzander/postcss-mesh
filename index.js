@@ -92,8 +92,8 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 
 		// get display Type
 		function getDisplaySettings(grid){
-			var displayProperty = grid.display === 'float' ? 'float' : 'display';
-			var displayValue = grid.display === 'float' ? 'left' : grid.display;
+			var displayProperty = grid.displayType === 'float' ? 'float' : 'display';
+			var displayValue = grid.displayType === 'float' ? 'left' : grid.displayType;
 
 			return {property : displayProperty, value : displayValue};
 		}
