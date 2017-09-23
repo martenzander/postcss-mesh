@@ -132,7 +132,7 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 
 				// common viewport rules
 				var meshContainerRule = postcss.rule();
-					 meshContainerRule.selector = `.${name}-container`;
+					meshContainerRule.selector = `.${name}-container`;
 
 				// set padding
 				meshContainerRule.append(postcss.decl({prop:'padding', value: `0 ${gutterSize/2}px`}));
@@ -153,21 +153,26 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 			var name = grid.name;
 			var meshVoidAfterRule = postcss.rule();
 			var meshVoidRule = postcss.rule();
-				 meshVoidAfterRule.selector = `.${name}-void:after`;
-				 meshVoidRule.selector = `.${name}-void`;
+				meshVoidAfterRule.selector = `.${name}-void:after`;
+				meshVoidRule.selector = `.${name}-void`;
 
 			// set content
-			meshVoidAfterRule.append(postcss.decl({prop:'content', value: ''}));
+			meshVoidAfterRule.append(postcss.decl({prop:'content', value: `""` }));
 			// set clear
 			meshVoidAfterRule.append(postcss.decl({prop:'clear', value: 'both'}));
 			// set display
 			meshVoidAfterRule.append(postcss.decl({prop:'display', value: 'block'}));
-			meshVoidRule.append(postcss.decl({prop:'display', value: 'block'}));
+			if( getDisplaySettings(grid).value === 'flex' ){
+				meshVoidRule.append(postcss.decl({prop:'display', value: 'flex'}));
+			} else {
+				meshVoidRule.append(postcss.decl({prop:'display', value: 'block'}));
+			}
 			// set margin
 			var gutterSize = parseInt(grid['gutter'].substring(0,grid['gutter'].length - 1));
 			meshVoidRule.append(postcss.decl({prop:'margin', value: `0 -${gutterSize/2}px`}));
 			// set font-size
 			if( getDisplaySettings(grid).value === 'inline-block' ) meshVoidRule.append(postcss.decl({prop:'font-size', value: '0'}));
+			// set display
 
 			if( getDisplaySettings(grid).property === 'float' ) rules.push(meshVoidAfterRule);
 			rules.push(meshVoidRule);
@@ -203,21 +208,21 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 			var meshPushRule = postcss.rule();
 			var meshPullRule = postcss.rule();
 			var meshColumnRule = postcss.rule();
-				 meshCenterRule.selector = `[class*="${name}-center"]`;
-				 meshPushRule.selector = `[class*="${name}-push"]`;
-				 meshPullRule.selector = `[class*="${name}-pull"]`;
-				 meshColumnRule.selector = `[class*="${name}-column"]`;
-			var columns = grid.columns;
+				meshCenterRule.selector = `[class*="${name}-center"]`;
+				meshPushRule.selector = `[class*="${name}-push"]`;
+				meshPullRule.selector = `[class*="${name}-pull"]`;
+				meshColumnRule.selector = `[class*="${name}-column"]`;
+			var columns = grid.columnCount;
 			var gutterSize = parseInt(grid['gutter'].substring(0,grid['gutter'].length - 1));
 			var columnSingleWidth = 100/columns;
 
 
 			// set displayProperty
-			meshColumnRule.append(postcss.decl({prop: getDisplaySettings(grid).property, value: getDisplaySettings(grid).value}));
+			if( getDisplaySettings(grid).value !== 'flex' ) meshColumnRule.append(postcss.decl({prop: getDisplaySettings(grid).property, value: getDisplaySettings(grid).value}));
 			// set padding
 			meshColumnRule.append(postcss.decl({prop:'padding', value: `0 ${gutterSize/2}px`}));
 			// set vertical-align
-			if(getDisplaySettings(grid).property === 'display') meshColumnRule.append(postcss.decl({prop:'vertical-align', value: `top`}));
+			if(getDisplaySettings(grid).value === 'inline-block') meshColumnRule.append(postcss.decl({prop:'vertical-align', value: `top`}));
 			//set position
 			meshCenterRule.append(postcss.decl({prop:'position', value: `relative`}));
 			meshPushRule.append(postcss.decl({prop:'position', value: `relative`}));
@@ -227,6 +232,7 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 			// set transform
 			meshCenterRule.append(postcss.decl({prop:'transform', value: `translate3d(-50%,0,0)`}));
 
+			if( getDisplaySettings(grid).property === 'float' ) meshColumnRule.append(postcss.decl({prop:'min-height', value: `1px`}));
 			rules.push(meshCenterRule, meshPushRule, meshPullRule, meshColumnRule);
 
 			for(var i = 0; i < columns; i++){
