@@ -164,6 +164,7 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 			meshVoidAfterRule.append(postcss.decl({prop:'display', value: 'block'}));
 			if( getDisplaySettings(grid).value === 'flex' ){
 				meshVoidRule.append(postcss.decl({prop:'display', value: 'flex'}));
+				meshVoidRule.append(postcss.decl({prop:'flex-wrap', value: 'wrap'}));
 			} else {
 				meshVoidRule.append(postcss.decl({prop:'display', value: 'block'}));
 			}
