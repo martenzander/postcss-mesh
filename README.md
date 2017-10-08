@@ -16,6 +16,8 @@ I know there are a lot of different grid systems already out there and most of t
 $ npm i postcss-mesh -D
 ```
 
+___
+
 ## Grid Setup
 This is what a basic Grid Setup using Mesh looks like:
 
@@ -43,6 +45,8 @@ This is what a basic Grid Setup using Mesh looks like:
 }
 ```
 
+___
+
 ### @Rules
 
 ##### @mesh-grid-BASENAME
@@ -52,6 +56,8 @@ E.g. if you generate a grid using `@mesh-grid-myGrid{...}` the class of the cont
 ##### @mesh-viewport-VIEWPORTNAME
 initiates a new breakpoint where `VIEWPORTNAME` should be the name of the viewport.
 E.g. if you generate a grid using `@mesh-viewport-sm{...}` the class of a column for the specific breakpoint could look like this: `.myGrid-column-sm-12{...}`
+
+___
 
 ### Properties
 The mesh grid system is customizable via a bunch of different properties. **coulmnCount**, **coulmnJustify**, **coulmnAlign** and **gutter** can be overwritten for a specific viewport.
@@ -95,6 +101,8 @@ switches between "min-width" and "max-width" in media queries expressions // tru
 **viewport**<br>
 is the breakpoint width for a specific viewport // e.g. 768px
 
+___
+
 ### Usage
 mesh works like any other common grid system. See the code below for a simple example.
 
@@ -110,6 +118,7 @@ mesh works like any other common grid system. See the code below for a simple ex
     </div>
 </div>
 ```
+___
 
 ### Roadmap
 * set styles via includes so one does not have to use and compile the default classes
