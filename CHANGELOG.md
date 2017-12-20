@@ -1,3 +1,7 @@
+## **v0.0.4** *- 2017-12-20*
+
+* minor changes
+
 ## **v0.0.3** *- 2017-12-20*
 
 * seperate multi-word properties by '-'

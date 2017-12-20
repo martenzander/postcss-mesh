@@ -1,6 +1,6 @@
 {
   "name": "postcss-mesh",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "postcss-mesh is a work in progress grid system",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,9 @@
     "type": "git",
     "url": "git+https://github.com/SlimMarten/postcss-mesh.git"
   },
-  "author": "Marten Zander",
+  "author": {
+    "name": "Marten Zander"
+  },
   "license": "MIT",
   "devDependencies": {
     "eslint": "^3.8.1",

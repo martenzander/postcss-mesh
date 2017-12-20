@@ -2,7 +2,7 @@ var postcss = require( 'postcss' );
 var meta = require('./package.json');
 var name = meta.name;
 var version = meta.version;
-var author = meta.author;
+var author = meta.author.name;
 var license = meta.license;
 
 module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
@@ -92,7 +92,6 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 
 		// get display Type
 		function getDisplaySettings(grid){
-			console.log(grid);
 			var displayProperty = grid['display-type'] === 'float' ? 'float' : 'display';
 			var displayValue = grid['display-type'] === 'float' ? 'left' : grid['display-type'];
 
