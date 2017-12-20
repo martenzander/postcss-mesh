@@ -6,9 +6,9 @@
 > [PostCSS](https://github.com/postcss/postcss) plugin to generate a completeley customizable grid
 
 ## Why Mesh ?!
-I know there are a lot of different grid systems already out there and most of them are pretty good. But none of them is offering the whole bandwidth of possible options. E.g. I wanted to have the ability to switch between different `displayTypes` (float | inline-block | flex) as well as I wanted to be able to overwrite certain parameters like `gutter` or `columnCount` for specific viewports. That's how I came up with the idea to create my very own grid-system. Even though not every feature is fully supported yet, I thought I could share my work in progress. Another advantage of Mesh is that you are able to set as many different viewports and grids as you want and don't have to rely on a single config (e.g. how Bootstrap does).
+I know there are a lot of different grid systems already out there and most of them are pretty good. But none of them is offering the whole bandwidth of possible options. E.g. I wanted to have the ability to switch between different `display-types` (float | inline-block | flex) as well as I wanted to be able to overwrite certain parameters like `gutter` or `column-count` for specific viewports. That's how I came up with the idea to create my very own grid-system. Even though not every feature is fully supported yet, I thought I could share my work in progress. Another advantage of Mesh is that you are able to set as many different viewports and grids as you want and don't have to rely on a single config (e.g. how Bootstrap does).
 
-> Features that are not supported yet: **columnJustify**, **columnAlign**
+> Features that are not supported yet: **column-justify**, **column-align**
 
 ## Installation
 
@@ -23,16 +23,16 @@ This is what a basic Grid Setup using Mesh looks like:
 
 ```css
 @mesh-grid-BASENAME{
-	displayType: inline-block;
+	display-type: inline-block;
 	gutter: 30px;
-	columnCount: 12;
-	containerWidth: fluid;
-	compileDefaultClasses: true;
-	mobileFirst: true;
+	column-count: 12;
+	container-width: fluid;
+	compile-default-classes: true;
+	mobile-first: true;
 
 	@mesh-viewport-VIEWPORTNAME1 {
 		viewport: 1200px;
-		containerWidth: 1170px;
+		container-width: 1170px;
 	}
 
 	@mesh-viewport-VIEWPORTNAME2 {
@@ -61,41 +61,41 @@ ___
 
 ### Properties
 The mesh grid system is customizable via a bunch of different properties. **coulmnCount**, **coulmnJustify**, **coulmnAlign** and **gutter** can be overwritten for a specific viewport.
-> **NOTICE:** Not every property is supported by all displayTypes. See the table below for more information.
+> **NOTICE:** Not every property is supported by all display-types. See the table below for more information.
 
-| displayType         | float | inline-block | flex |
+| display-type         | float | inline-block | flex |
 |---------------------|-------|--------------|------|
 |      gutter         | yes   | yes          | yes  |
-| columnAlign         | -     | yes          | yes  |
-| columnCount         | yes   | yes          | yes  |
-| columnJustify       | -     | yes          | yes  |
-| containerWidth      | yes   | yes          | yes  |
-| compileDefaultClass | yes   | yes          | yes  |
-| mobileFirst         | yes   | yes          | yes  |
+| column-align         | -     | yes          | yes  |
+| column-count         | yes   | yes          | yes  |
+| column-justify       | -     | yes          | yes  |
+| container-width      | yes   | yes          | yes  |
+| compile-default-class | yes   | yes          | yes  |
+| mobile-first         | yes   | yes          | yes  |
 | viewport            | yes   | yes          | yes  |
 
-**displayType**<br>
+**display-type**<br>
 defines the grids display property // e.g. float | inline-block | flex
 
 **gutter**<br>
 sets space between columns // e.g. 30px
 
-**columnAlign** (not supported yet)<br>
+**column-align** (not supported yet)<br>
 defines the columns vertical-align property // e.g. top | middle | bottom
 
-**columnCount**<br>
+**column-count**<br>
 defines the amount of columns // e.g. 12
 
-**columnJustify** (not supported yet)<br>
+**column-justify** (not supported yet)<br>
 defines the horizontal justification of columns // e.g. left | center | right | justify
 
-**containerWidth**<br>
+**container-width**<br>
 defines the containers max-width property for current viewport // e.g. 1170px | fluid
 
-**compileDefaultClass**<br>
+**compile-default-class**<br>
 if set to true it compiles default classes // true | false
 
-**mobileFirst**<br>
+**mobile-first**<br>
 switches between "min-width" and "max-width" in media queries expressions // true | false
 
 **viewport**<br>
@@ -122,6 +122,6 @@ ___
 
 ### Roadmap
 * set styles via includes so one does not have to use and compile the default classes
-* columnJustify
-* columnAlign
-* displayType: **grid**
+* column-justify
+* column-align
+* display-type: **grid**

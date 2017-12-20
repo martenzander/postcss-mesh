@@ -65,7 +65,7 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 					tempSortedViewports.push(currentBreakpoint);
 				}
 
-				tempSortedViewports = currentGrid.mobileFirst === 'true' ? tempSortedViewports.sort(function(a, b){return a - b}) : tempSortedViewports.sort(function(a, b){return b - a});
+				tempSortedViewports = currentGrid['mobile-first'] === 'true' ? tempSortedViewports.sort(function(a, b){return a - b}) : tempSortedViewports.sort(function(a, b){return b - a});
 
 				for (var i = 0; i < tempSortedViewports.length; i++){
 					var breakpoint = tempSortedViewports[i];
@@ -92,8 +92,9 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 
 		// get display Type
 		function getDisplaySettings(grid){
-			var displayProperty = grid.displayType === 'float' ? 'float' : 'display';
-			var displayValue = grid.displayType === 'float' ? 'left' : grid.displayType;
+			console.log(grid);
+			var displayProperty = grid['display-type'] === 'float' ? 'float' : 'display';
+			var displayValue = grid['display-type'] === 'float' ? 'left' : grid['display-type'];
 
 			return {property : displayProperty, value : displayValue};
 		}
@@ -110,7 +111,7 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 			// set margin
 			meshContainerRules.append(postcss.decl({prop:'margin', value: '0 auto'}));
 			// set max-width
-			grid['containerWidth'] == 'fluid' ? meshContainerRules.append(postcss.decl({prop:'max-width', value: '100%'})) : meshContainerRules.append(postcss.decl({prop:'max-width', value: grid['containerWidth']}));
+			grid['container-width'] == 'fluid' ? meshContainerRules.append(postcss.decl({prop:'max-width', value: '100%'})) : meshContainerRules.append(postcss.decl({prop:'max-width', value: grid['container-width']}));
 			// set padding
 			var gutterSize = parseInt(grid['gutter'].substring(0,grid['gutter'].length - 1));
 			meshContainerRules.append(postcss.decl({prop:'padding',value: `0 ${gutterSize/2}px` }));
@@ -124,7 +125,7 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 			for (var key in grid.sortedViewports){
 				var currentViewport = grid.sortedViewports[key];
 				var breakpoint = currentViewport.viewport;
-				var maxWidth = currentViewport.containerWidth;
+				var maxWidth = currentViewport['container-width'];
 				var atRule = postcss.atRule();
 				atRule.name = `media (${queryCondition} : ${breakpoint})`;
 				// update properties
@@ -213,7 +214,7 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 				meshPushRule.selector = `[class*="${name}-push"]`;
 				meshPullRule.selector = `[class*="${name}-pull"]`;
 				meshColumnRule.selector = `[class*="${name}-column"]`;
-			var columns = grid.columnCount;
+			var columns = grid['column-count'];
 			var gutterSize = parseInt(grid['gutter'].substring(0,grid['gutter'].length - 1));
 			var columnSingleWidth = 100/columns;
 
@@ -310,9 +311,9 @@ module.exports = postcss.plugin( 'postcss-mesh', function ( options ) {
 
 			for(var key in inlineSettings){
 				var currentGrid = inlineSettings[key];
-				queryCondition = currentGrid.mobileFirst === 'true' ? 'min-width' : 'max-width';
+				queryCondition = currentGrid['mobile-first'] === 'true' ? 'min-width' : 'max-width';
 
-				if( JSON.parse(currentGrid.compileDefaultClasses) ){
+				if( JSON.parse(currentGrid['compile-default-classes']) ){
 
 					// append .mesh-container base styles
 					mesh.append(getMeshContainerRules(currentGrid));

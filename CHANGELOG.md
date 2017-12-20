@@ -1,3 +1,7 @@
+## **v0.0.3** *- 2017-12-20*
+
+* seperate multi-word properties by '-'
+
 ## **v0.0.2** *- 2017-10-08*
 
 * updated READE.md with basic documentation
