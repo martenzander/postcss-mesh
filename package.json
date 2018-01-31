@@ -1,6 +1,6 @@
 {
   "name": "postcss-mesh",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "postcss-mesh is a work in progress grid system",
   "main": "index.js",
   "scripts": {
