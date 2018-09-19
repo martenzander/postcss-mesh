@@ -325,38 +325,39 @@ module.exports = postcss.plugin("postcss-mesh", function(options) {
         );
       rules.push(meshCenterRule, meshPushRule, meshPullRule, meshColumnRule);
 
-      for (var i = 0; i < columns; i++) {
+      for (var i = 0; i <= columns; i++) {
         var meshOffsetRule = postcss.rule();
         var meshPushRule = postcss.rule();
         var meshPullRule = postcss.rule();
         var meshColumnRule = postcss.rule();
-        meshOffsetRule.selector = `.${name}-offset-${i + 1}`;
-        meshPushRule.selector = `.${name}-push-${i + 1}`;
-        meshPullRule.selector = `.${name}-pull-${i + 1}`;
-        meshColumnRule.selector = `.${name}-column-${i + 1}`;
+        var index = i;
+        meshOffsetRule.selector = `.${name}-offset-${index}`;
+        meshPushRule.selector = `.${name}-push-${index}`;
+        meshPullRule.selector = `.${name}-pull-${index}`;
+        meshColumnRule.selector = `.${name}-column-${index}`;
         // set width
         meshOffsetRule.append(
           postcss.decl({
             prop: "margin-left",
-            value: `${columnSingleWidth * (i + 1)}%`
+            value: `${columnSingleWidth * index}%`
           })
         );
         meshPushRule.append(
           postcss.decl({
             prop: "left",
-            value: `${columnSingleWidth * (i + 1)}%`
+            value: `${columnSingleWidth * index}%`
           })
         );
         meshPullRule.append(
           postcss.decl({
             prop: "right",
-            value: `${columnSingleWidth * (i + 1)}%`
+            value: `${columnSingleWidth * index}%`
           })
         );
         meshColumnRule.append(
           postcss.decl({
             prop: "width",
-            value: `${columnSingleWidth * (i + 1)}%`
+            value: `${columnSingleWidth * index}%`
           })
         );
 
@@ -392,42 +393,40 @@ module.exports = postcss.plugin("postcss-mesh", function(options) {
 
         atRule.append(meshColumnRule);
 
-        for (var i = 0; i < columns; i++) {
+        for (var i = 0; i <= columns; i++) {
           var meshOffsetRule = postcss.rule();
           var meshPushRule = postcss.rule();
           var meshPullRule = postcss.rule();
           var meshColumnRule = postcss.rule();
-          meshOffsetRule.selector = `[class*="${name}-offset-${viewportName}-${i +
-            1}"]`;
-          meshPushRule.selector = `[class*="${name}-push-${viewportName}-${i +
-            1}"]`;
-          meshPullRule.selector = `[class*="${name}-pull-${viewportName}-${i +
-            1}"]`;
-          meshColumnRule.selector = `.${name}-column-${viewportName}-${i + 1}`;
+          var index = i;
+          meshOffsetRule.selector = `[class*="${name}-offset-${viewportName}-${index}"]`;
+          meshPushRule.selector = `[class*="${name}-push-${viewportName}-${index}"]`;
+          meshPullRule.selector = `[class*="${name}-pull-${viewportName}-${index}"]`;
+          meshColumnRule.selector = `.${name}-column-${viewportName}-${index}`;
 
           // set width/offset
           meshOffsetRule.append(
             postcss.decl({
               prop: "margin-left",
-              value: `${columnSingleWidth * (i + 1)}%`
+              value: `${columnSingleWidth * index}%`
             })
           );
           meshPushRule.append(
             postcss.decl({
               prop: "left",
-              value: `${columnSingleWidth * (i + 1)}%`
+              value: `${columnSingleWidth * index}%`
             })
           );
           meshPullRule.append(
             postcss.decl({
               prop: "right",
-              value: `${columnSingleWidth * (i + 1)}%`
+              value: `${columnSingleWidth * index}%`
             })
           );
           meshColumnRule.append(
             postcss.decl({
               prop: "width",
-              value: `${columnSingleWidth * (i + 1)}%`
+              value: `${columnSingleWidth * index}%`
             })
           );
 
