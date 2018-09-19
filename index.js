@@ -29,9 +29,16 @@ module.exports = postcss.plugin("postcss-mesh", function(options) {
     // retrieve css inline settings
     function getInlineSettings() {
       input.walkAtRules(function(rule) {
-        // return if at-rule does not match 'mesh-grid-'
-        if (!/^mesh-grid-/.test(rule.name)) return;
-        var gridName = rule.name.split("-")[rule.name.split("-").length - 1];
+        // return if at-rule does not match 'mesh-grid'
+        if (!/^mesh-grid/.test(rule.name)) return;
+        var gridName = "mesh";
+
+        rule.walkDecls(function(decl) {
+          if (decl.prop === "name") {
+            gridName = decl.value;
+          }
+        });
+
         inlineSettings[gridName] = {};
         inlineSettings[gridName].name = gridName;
         inlineSettings[gridName].viewports = {};
