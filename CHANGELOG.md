@@ -1,6 +1,7 @@
 ## **v0.0.6** _- 2018-09-19_
 
 - You can now set the grid's name via the `name` property.
+- classes with suffix `-0` now exist so you can reset pulls, pushes and offsets.
 
 ## **v0.0.5** _- 2018-01-31_
 
