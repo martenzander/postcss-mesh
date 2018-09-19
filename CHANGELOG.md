@@ -1,6 +1,6 @@
 ## **v0.0.6** _- 2018-09-19_
 
-- You can no set the grid's name via the `name` property.
+- You can now set the grid's name via the `name` property.
 
 ## **v0.0.5** _- 2018-01-31_
 
