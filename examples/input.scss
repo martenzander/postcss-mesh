@@ -31,13 +31,13 @@
   name: mesh;
   display-type: inline-block;
   gutter: 30px;
-  column-align: "tbd";
+  // column-align: "tbd";
   column-count: 12;
-  column-justify: "tbd";
+  // column-justify: "tbd";
   container-width: fluid;
   compile-default-classes: true;
   mobile-first: true;
-  gutter-on-outside: true;
+  // gutter-on-outside: true;
 
   @mesh-viewport-lg {
     viewport: 1200px;
