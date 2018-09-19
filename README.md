@@ -24,7 +24,8 @@ $ npm i postcss-mesh -D
 This is what a basic Grid Setup using Mesh looks like:
 
 ```css
-@mesh-grid-basename {
+@mesh-grid {
+  name: mesh;
   display-type: inline-block;
   gutter: 30px;
   column-count: 12;
