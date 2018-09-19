@@ -1,6 +1,7 @@
 var postcss = require("postcss");
 var meta = require("./package.json");
 var name = meta.name;
+var defaults = require("./defaults.json");
 var version = meta.version;
 var author = meta.author.name;
 var license = meta.license;
@@ -9,7 +10,7 @@ module.exports = postcss.plugin("postcss-mesh", function(options) {
   return function(input) {
     /*===============================================
 		=            constants and variables            =
-		===============================================*/
+    ===============================================*/
 
     // inline css settings
     var inlineSettings = {};
@@ -19,6 +20,10 @@ module.exports = postcss.plugin("postcss-mesh", function(options) {
 
     // mobile first or desktop first
     var queryCondition = "";
+
+    // defaults
+    var responsivePadding = defaults["responsive-padding"];
+    var gutter = defaults["gutter"] / 2;
 
     /*=====  End of constants and variables  ======*/
 
@@ -31,7 +36,7 @@ module.exports = postcss.plugin("postcss-mesh", function(options) {
       input.walkAtRules(function(rule) {
         // return if at-rule does not match 'mesh-grid'
         if (!/^mesh-grid/.test(rule.name)) return;
-        var gridName = "mesh";
+        var gridName = defaults.name;
 
         rule.walkDecls(function(decl) {
           if (decl.prop === "name") {
@@ -126,6 +131,16 @@ module.exports = postcss.plugin("postcss-mesh", function(options) {
       var name = grid.name;
       meshContainerRules.selector = `.${name}-container`;
 
+      // padding settings
+      if (grid["responsive-padding"])
+        responsivePadding =
+          grid["responsive-padding"] === "true" ? true : false;
+
+      // gutter settings
+      var gutterOnOutside = defaults["gutter-on-outside"];
+      if (grid["gutter-on-outside"])
+        gutterOnOutside = grid["gutter-on-outside"] === "true" ? true : false;
+
       // set display
       meshContainerRules.append(
         postcss.decl({ prop: "display", value: "block" })
@@ -143,12 +158,13 @@ module.exports = postcss.plugin("postcss-mesh", function(options) {
             postcss.decl({ prop: "max-width", value: grid["container-width"] })
           );
       // set padding
-      var gutterSize = parseInt(
-        grid["gutter"].substring(0, grid["gutter"].length - 1)
-      );
-      meshContainerRules.append(
-        postcss.decl({ prop: "padding", value: `0 ${gutterSize / 2}px` })
-      );
+      if (gutterOnOutside) {
+        gutter =
+          parseInt(grid["gutter"].substring(0, grid["gutter"].length - 1)) / 2;
+        meshContainerRules.append(
+          postcss.decl({ prop: "padding", value: `0 ${gutter}px` })
+        );
+      }
       // set position
       meshContainerRules.append(
         postcss.decl({ prop: "position", value: "relative" })
@@ -165,24 +181,53 @@ module.exports = postcss.plugin("postcss-mesh", function(options) {
         maxWidth === "fluid" ? (maxWidth = "100%") : (maxWidth = maxWidth);
         var atRule = postcss.atRule();
         atRule.name = `media (${queryCondition} : ${breakpoint})`;
-        // update properties
+
+        // update gutter
         if ("gutter" in currentViewport)
-          gutterSize =
+          gutter =
             parseInt(
               currentViewport.gutter.substring(
                 0,
                 currentViewport.gutter.length - 1
               )
-            ) || gutter;
+            ) / 2;
+
+        // update gutterOnOutside
+        if ("gutter-on-outside" in currentViewport) {
+          gutterOnOutside =
+            currentViewport["gutter-on-outside"] === "true" ? true : false;
+        }
+
+        // update responsivePadding
+        if ("responsive-padding" in currentViewport) {
+          responsivePadding =
+            currentViewport["responsive-padding"] === "true" ? true : false;
+        }
 
         // common viewport rules
         var meshContainerRule = postcss.rule();
         meshContainerRule.selector = `.${name}-container`;
 
         // set padding
-        meshContainerRule.append(
-          postcss.decl({ prop: "padding", value: `0 ${gutterSize / 2}px` })
-        );
+        if (gutterOnOutside) {
+          if (responsivePadding) {
+            var breakpointInt = parseInt(
+              breakpoint.substring(0, breakpoint.length - 1)
+            );
+            var value = (gutter / breakpointInt) * 100;
+            meshContainerRule.append(
+              postcss.decl({
+                prop: "padding",
+                value: `0 ${value}%`
+              })
+            );
+          } else {
+            meshContainerRule.append(
+              postcss.decl({ prop: "padding", value: `0 ${gutter}px` })
+            );
+          }
+        }
+
         // set max-width
         meshContainerRule.append(
           postcss.decl({ prop: "max-width", value: maxWidth })
@@ -220,11 +265,10 @@ module.exports = postcss.plugin("postcss-mesh", function(options) {
         meshVoidRule.append(postcss.decl({ prop: "display", value: "block" }));
       }
       // set margin
-      var gutterSize = parseInt(
-        grid["gutter"].substring(0, grid["gutter"].length - 1)
-      );
+      gutter =
+        parseInt(grid["gutter"].substring(0, grid["gutter"].length - 1)) / 2;
       meshVoidRule.append(
-        postcss.decl({ prop: "margin", value: `0 -${gutterSize / 2}px` })
+        postcss.decl({ prop: "margin", value: `0 -${gutter}px` })
       );
       // set font-size
       if (getDisplaySettings(grid).value === "inline-block")
@@ -242,13 +286,13 @@ module.exports = postcss.plugin("postcss-mesh", function(options) {
         atRule.name = `media (${queryCondition} : ${breakpoint})`;
         // update properties
         if ("gutter" in currentViewport)
-          gutterSize =
+          gutter =
             parseInt(
               currentViewport.gutter.substring(
                 0,
                 currentViewport.gutter.length - 1
               )
-            ) || gutter;
+            ) / 2;
 
         // common viewport rules
         var meshVoidRule = postcss.rule();
@@ -256,7 +300,7 @@ module.exports = postcss.plugin("postcss-mesh", function(options) {
 
         // set margin
         meshVoidRule.append(
-          postcss.decl({ prop: "margin", value: `0 -${gutterSize / 2}px` })
+          postcss.decl({ prop: "margin", value: `0 -${gutter}px` })
         );
 
         atRule.append(meshVoidRule);
@@ -280,9 +324,8 @@ module.exports = postcss.plugin("postcss-mesh", function(options) {
       meshPullRule.selector = `[class*="${name}-pull"]`;
       meshColumnRule.selector = `[class*="${name}-column"]`;
       var columns = grid["column-count"];
-      var gutterSize = parseInt(
-        grid["gutter"].substring(0, grid["gutter"].length - 1)
-      );
+      gutter =
+        parseInt(grid["gutter"].substring(0, grid["gutter"].length - 1)) / 2;
       var columnSingleWidth = 100 / columns;
 
       // set displayProperty
@@ -294,9 +337,16 @@ module.exports = postcss.plugin("postcss-mesh", function(options) {
           })
         );
       // set padding
-      meshColumnRule.append(
-        postcss.decl({ prop: "padding", value: `0 ${gutterSize / 2}px` })
-      );
+      if (responsivePadding) {
+        var value = (gutter / 375) * 100;
+        meshColumnRule.append(
+          postcss.decl({ prop: "padding", value: `0 ${value}%` })
+        );
+      } else {
+        meshColumnRule.append(
+          postcss.decl({ prop: "padding", value: `0 ${gutter}px` })
+        );
+      }
       // set vertical-align
       if (getDisplaySettings(grid).value === "inline-block")
         meshColumnRule.append(
@@ -374,22 +424,33 @@ module.exports = postcss.plugin("postcss-mesh", function(options) {
         columnSingleWidth = 100 / columns;
         columns = currentViewport.columns || columns;
         if ("gutter" in currentViewport)
-          gutterSize =
+          gutter =
             parseInt(
               currentViewport.gutter.substring(
                 0,
                 currentViewport.gutter.length - 1
               )
-            ) || gutter;
+            ) / 2;
 
         // common viewport rules
         var meshColumnRule = postcss.rule();
         meshColumnRule.selector = `[class*="${name}-column-${viewportName}"]`;
 
         //set padding
-        meshColumnRule.append(
-          postcss.decl({ prop: "padding", value: `0 ${gutterSize / 2}px` })
-        );
+        if (responsivePadding) {
+          var breakpointInt = parseInt(
+            breakpoint.substring(0, breakpoint.length - 1)
+          );
+          var value = (gutter / breakpointInt) * 100;
+          console.log(value);
+          meshColumnRule.append(
+            postcss.decl({ prop: "padding", value: `0 ${value}%` })
+          );
+        } else {
+          meshColumnRule.append(
+            postcss.decl({ prop: "padding", value: `0 ${gutter}px` })
+          );
+        }
 
         atRule.append(meshColumnRule);
 
