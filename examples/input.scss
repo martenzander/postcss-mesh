@@ -28,30 +28,31 @@
 */
 
 @mesh-grid {
-  name: mesh;
-  display-type: inline-block;
-  gutter: 30px;
   // column-align: "tbd";
-  column-count: 12;
   // column-justify: "tbd";
-  container-width: fluid;
+  column-count: 12;
   compile-default-classes: true;
+  container-width: fluid;
+  display-type: inline-block;
+  gutter-on-outside: true;
+  responsive-padding: true;
+  gutter: 30px;
   mobile-first: true;
-  // gutter-on-outside: true;
+  name: mesh;
 
   @mesh-viewport-lg {
+    container-width: calc(100% - 30px);
     viewport: 1200px;
-    container-width: 1170px;
-  }
-
-  @mesh-viewport-sm {
-    viewport: 768px;
-    container-width: 750px;
   }
 
   @mesh-viewport-md {
-    viewport: 992px;
     container-width: 970px;
+    viewport: 992px;
+  }
+
+  @mesh-viewport-sm {
+    container-width: 750px;
+    viewport: 768px;
   }
 }
 
