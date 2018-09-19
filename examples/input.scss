@@ -1,13 +1,58 @@
-@mesh-grid-mesh {
+/*============================
+=            grid            =
+============================*/
+
+/**
+
+	BASED ON:
+	postcss-mesh: https://github.com/SlimMarten/postcss-mesh
+
+	@mesh-grid-NAME{
+		display-type: inline-block;
+		gutter: 30px;
+		column-align: 'tbd';
+		column-count: 12;
+		column-justify: 'tbd';
+		container-width: fluid;
+		compile-default-classes: true;
+		mobile-first: true;
+
+		@mesh-viewport-VIEWPORTNAME {
+			viewport: 1200px;
+			container-width: 1170px;
+		}
+
+		...
+	}
+
+*/
+
+@mesh-grid {
+  name: mesh;
   display-type: inline-block;
   gutter: 30px;
+  column-align: "tbd";
   column-count: 12;
+  column-justify: "tbd";
   container-width: fluid;
   compile-default-classes: true;
   mobile-first: true;
+  gutter-on-outside: true;
 
   @mesh-viewport-lg {
     viewport: 1200px;
     container-width: 1170px;
   }
+
+  @mesh-viewport-sm {
+    viewport: 768px;
+    container-width: 750px;
+  }
+
+  @mesh-viewport-md {
+    viewport: 992px;
+    container-width: 970px;
+  }
 }
+
+/*=====  End of grid  ======*/
