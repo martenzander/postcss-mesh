@@ -1,0 +1,13 @@
+@mesh-grid-mesh {
+  display-type: inline-block;
+  gutter: 30px;
+  column-count: 12;
+  container-width: fluid;
+  compile-default-classes: true;
+  mobile-first: true;
+
+  @mesh-viewport-lg {
+    viewport: 1200px;
+    container-width: 1170px;
+  }
+}

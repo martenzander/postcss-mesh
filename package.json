@@ -4,6 +4,7 @@
   "description": "postcss-mesh is a work in progress grid system",
   "main": "index.js",
   "scripts": {
+    "start": "postcss examples/input.scss -o examples/output.css --config postcss.config.js",
     "test": "eslint --config /Volumes/files/work/dev/_intern/postcss-random/src/.eslintrc.js index.js"
   },
   "keywords": [
@@ -19,15 +20,18 @@
     "name": "Marten Zander"
   },
   "license": "MIT",
-  "devDependencies": {
+  "bugs": {
+    "url": "https://github.com/SlimMarten/postcss-mesh/issues"
+  },
+  "homepage": "https://github.com/SlimMarten/postcss-mesh#readme",
+  "dependencies": {
     "eslint": "^3.8.1",
     "eslint-config-standard": "^6.2.0",
     "eslint-plugin-promise": "^3.3.0",
     "eslint-plugin-standard": "^2.0.1",
-    "postcss": "^6.0.8"
-  },
-  "bugs": {
-    "url": "https://github.com/SlimMarten/postcss-mesh/issues"
-  },
-  "homepage": "https://github.com/SlimMarten/postcss-mesh#readme"
+    "postcss": "^6.0.8",
+    "postcss-cli": "^6.0.0",
+    "postcss-scss": "^2.0.0",
+    "universalify": "^0.1.2"
+  }
 }
