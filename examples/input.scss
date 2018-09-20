@@ -28,32 +28,34 @@
 */
 
 @mesh-grid {
-  // column-align: "tbd";
-  // column-justify: "tbd";
-  column-count: 12;
-  compile-default-classes: true;
-  container-width: fluid;
-  display-type: inline-block;
-  gutter-on-outside: true;
-  responsive-padding: true;
-  gutter: 30px;
-  mobile-first: true;
-  name: mesh;
+	// column-align: "tbd";
+	// column-justify: "tbd";
+	column-count: 12;
+	compile-default-classes: true;                  // true || false
+	container-width: 100%;                          // px || % || calc(% +/- px)
+	viewport: 375px;                                // px
+	display-type: inline-block;                     // inline-block || flex || float
+	gutter-on-outside: true;                        // true || false
+	responsive-padding: true;                       // true || false
+	gutter: 30px;                                   // px
+	query-condition: min-width;                     // min-width || max-width
+	name: mesh;                                     // ""
 
-  @mesh-viewport-lg {
-    container-width: calc(100% - 30px);
-    viewport: 1200px;
-  }
+	@mesh-viewport-lg {
+		container-width: calc(100% - 30px);           // px || % || calc(% +/- px)
+		viewport: 1200px;                             // px
+	}
 
-  @mesh-viewport-md {
-    container-width: 970px;
-    viewport: 992px;
-  }
+	@mesh-viewport-md {
+		container-width: 970px;                       // px || % || calc(% +/- px)
+		viewport: 992px;                              // px
+    gutter: 20px;                                 // px
+	}
 
-  @mesh-viewport-sm {
-    container-width: 750px;
-    viewport: 768px;
-  }
+	@mesh-viewport-sm {
+		container-width: 750px;                       // px || % || calc(% +/- px)
+		viewport: 768px;                              // px
+	}
 }
 
 /*=====  End of grid  ======*/
