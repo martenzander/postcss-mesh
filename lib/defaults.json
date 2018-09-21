@@ -1,6 +1,10 @@
 {
 	"calcedContainerWidth": 345,
 	"columnCount": 12,
+	"containerDefaultWidth": "100%",
+	"containerDisplay": "block",
+	"containerPosition": "relative",
+	"containerMargin": "auto",
 	"containerWidth": "100%",
 	"transform": 0,
 	"displayType": {

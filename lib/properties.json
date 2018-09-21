@@ -1,10 +1,16 @@
 {
 	"container": {
 		"display": {
-			"viewportRelevant": false
+			"viewportRelevant": false,
+			"valueKey": "containerDisplay"
 		},
-		"margin": {
-			"viewportRelevant": false
+		"margin-left": {
+			"viewportRelevant": false,
+			"valueKey": "containerMargin"
+		},
+		"margin-right": {
+			"viewportRelevant": false,
+			"valueKey": "containerMargin"
 		},
 		"max-width": {
 			"viewportRelevant": true,
@@ -21,10 +27,12 @@
 			"unit": "px"
 		},
 		"position": {
-			"viewportRelevant": false
+			"viewportRelevant": false,
+			"valueKey": "containerPosition"
 		},
 		"width": {
-			"viewportRelevant": false
+			"viewportRelevant": false,
+			"valueKey": "containerDefaultWidth"
 		}
 	},
 	"void": {
@@ -62,22 +70,22 @@
 	"offset": {
 		"margin-left": {
 			"viewportRelevant": true,
-			"valueKey" : "transform",
-			"unit" : "%"
+			"valueKey": "transform",
+			"unit": "%"
 		}
 	},
 	"push": {
 		"left": {
 			"viewportRelevant": true,
-			"valueKey" : "transform",
-			"unit" : "%"
+			"valueKey": "transform",
+			"unit": "%"
 		}
 	},
 	"pull": {
 		"right": {
 			"viewportRelevant": false,
-			"valueKey" : "transform",
-			"unit" : "%"
+			"valueKey": "transform",
+			"unit": "%"
 		}
 	},
 	"column": {

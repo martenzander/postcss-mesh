@@ -157,19 +157,19 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 				let value;
 
 				if ("viewports" in viewport) {
-					getPropValue(component, property);
+					value = getPropValue(component, property);
 				} else {
 					if (propOptions.viewportRelevant) {
-						getPropValue(component, property);
+						value = getPropValue(component, property);
 					}
-					if (value !== undefined)
-						rule.append(
-							postcss.decl({
-								prop: property.name,
-								value: value
-							})
-						);
 				}
+				if (value !== undefined)
+					rule.append(
+						postcss.decl({
+							prop: property.name,
+							value: value
+						})
+					);
 			}
 			return rule;
 		}
@@ -185,32 +185,6 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 					selector: `.${settings.name}-container`
 				})
 			);
-
-			// const containerRules = postcss.rule();
-			// containerRules.selector = `.${settings.name}-container`;
-
-			// // set display
-			// containerRules.append(postcss.decl({ prop: "display", value: "block" }));
-			// // set margin
-			// containerRules.append(postcss.decl({ prop: "margin", value: "0 auto" }));
-			// // set max-width
-			// containerRules.append(
-			// 	postcss.decl({ prop: "max-width", value: grid["container-width"] })
-			// );
-			// // set padding
-			// if (settings.gutterOnOutside) {
-			// 	containerRules.append(
-			// 		postcss.decl({ prop: "padding", value: `0 ${settings.gutter}px` })
-			// 	);
-			// }
-			// // set position
-			// containerRules.append(
-			// 	postcss.decl({ prop: "position", value: "relative" })
-			// );
-			// // set width
-			// containerRules.append(postcss.decl({ prop: "width", value: "100%" }));
-
-			// rules.push(containerRules);
 
 			for (const key in grid.sortedViewports) {
 				const curViewport = grid.sortedViewports[key];
