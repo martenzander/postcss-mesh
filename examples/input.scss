@@ -35,7 +35,7 @@
 	container-width: 100%;                          // px || % || calc(% +/- px)
 	viewport: 375px;                                // px
 	display-type: inline-block;                     // inline-block || flex || float
-	gutter-on-outside: true;                        // true || false
+	gutter-on-outside: false;                        // true || false
 	responsive-padding: true;                       // true || false
 	gutter: 30px;                                   // px
 	query-condition: min-width;                     // min-width || max-width

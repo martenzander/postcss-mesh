@@ -63,123 +63,166 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 			settings.columnSingleWidth = 100 / settings.columnCount;
 		}
 
-		function getViewportAtRules(viewport, options) {
-			updateSettings(viewport);
-			const component = options.component;
-			const props = properties[component];
+		function getAtRule() {
 			const atRule = postcss.atRule();
 			atRule.name = `media (${settings.queryCondition.value} : ${
 				settings.viewportWidth
 			}px)`;
+
+			return atRule;
+		}
+
+		function getPropValue(component, property) {
+			let value;
+
+			switch (component) {
+				case "container":
+					if (
+						!settings.gutterOnOutside &&
+						property.name.indexOf("padding") >= 0
+					) {
+						value = undefined;
+					} else if (
+						settings.responsivePadding &&
+						property.name.indexOf("padding") >= 0
+					) {
+						value = settings[property.options.valueKey];
+						value = (value / settings.viewportWidth) * 100;
+						value = `${value}%`;
+					} else {
+						value = property.options["unit"]
+							? `${settings[property.options.valueKey]}${property.options.unit}`
+							: settings[property.options.valueKey];
+					}
+					break;
+				case "void":
+					if (
+						settings.responsivePadding &&
+						property.name.indexOf("margin") >= 0
+					) {
+						value = settings[property.options.valueKey];
+						value = (value / settings.calcedContainerWidth) * 100;
+						value = `-${value}%`;
+					} else {
+						value = property.options["unit"]
+							? `-${settings[property.options.valueKey]}${
+									property.options.unit
+							  }`
+							: `-${settings[property.options.valueKey]}`;
+					}
+					break;
+				case "void:after":
+					break;
+				case "column":
+					if (
+						settings.responsivePadding &&
+						property.name.indexOf("padding") >= 0
+					) {
+						value = settings[property.options.valueKey];
+						value = (value / settings.calcedContainerWidth) * 100;
+						value = `${value}%`;
+					} else {
+						value = property.options["unit"]
+							? `${settings[property.options.valueKey]}${property.options.unit}`
+							: settings[property.options.valueKey];
+					}
+					break;
+				case "pull":
+					break;
+				case "push":
+					break;
+				case "offset":
+					break;
+				case "center":
+					break;
+				default:
+					break;
+			}
+
+			return value;
+		}
+
+		function getComponentRules(viewport, options) {
+			const component = options.component;
+			const props = properties[component];
 			const rule = postcss.rule();
 			rule.selector = options.selector || "undefined selector";
 
 			for (const key in props) {
-				const prop = key;
-				const propOptions = props[prop];
+				const property = {
+					name: key,
+					options: props[key]
+				};
+				const propOptions = props[property.name];
+				let value;
 
-				if (propOptions.viewportRelevant) {
-					let value;
-
-					switch (component) {
-						case "container":
-							if (settings.responsivePadding && prop.indexOf("padding") >= 0) {
-								value = settings[propOptions.valueKey];
-								value = (value / settings.viewportWidth) * 100;
-								value = `${value}%`;
-							} else {
-								value = propOptions["unit"]
-									? `${settings[propOptions.valueKey]}${propOptions.unit}`
-									: settings[propOptions.valueKey];
-							}
-							break;
-						case "void":
-							if (settings.responsivePadding && prop.indexOf("margin") >= 0) {
-								value = settings[propOptions.valueKey];
-								value = (value / settings.calcedContainerWidth) * 100;
-								value = `-${value}%`;
-							} else {
-								value = propOptions["unit"]
-									? `-${settings[propOptions.valueKey]}${propOptions.unit}`
-									: `-${settings[propOptions.valueKey]}`;
-							}
-							break;
-						case "void:after":
-							break;
-						case "column":
-							if (settings.responsivePadding && prop.indexOf("padding") >= 0) {
-								value = settings[propOptions.valueKey];
-								value = (value / settings.calcedContainerWidth) * 100;
-								value = `${value}%`;
-							} else {
-								value = propOptions["unit"]
-									? `${settings[propOptions.valueKey]}${propOptions.unit}`
-									: settings[propOptions.valueKey];
-							}
-							break;
-						case "pull":
-							break;
-						case "push":
-							break;
-						case "offset":
-							break;
-						case "center":
-							break;
-						default:
-							break;
+				if ("viewports" in viewport) {
+					getPropValue(component, property);
+				} else {
+					if (propOptions.viewportRelevant) {
+						getPropValue(component, property);
 					}
-
-					rule.append(
-						postcss.decl({
-							prop: prop,
-							value: value
-						})
-					);
+					if (value !== undefined)
+						rule.append(
+							postcss.decl({
+								prop: property.name,
+								value: value
+							})
+						);
 				}
 			}
-			atRule.append(rule);
-
-			return atRule;
+			return rule;
 		}
 
 		// generate rules for .mesh-container
 		function getContainerRules(grid) {
 			updateSettings(grid);
 			const rules = [];
-			const containerRules = postcss.rule();
-			containerRules.selector = `.${settings.name}-container`;
 
-			// set display
-			containerRules.append(postcss.decl({ prop: "display", value: "block" }));
-			// set margin
-			containerRules.append(postcss.decl({ prop: "margin", value: "0 auto" }));
-			// set max-width
-			containerRules.append(
-				postcss.decl({ prop: "max-width", value: grid["container-width"] })
+			rules.push(
+				getComponentRules(grid, {
+					component: "container",
+					selector: `.${settings.name}-container`
+				})
 			);
-			// set padding
-			if (settings.gutterOnOutside) {
-				containerRules.append(
-					postcss.decl({ prop: "padding", value: `0 ${settings.gutter}px` })
-				);
-			}
-			// set position
-			containerRules.append(
-				postcss.decl({ prop: "position", value: "relative" })
-			);
-			// set width
-			containerRules.append(postcss.decl({ prop: "width", value: "100%" }));
 
-			rules.push(containerRules);
+			// const containerRules = postcss.rule();
+			// containerRules.selector = `.${settings.name}-container`;
+
+			// // set display
+			// containerRules.append(postcss.decl({ prop: "display", value: "block" }));
+			// // set margin
+			// containerRules.append(postcss.decl({ prop: "margin", value: "0 auto" }));
+			// // set max-width
+			// containerRules.append(
+			// 	postcss.decl({ prop: "max-width", value: grid["container-width"] })
+			// );
+			// // set padding
+			// if (settings.gutterOnOutside) {
+			// 	containerRules.append(
+			// 		postcss.decl({ prop: "padding", value: `0 ${settings.gutter}px` })
+			// 	);
+			// }
+			// // set position
+			// containerRules.append(
+			// 	postcss.decl({ prop: "position", value: "relative" })
+			// );
+			// // set width
+			// containerRules.append(postcss.decl({ prop: "width", value: "100%" }));
+
+			// rules.push(containerRules);
 
 			for (const key in grid.sortedViewports) {
-				const currentViewport = grid.sortedViewports[key];
-				rules.push(
-					getViewportAtRules(currentViewport, {
+				const curViewport = grid.sortedViewports[key];
+				updateSettings(curViewport);
+				const atRule = getAtRule();
+				atRule.append(
+					getComponentRules(curViewport, {
 						component: "container",
 						selector: `.${settings.name}-container`
 					})
 				);
+				rules.push(atRule);
 			}
 
 			return rules;
@@ -226,13 +269,16 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 			rules.push(voidRule);
 
 			for (const key in grid.sortedViewports) {
-				const currentViewport = grid.sortedViewports[key];
-				rules.push(
-					getViewportAtRules(currentViewport, {
-						component: "void",
-						selector: `.${settings.name}-void`
-					})
-				);
+				const curViewport = grid.sortedViewports[key];
+				updateSettings(curViewport);
+				const atRule = getAtRule();
+				// atRule.append(
+				// 	getComponentRules(curViewport, {
+				// 		component: "void",
+				// 		selector: `.${settings.name}-void`
+				// 	})
+				// );
+				rules.push(atRule);
 			}
 
 			return rules;
@@ -242,18 +288,12 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 		function getColumnRules(grid) {
 			updateSettings(grid);
 			const rules = [];
-			const centerRule = postcss.rule();
 			const pushRule = postcss.rule();
 			const pullRule = postcss.rule();
 			const columnRule = postcss.rule();
-			centerRule.selector = `[class*="${settings.name}-center"]`;
 			pushRule.selector = `[class*="${settings.name}-push"]`;
 			pullRule.selector = `[class*="${settings.name}-pull"]`;
 			columnRule.selector = `[class*="${settings.name}-column"]`;
-			// settings.columnCount = grid["column-count"];
-			// settings.gutter =
-			// 	parseInt(grid["gutter"].substring(0, grid["gutter"].length - 1)) / 2;
-			// settings.columnSingleWidth = 100 / settings.columnCount;
 
 			// set displayProperty
 			if (getDisplaySettings(grid).value !== "flex")
@@ -280,19 +320,12 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 					postcss.decl({ prop: "vertical-align", value: "top" })
 				);
 			//set position
-			centerRule.append(postcss.decl({ prop: "position", value: "relative" }));
 			pushRule.append(postcss.decl({ prop: "position", value: "relative" }));
 			pullRule.append(postcss.decl({ prop: "position", value: "relative" }));
-			// set left
-			centerRule.append(postcss.decl({ prop: "left", value: "50%" }));
-			// set transform
-			centerRule.append(
-				postcss.decl({ prop: "transform", value: "translate3d(-50%,0,0)" })
-			);
 
 			if (getDisplaySettings(grid).property === "float")
 				columnRule.append(postcss.decl({ prop: "min-height", value: "1px" }));
-			rules.push(centerRule, pushRule, pullRule, columnRule);
+			rules.push(pushRule, pullRule, columnRule);
 
 			for (let i = 0; i <= settings.columnCount; i++) {
 				const offsetRule = postcss.rule();
@@ -413,7 +446,7 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 				}
 
 				// rules.push(
-				// 	getViewportAtRules(currentViewport, {
+				// 	getComponentRules(currentViewport, {
 				// 		component: "column",
 				// 		selector: `[class*="${name}-column-${viewportName}"]`
 				// 	})

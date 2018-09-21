@@ -2,6 +2,7 @@
 	"calcedContainerWidth": 345,
 	"columnCount": 12,
 	"containerWidth": "100%",
+	"transform": 0,
 	"displayType": {
 		"value": "inline-block",
 		"options": ["inline-block", "flex", "float"]

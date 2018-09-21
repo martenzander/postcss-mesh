@@ -61,22 +61,23 @@
 	},
 	"offset": {
 		"margin-left": {
-			"viewportRelevant": true
+			"viewportRelevant": true,
+			"valueKey" : "transform",
+			"unit" : "%"
 		}
 	},
 	"push": {
 		"left": {
-			"viewportRelevant": true
+			"viewportRelevant": true,
+			"valueKey" : "transform",
+			"unit" : "%"
 		}
 	},
 	"pull": {
 		"right": {
-			"viewportRelevant": false
-		}
-	},
-	"center": {
-		"transform": {
-			"viewportRelevant": false
+			"viewportRelevant": false,
+			"valueKey" : "transform",
+			"unit" : "%"
 		}
 	},
 	"column": {
