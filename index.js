@@ -1,31 +1,31 @@
-var postcss = require("postcss");
-var meta = require("./package.json");
-var name = meta.name;
-var defaults = require("./lib/defaults.json");
-var properties = require("./lib/properties.json");
-var version = meta.version;
-var author = meta.author.name;
-var license = meta.license;
-var getDisplaySettings = require("./utils/getDisplaySettings");
-var getCalcedContainerWidth = require("./utils/getCalcedContainerWidth");
-var getInlineSettings = require("./utils/getInlineSettings");
+const postcss = require("postcss");
+const meta = require("./package.json");
+const name = meta.name;
+const defaults = require("./lib/defaults.json");
+const properties = require("./lib/properties.json");
+const version = meta.version;
+const author = meta.author.name;
+const license = meta.license;
+const getDisplaySettings = require("./utils/getDisplaySettings");
+const getCalcedContainerWidth = require("./utils/getCalcedContainerWidth");
+const getInlineSettings = require("./utils/getInlineSettings");
 
 module.exports = postcss.plugin("postcss-mesh", function() {
 	return function(input) {
 		/*===============================================
-		=            constants and variables            =
+		=            constants and constiables            =
 		===============================================*/
 
 		// inline css settings
-		var inlineSettings = {};
+		let inlineSettings = {};
 
 		// generated CSS
-		var mesh = postcss.root();
+		const mesh = postcss.root();
 
 		// defaults
-		var settings = defaults;
+		const settings = defaults;
 
-		/*=====  End of constants and variables  ======*/
+		/*=====  End of constants and constiables  ======*/
 
 		function updateSettings(obj) {
 			// gutter
@@ -65,21 +65,21 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 
 		function getViewportAtRules(viewport, options) {
 			updateSettings(viewport);
-			var component = options.component;
-			var props = properties[component];
-			var atRule = postcss.atRule();
+			const component = options.component;
+			const props = properties[component];
+			const atRule = postcss.atRule();
 			atRule.name = `media (${settings.queryCondition.value} : ${
 				settings.viewportWidth
 			}px)`;
-			var rule = postcss.rule();
+			const rule = postcss.rule();
 			rule.selector = options.selector || "undefined selector";
 
-			for (var key in props) {
-				var prop = key;
-				var propOptions = props[prop];
+			for (const key in props) {
+				const prop = key;
+				const propOptions = props[prop];
 
 				if (propOptions.viewportRelevant) {
-					var value;
+					let value;
 
 					switch (component) {
 						case "container":
@@ -117,6 +117,14 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 									: settings[propOptions.valueKey];
 							}
 							break;
+						case "pull":
+							break;
+						case "push":
+							break;
+						case "offset":
+							break;
+						case "center":
+							break;
 						default:
 							break;
 					}
@@ -137,9 +145,9 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 		// generate rules for .mesh-container
 		function getContainerRules(grid) {
 			updateSettings(grid);
-			var rules = [];
-			var containerRules = postcss.rule();
-			containerRules.selector = `.${name}-container`;
+			const rules = [];
+			const containerRules = postcss.rule();
+			containerRules.selector = `.${settings.name}-container`;
 
 			// set display
 			containerRules.append(postcss.decl({ prop: "display", value: "block" }));
@@ -164,12 +172,12 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 
 			rules.push(containerRules);
 
-			for (var key in grid.sortedViewports) {
-				var currentViewport = grid.sortedViewports[key];
+			for (const key in grid.sortedViewports) {
+				const currentViewport = grid.sortedViewports[key];
 				rules.push(
 					getViewportAtRules(currentViewport, {
 						component: "container",
-						selector: `.${name}-container`
+						selector: `.${settings.name}-container`
 					})
 				);
 			}
@@ -180,11 +188,11 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 		// generate rules for .mesh-void
 		function getVoidRules(grid) {
 			updateSettings(grid);
-			var rules = [];
-			var voidAfterRule = postcss.rule();
-			var voidRule = postcss.rule();
-			voidAfterRule.selector = `.${name}-void:after`;
-			voidRule.selector = `.${name}-void`;
+			const rules = [];
+			const voidAfterRule = postcss.rule();
+			const voidRule = postcss.rule();
+			voidAfterRule.selector = `.${settings.name}-void:after`;
+			voidRule.selector = `.${settings.name}-void`;
 
 			// set content
 			voidAfterRule.append(postcss.decl({ prop: "content", value: "''" }));
@@ -217,12 +225,12 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 				rules.push(voidAfterRule);
 			rules.push(voidRule);
 
-			for (var key in grid.sortedViewports) {
-				var currentViewport = grid.sortedViewports[key];
+			for (const key in grid.sortedViewports) {
+				const currentViewport = grid.sortedViewports[key];
 				rules.push(
 					getViewportAtRules(currentViewport, {
 						component: "void",
-						selector: `.${name}-void`
+						selector: `.${settings.name}-void`
 					})
 				);
 			}
@@ -233,15 +241,15 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 		// generate rules for .mesh-column
 		function getColumnRules(grid) {
 			updateSettings(grid);
-			var rules = [];
-			var centerRule = postcss.rule();
-			var pushRule = postcss.rule();
-			var pullRule = postcss.rule();
-			var columnRule = postcss.rule();
-			centerRule.selector = `[class*="${name}-center"]`;
-			pushRule.selector = `[class*="${name}-push"]`;
-			pullRule.selector = `[class*="${name}-pull"]`;
-			columnRule.selector = `[class*="${name}-column"]`;
+			const rules = [];
+			const centerRule = postcss.rule();
+			const pushRule = postcss.rule();
+			const pullRule = postcss.rule();
+			const columnRule = postcss.rule();
+			centerRule.selector = `[class*="${settings.name}-center"]`;
+			pushRule.selector = `[class*="${settings.name}-push"]`;
+			pullRule.selector = `[class*="${settings.name}-pull"]`;
+			columnRule.selector = `[class*="${settings.name}-column"]`;
 			// settings.columnCount = grid["column-count"];
 			// settings.gutter =
 			// 	parseInt(grid["gutter"].substring(0, grid["gutter"].length - 1)) / 2;
@@ -257,7 +265,7 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 				);
 			// set padding
 			if (settings.responsivePadding) {
-				var value = (settings.gutter / 375) * 100;
+				const value = (settings.gutter / 375) * 100;
 				columnRule.append(
 					postcss.decl({ prop: "padding", value: `0 ${value}%` })
 				);
@@ -286,16 +294,16 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 				columnRule.append(postcss.decl({ prop: "min-height", value: "1px" }));
 			rules.push(centerRule, pushRule, pullRule, columnRule);
 
-			for (var i = 0; i <= settings.columnCount; i++) {
-				var offsetRule = postcss.rule();
-				var pushRule = postcss.rule();
-				var pullRule = postcss.rule();
-				var columnRule = postcss.rule();
-				var index = i;
-				offsetRule.selector = `.${name}-offset-${index}`;
-				pushRule.selector = `.${name}-push-${index}`;
-				pullRule.selector = `.${name}-pull-${index}`;
-				columnRule.selector = `.${name}-column-${index}`;
+			for (let i = 0; i <= settings.columnCount; i++) {
+				const offsetRule = postcss.rule();
+				const pushRule = postcss.rule();
+				const pullRule = postcss.rule();
+				const columnRule = postcss.rule();
+				const index = i;
+				offsetRule.selector = `.${settings.name}-offset-${index}`;
+				pushRule.selector = `.${settings.name}-push-${index}`;
+				pullRule.selector = `.${settings.name}-pull-${index}`;
+				columnRule.selector = `.${settings.name}-column-${index}`;
 				// set width
 				offsetRule.append(
 					postcss.decl({
@@ -325,23 +333,26 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 				rules.push(offsetRule, pushRule, pullRule, columnRule);
 			}
 
-			for (var key in grid.sortedViewports) {
-				var currentViewport = grid.sortedViewports[key];
+			for (const key in grid.sortedViewports) {
+				const currentViewport = grid.sortedViewports[key];
 				updateSettings(currentViewport);
-				var viewportName = currentViewport.name;
-				var atRule = postcss.atRule();
+				const viewportName = currentViewport.name;
+				const atRule = postcss.atRule();
 				atRule.name = `media (${settings.queryCondition.value} : ${
 					settings.viewportWidth
-				})`;
+				}px)`;
+
 				// settings.columnSingleWidth = 100 / settings.columnCount;
 
-				common viewport rules
-				var columnRule = postcss.rule();
-				columnRule.selector = `[class*="${name}-column-${viewportName}"]`;
+				// common viewport rules
+				const columnRule = postcss.rule();
+				columnRule.selector = `[class*="${
+					settings.name
+				}-column-${viewportName}"]`;
 
 				//set padding
 				if (settings.responsivePadding) {
-					var value = (settings.gutter / settings.calcedContainerWidth) * 100;
+					const value = (settings.gutter / settings.calcedContainerWidth) * 100;
 					columnRule.append(
 						postcss.decl({ prop: "padding", value: `0 ${value}%` })
 					);
@@ -353,16 +364,24 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 
 				atRule.append(columnRule);
 
-				for (var n = 0; n <= settings.columnCount; n++) {
-					var offsetRule = postcss.rule();
-					var pushRule = postcss.rule();
-					var pullRule = postcss.rule();
-					var columnRule = postcss.rule();
-					var index = n;
-					offsetRule.selector = `[class*="${name}-offset-${viewportName}-${index}"]`;
-					pushRule.selector = `[class*="${name}-push-${viewportName}-${index}"]`;
-					pullRule.selector = `[class*="${name}-pull-${viewportName}-${index}"]`;
-					columnRule.selector = `.${name}-column-${viewportName}-${index}`;
+				for (let n = 0; n <= settings.columnCount; n++) {
+					const offsetRule = postcss.rule();
+					const pushRule = postcss.rule();
+					const pullRule = postcss.rule();
+					const columnRule = postcss.rule();
+					const index = n;
+					offsetRule.selector = `[class*="${
+						settings.name
+					}-offset-${viewportName}-${index}"]`;
+					pushRule.selector = `[class*="${
+						settings.name
+					}-push-${viewportName}-${index}"]`;
+					pullRule.selector = `[class*="${
+						settings.name
+					}-pull-${viewportName}-${index}"]`;
+					columnRule.selector = `.${
+						settings.name
+					}-column-${viewportName}-${index}`;
 
 					// set width/offset
 					offsetRule.append(
@@ -407,17 +426,17 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 
 		// generate styles for base classes
 		function generateCSS() {
-			var licenseNotification = postcss.comment();
+			const licenseNotification = postcss.comment();
 			licenseNotification.text = `! Grid generated using ${name} v${version} | ${license} License | ${author} | github.com/SlimMarten/postcss-mesh `;
 
 			// append licenseNotification
 			mesh.append(licenseNotification);
 
-			for (var key in inlineSettings) {
-				var curGrid = inlineSettings[key];
+			for (const key in inlineSettings) {
+				const curGrid = inlineSettings[key];
 
 				// overwirte name
-				if (curGrid.name) name = curGrid.name;
+				if (curGrid.name) settings.name = curGrid.name;
 
 				// overwrite queryCondition
 				if (curGrid["query-condition"])
@@ -439,6 +458,7 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 		// main init
 		function init() {
 			inlineSettings = getInlineSettings(input);
+			// console.log(inlineSettings);
 			generateCSS();
 		}
 

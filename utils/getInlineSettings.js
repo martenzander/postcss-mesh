@@ -1,11 +1,11 @@
-var defaults = require("./../lib/defaults.json");
-var inlineSettings = {};
+const defaults = require("./../lib/defaults.json");
+const inlineSettings = {};
 
 module.exports = function(input) {
 	input.walkAtRules(function(rule) {
 		// return if at-rule does not match 'mesh-grid'
 		if (!/^mesh-grid/.test(rule.name)) return;
-		var gridName = defaults.name;
+		let gridName = defaults.name;
 
 		rule.walkDecls(function(decl) {
 			if (decl.prop === "name") {
@@ -21,7 +21,7 @@ module.exports = function(input) {
 			if (!/^mesh-viewport-/.test(decl.parent.name)) {
 				inlineSettings[gridName][decl.prop] = decl.value;
 			} else {
-				var viewport = decl.parent.name.split("-")[
+				const viewport = decl.parent.name.split("-")[
 					decl.parent.name.split("-").length - 1
 				];
 				inlineSettings[gridName].viewports[viewport] =
@@ -34,14 +34,14 @@ module.exports = function(input) {
 	});
 
 	// sort viewports
-	for (var n in inlineSettings) {
-		var currentGrid = inlineSettings[n];
+	for (const n in inlineSettings) {
+		const currentGrid = inlineSettings[n];
 		currentGrid.sortedViewports = {};
-		var tempSortedViewports = [];
+		let tempSortedViewports = [];
 
-		for (var i in currentGrid.viewports) {
-			var currentViewport = currentGrid.viewports[i];
-			var currentBreakpoint = currentViewport.viewport;
+		for (const i in currentGrid.viewports) {
+			const currentViewport = currentGrid.viewports[i];
+			let currentBreakpoint = currentViewport.viewport;
 			currentBreakpoint = parseInt(
 				currentBreakpoint.substring(0, currentBreakpoint.length - 2)
 			);
@@ -57,14 +57,14 @@ module.exports = function(input) {
 						return b - a;
 				  });
 
-		for (var i = 0; i < tempSortedViewports.length; i++) {
-			var breakpoint = tempSortedViewports[i];
-			var relatedViewport = {};
+		for (let i = 0; i < tempSortedViewports.length; i++) {
+			const breakpoint = tempSortedViewports[i];
+			let relatedViewport = {};
 
-			for (var j in currentGrid.viewports) {
-				var currentSetting = currentGrid.viewports[j];
-				var currentViewport = currentSetting.viewport;
-				var currentBreakpoint = parseInt(
+			for (const j in currentGrid.viewports) {
+				const currentSetting = currentGrid.viewports[j];
+				const currentViewport = currentSetting.viewport;
+				const currentBreakpoint = parseInt(
 					currentViewport.substring(0, currentViewport.length - 2)
 				);
 

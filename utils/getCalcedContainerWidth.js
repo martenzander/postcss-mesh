@@ -1,11 +1,9 @@
 module.exports = function(viewport) {
-	var containerWidth = viewport["container-width"];
-	var breakpoint = viewport.viewport;
-	var breakpointInt = breakpoint.substring(0, breakpoint.length - 2);
-	var split = containerWidth.split(" ");
-	var int;
-
-	// console.log(split);
+	const containerWidth = viewport["container-width"];
+	const breakpoint = viewport.viewport;
+	const breakpointInt = breakpoint.substring(0, breakpoint.length - 2);
+	const split = containerWidth.split(" ");
+	let int;
 
 	if (split.length === 1) {
 		if (split[0].indexOf("%") >= 0) {
@@ -21,11 +19,11 @@ module.exports = function(viewport) {
 			int = parseInt(split[0]);
 		}
 	} else {
-		for (var i = 0; i < split.length; i++) {
-			var curSnippet = split[i];
+		for (let i = 0; i < split.length; i++) {
+			const curSnippet = split[i];
 
 			if (curSnippet.indexOf("px") >= 0) {
-				var value = curSnippet.substring(
+				const value = curSnippet.substring(
 					0,
 					curSnippet.length - (curSnippet.length - curSnippet.indexOf("px"))
 				);

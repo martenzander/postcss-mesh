@@ -1,24 +1,16 @@
 {
-	"presets": [
-		["@babel/preset-env", {
-			"targets" :{
-				"browsers":[">0.25%", "not op_mini all"]
-			},
-			"modules": false,
-			"useBuiltIns": "usage"
-		}],
-		["@babel/preset-stage-0", { "decoratorsLegacy": true }]
-	],
-	"plugins": [
-		"@babel/plugin-proposal-class-properties",
-		"@babel/plugin-transform-object-assign"
-	],
-	"env": {
-		"production": {
-			"plugins": [
-				"@babel/plugin-proposal-class-properties",
-				"@babel/plugin-transform-object-assign"
-			]
-		}
+  "presets": [["env", {
+    "targets": {
+      "node": 4
+    }
+  }]],
+  "plugins": ["add-module-exports"],
+  "env": {
+    "development": {
+      "sourceMaps": "inline"
+    },
+    "test": {
+      "plugins": ["istanbul"]
+    }
   }
 }
