@@ -4,8 +4,7 @@
   "description": "postcss-mesh is a work in progress grid system",
   "main": "index.js",
   "scripts": {
-    "start": "postcss examples/input.scss -o examples/output.css --config postcss.config.js",
-    "test": "eslint --config /Volumes/files/work/dev/_intern/postcss-random/src/.eslintrc.js index.js"
+    "start": "postcss examples/input.scss -o examples/output.css --config postcss.config.js"
   },
   "keywords": [
     "scss",
