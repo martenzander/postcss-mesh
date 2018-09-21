@@ -4,7 +4,8 @@
   "description": "postcss-mesh is a work in progress grid system",
   "main": "index.js",
   "scripts": {
-    "start": "postcss examples/input.scss -o examples/output.css --config postcss.config.js"
+    "start": "postcss examples/input.scss -o examples/output.css --config postcss.config.js",
+    "babel": "babel index.js"
   },
   "keywords": [
     "scss",
@@ -25,16 +26,22 @@
   "homepage": "https://github.com/SlimMarten/postcss-mesh#readme",
   "dependencies": {
     "postcss": "^6.0.8",
-    "postcss-cli": "^6.0.0",
-    "postcss-scss": "^2.0.0",
     "universalify": "^0.1.2"
   },
   "devDependencies": {
-    "eslint": "^5.6.0",
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.21.0",
+    "babel-eslint": "^7.1.1",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-env": "^1.4.0",
+    "babel-register": "^6.18.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-standard": "^4.0.0"
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint": "^5.6.0",
+    "postcss-cli": "^6.0.0",
+    "postcss-scss": "^2.0.0"
   }
 }
