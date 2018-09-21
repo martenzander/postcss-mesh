@@ -1,0 +1,112 @@
+{
+	"container": {
+		"display": {
+			"viewportRelevant": false
+		},
+		"margin": {
+			"viewportRelevant": false
+		},
+		"max-width": {
+			"viewportRelevant": true,
+			"valueKey": "containerWidth"
+		},
+		"padding-left": {
+			"viewportRelevant": true,
+			"valueKey": "gutter",
+			"unit": "px"
+		},
+		"padding-right": {
+			"viewportRelevant": true,
+			"valueKey": "gutter",
+			"unit": "px"
+		},
+		"position": {
+			"viewportRelevant": false
+		},
+		"width": {
+			"viewportRelevant": false
+		}
+	},
+	"void": {
+		"display": {
+			"viewportRelevant": false
+		},
+		"flex-wrap": {
+			"viewportRelevant": false
+		},
+		"font-size": {
+			"viewportRelevant": false
+		},
+		"margin-left": {
+			"viewportRelevant": true,
+			"valueKey": "gutter",
+			"unit": "px"
+		},
+		"margin-right": {
+			"viewportRelevant": true,
+			"valueKey": "gutter",
+			"unit": "px"
+		}
+	},
+	"void:after": {
+		"clear": {
+			"viewportRelevant": false
+		},
+		"content": {
+			"viewportRelevant": false
+		},
+		"display": {
+			"viewportRelevant": false
+		}
+	},
+	"offset": {
+		"margin-left": {
+			"viewportRelevant": true
+		}
+	},
+	"push": {
+		"left": {
+			"viewportRelevant": true
+		}
+	},
+	"pull": {
+		"right": {
+			"viewportRelevant": false
+		}
+	},
+	"center": {
+		"transform": {
+			"viewportRelevant": false
+		}
+	},
+	"column": {
+		"display": {
+			"viewportRelevant": false
+		},
+		"float": {
+			"viewportRelevant": false
+		},
+		"padding-left": {
+			"viewportRelevant": true,
+			"valueKey": "gutter",
+			"unit": "px"
+		},
+		"padding-right": {
+			"viewportRelevant": true,
+			"valueKey": "gutter",
+			"unit": "px"
+		},
+		"vertical-align": {
+			"viewportRelevant": false
+		},
+		"position": {
+			"viewportRelevant": false
+		},
+		"min-height": {
+			"viewportRelevant": false
+		},
+		"width": {
+			"viewportRelevant": true
+		}
+	}
+}

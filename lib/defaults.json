@@ -1,0 +1,18 @@
+{
+	"calcedContainerWidth": 345,
+	"columnCount": 12,
+	"containerWidth": "100%",
+	"displayType": {
+		"value": "inline-block",
+		"options": ["inline-block", "flex", "float"]
+	},
+	"gutterOnOutside": false,
+	"name": "mesh",
+	"responsivePadding": true,
+	"gutter": 15,
+	"queryCondition": {
+		"value": "min-width",
+		"options": ["min-width", "max-width"]
+	},
+	"viewportWidth": "375px"
+}
