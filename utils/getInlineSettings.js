@@ -1,11 +1,11 @@
-const defaults = require("./../lib/defaults.json");
+const settings = require("./../lib/settings.json");
 const inlineSettings = {};
 
 module.exports = function(input) {
 	input.walkAtRules(function(rule) {
 		// return if at-rule does not match 'mesh-grid'
 		if (!/^mesh-grid/.test(rule.name)) return;
-		let gridName = defaults.name;
+		let gridName = settings.name;
 
 		rule.walkDecls(function(decl) {
 			if (decl.prop === "name") {
