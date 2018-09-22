@@ -7,7 +7,8 @@ module.exports = function(viewport) {
 
 	if (split.length === 1) {
 		if (split[0].indexOf("%") >= 0) {
-			int = parseInt(breakpointInt);
+			let fac = parseFloat(split[0].replace("%", "")) / 100;
+			int = parseInt(breakpointInt) * fac;
 		} else if (split[0].indexOf("px") >= 0) {
 			int = parseInt(
 				split[0].substring(
