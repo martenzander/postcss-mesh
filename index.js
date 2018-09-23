@@ -122,7 +122,10 @@ function getPropValue(component, property) {
 								property,
 								settings.calcedContainerWidth / fac - settings.gutter * 2
 						  )
-						: getGutterValue(property, settings.calcedContainerWidth / fac);
+						: getGutterValue(
+								property,
+								(settings.calcedContainerWidth - settings.gutter * 2) / fac
+						  );
 					value = value.substring(0, value.length - 1);
 					value = `0 -${value}${settings.gutterUnit}`;
 					value = settings.responsiveGutter
