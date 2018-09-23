@@ -129,12 +129,6 @@ function getPropValue(component, property) {
 								(settings.calcedContainerWidth + settings.gutter * 2) / fac -
 									settings.gutter * 2
 						  );
-					console.log(
-						"void",
-						(settings.calcedContainerWidth + settings.gutter * 2) / fac -
-							settings.gutter * 2,
-						value
-					);
 					value = value.substring(0, value.length - 1);
 					value = `0 -${value}${settings.gutterUnit}`;
 					value = settings.responsiveGutter
@@ -188,11 +182,6 @@ function getPropValue(component, property) {
 								property,
 								(settings.calcedContainerWidth + settings.gutter * 2) / fac
 						  );
-					console.log(
-						"column",
-						(settings.calcedContainerWidth + settings.gutter * 2) / fac,
-						value
-					);
 					value = value.substring(0, value.length - 1);
 					value = `0 ${value}${settings.gutterUnit}`;
 					value = settings.responsiveGutter
