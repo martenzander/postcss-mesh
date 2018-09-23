@@ -79,7 +79,9 @@ function updateColumnWidth(fac) {
 
 function getGutterValue(property, referenceWidth) {
 	let value = settings[property.options.globalKey];
-	value = settings.responsiveGutter ? (value / referenceWidth) * 100 : value;
+	value = settings.responsiveGutter
+		? (value / Math.floor(referenceWidth)) * 100
+		: value;
 	value = `${value}${settings.gutterUnit}`;
 	return value;
 }
@@ -124,8 +126,15 @@ function getPropValue(component, property) {
 						  )
 						: getGutterValue(
 								property,
-								(settings.calcedContainerWidth - settings.gutter * 2) / fac
+								(settings.calcedContainerWidth + settings.gutter * 2) / fac -
+									settings.gutter * 2
 						  );
+					console.log(
+						"void",
+						(settings.calcedContainerWidth + settings.gutter * 2) / fac -
+							settings.gutter * 2,
+						value
+					);
 					value = value.substring(0, value.length - 1);
 					value = `0 -${value}${settings.gutterUnit}`;
 					value = settings.responsiveGutter
@@ -174,13 +183,18 @@ function getPropValue(component, property) {
 					let percentage = property.index / settings.columnCount;
 					let fac = 1 / percentage;
 					value = settings.gutterOnOutside
-						? getGutterValue(property, settings.calcedContainerWidth)
+						? getGutterValue(property, settings.calcedContainerWidth / fac)
 						: getGutterValue(
 								property,
-								settings.calcedContainerWidth + settings.gutter * 2
+								(settings.calcedContainerWidth + settings.gutter * 2) / fac
 						  );
+					console.log(
+						"column",
+						(settings.calcedContainerWidth + settings.gutter * 2) / fac,
+						value
+					);
 					value = value.substring(0, value.length - 1);
-					value = `0 ${value * fac}${settings.gutterUnit}`;
+					value = `0 ${value}${settings.gutterUnit}`;
 					value = settings.responsiveGutter
 						? value
 						: `0 ${settings.gutter}${settings.gutterUnit}`;
