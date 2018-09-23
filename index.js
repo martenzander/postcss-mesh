@@ -42,12 +42,12 @@ function updateSettings(obj) {
 		settings.gutterOnOutside =
 			obj["gutter-on-outside"] === "true" ? true : false;
 
-	// responsivePadding
-	if ("responsive-padding" in obj) {
-		settings.responsivePadding =
-			obj["responsive-padding"] === "true" ? true : false;
+	// responsiveGutter
+	if ("responsive-gutter" in obj) {
+		settings.responsiveGutter =
+			obj["responsive-gutter"] === "true" ? true : false;
 
-		settings.gutterUnit = settings.responsivePadding ? "%" : "px";
+		settings.gutterUnit = settings.responsiveGutter ? "%" : "px";
 	}
 
 	// containerWidth
@@ -79,7 +79,7 @@ function updateColumnWidth(fac) {
 
 function getGutterValue(property, referenceWidth) {
 	let value = settings[property.options.globalKey];
-	value = settings.responsivePadding ? (value / referenceWidth) * 100 : value;
+	value = settings.responsiveGutter ? (value / referenceWidth) * 100 : value;
 	value = `${value}${settings.gutterUnit}`;
 	return value;
 }
@@ -108,11 +108,26 @@ function getPropValue(component, property) {
 		switch (component) {
 			case "container":
 				if (property.name.indexOf("padding") >= 0) {
-					value = settings.gutterOnOutside
-						? getGutterValue(property, settings.viewportWidth)
-						: undefined;
+					value = settings.gutterOnOutside ? `${settings.gutter}px` : undefined;
 				} else {
 					defaultValue();
+				}
+				break;
+			case "void:nested":
+				{
+					let percentage = property.index / settings.columnCount;
+					let fac = 1 / percentage;
+					value = settings.gutterOnOutside
+						? getGutterValue(
+								property,
+								settings.calcedContainerWidth / fac - settings.gutter * 2
+						  )
+						: getGutterValue(property, settings.calcedContainerWidth / fac);
+					value = value.substring(0, value.length - 1);
+					value = `0 -${value}${settings.gutterUnit}`;
+					value = settings.responsiveGutter
+						? value
+						: `0 -${settings.gutter}${settings.gutterUnit}`;
 				}
 				break;
 			case "void":
@@ -135,6 +150,37 @@ function getPropValue(component, property) {
 					} else {
 						defaultValue();
 					}
+				}
+				break;
+			case "column-basic:first-of-type":
+				value = `${settings[property.options.globalKey]}px`;
+				break;
+			case "column-basic:last-of-type":
+				value = `${settings[property.options.globalKey]}px`;
+				break;
+			case "column:padding":
+				value = settings.gutterOnOutside
+					? getGutterValue(property, settings.calcedContainerWidth)
+					: getGutterValue(
+							property,
+							settings.calcedContainerWidth + settings.gutter * 2
+					  );
+				break;
+			case "column:nested":
+				{
+					let percentage = property.index / settings.columnCount;
+					let fac = 1 / percentage;
+					value = settings.gutterOnOutside
+						? getGutterValue(property, settings.calcedContainerWidth)
+						: getGutterValue(
+								property,
+								settings.calcedContainerWidth + settings.gutter * 2
+						  );
+					value = value.substring(0, value.length - 1);
+					value = `0 ${value * fac}${settings.gutterUnit}`;
+					value = settings.responsiveGutter
+						? value
+						: `0 ${settings.gutter}${settings.gutterUnit}`;
 				}
 				break;
 			case "column-basic":
@@ -190,6 +236,7 @@ function getComponentRules(viewport, options) {
 			name: key,
 			options: props[key]
 		};
+		if (options.index) property.index = options.index;
 		const propOptions = props[property.name];
 		let value;
 
@@ -275,6 +322,22 @@ function getRules(grid) {
 			getComponentRules(grid, {
 				component: "offset",
 				selector: `.${settings.name}-offset-${i}`
+			}),
+			// column-x column
+			getComponentRules(grid, {
+				component: "column:nested",
+				selector: `[class*="${settings.name}-column-${i}"] [class*="${
+					settings.name
+				}-column"]`,
+				index: i
+			}),
+			// column-x void
+			getComponentRules(grid, {
+				component: "void:nested",
+				selector: `[class*="${settings.name}-column-${i}"] .${
+					settings.name
+				}-void`,
+				index: i
 			})
 		);
 	}
@@ -325,6 +388,22 @@ function getRules(grid) {
 				getComponentRules(curViewport, {
 					component: "offset",
 					selector: `.${settings.name}-offset-${settings.viewportName}-${i}`
+				}),
+				// column-x column
+				getComponentRules(grid, {
+					component: "column:nested",
+					selector: `[class*="${settings.name}-column-${
+						settings.viewportName
+					}-${i}"] [class*="${settings.name}-column"]`,
+					index: i
+				}),
+				// column-x void
+				getComponentRules(grid, {
+					component: "void:nested",
+					selector: `[class*="${settings.name}-column-${
+						settings.viewportName
+					}-${i}"] .${settings.name}-void`,
+					index: i
 				})
 			);
 		}
@@ -379,7 +458,6 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 		// main init
 		function init() {
 			inlineSettings = getInlineSettings(input);
-			// console.log(inlineSettings);
 			generateCSS();
 		}
 

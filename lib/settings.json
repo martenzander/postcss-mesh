@@ -8,7 +8,7 @@
 		"options": ["inline-block", "flex", "float"]
 	},
 	"gutterOnOutside": false,
-	"responsivePadding": true,
+	"responsiveGutter": true,
 	"gutter": 15,
 	"gutterUnit": "px",
 	"name": "mesh",
@@ -88,6 +88,12 @@
 			"value": "block"
 		}
 	},
+	"void:nested": {
+		"margin": {
+			"viewportRelevant": true,
+			"globalKey": "gutter"
+		}
+	},
 	"offset": {
 		"margin-left": {
 			"viewportRelevant": true,
@@ -116,6 +122,12 @@
 		"position": {
 			"viewportRelevant": false,
 			"value": "relative"
+		}
+	},
+	"column:nested": {
+		"padding": {
+			"viewportRelevant": true,
+			"globalKey": "gutter"
 		}
 	},
 	"column": {
