@@ -1,25 +1,25 @@
-# postcss-mesh
+<h1 align="center">Mesh</h1>
+<p align="center">
+<a href="https://github.com/postcss/postcss">PostCSS</a> plugin to generate a completeley customizable grid<br>
+<a href="https://www.npmjs.com/package/postcss-mesh" rel="nofollow"><img src="https://img.shields.io/npm/v/postcss-mesh.svg" alt="Slack" data-canonical-src="https://img.shields.io/npm/v/postcss-mesh.svg" style="max-width:100%;"></a>
+<a href="https://www.npmjs.com/package/postcss-mesh" rel="nofollow"><img src="https://img.shields.io/npm/dt/postcss-mesh.svg" alt="Slack" data-canonical-src="https://img.shields.io/npm/dt/postcss-mesh.svg" style="max-width:100%;"></a>
+</p>
 
-[![npm version](https://img.shields.io/npm/v/postcss-mesh.svg)](https://www.npmjs.com/package/postcss-mesh)
-[![npm download](https://img.shields.io/npm/dt/postcss-mesh.svg)](https://www.npmjs.com/package/postcss-mesh)
-
-> [PostCSS](https://github.com/postcss/postcss) plugin to generate a completeley customizable grid
-
-## Why Mesh ?!
+## Unique Selling Points
 
 I know there are a lot of different grid systems already out there and most of them are pretty good. But none of them is offering the whole bandwidth of possible options. E.g. I wanted to have the ability to switch between different `display-types` (float | inline-block | flex) as well as I wanted to be able to overwrite certain parameters like `gutter` or `column-count` for specific viewports. That's how I came up with the idea to create my very own grid-system. Even though not every feature is fully supported yet, I thought I could share my work in progress. Another advantage of Mesh is that you are able to set as many different viewports and grids as you want and don't have to rely on a single config (e.g. how Bootstrap does).
 
 > Features that are not supported yet: **column-justify**, **column-align**
 
-## Installation
-
-```console
-$ npm i postcss-mesh -D
-```
-
 ---
 
-## Grid Setup
+## Getting Started
+### Installation
+
+```console
+$ npm i postcss-mesh
+```
+### Grid Setup
 
 This is what a basic Grid Setup using Mesh looks like:
 
@@ -69,10 +69,10 @@ The mesh grid system is customizable via a bunch of different properties. **coul
 
 > **NOTICE:** Not every property is supported by all display-types. See the table below for more information.
 
-| display-type   | float | inline-block | flex |
-| -------------- | ----- | ------------ | ---- |
-| column-align   | -     | yes          | yes  |
-| column-justify | -     | yes          | yes  |
+| display-type | float | inline-block | flex |
+| ------------ | ----- | ------------ | ---- |
+| column-align | -     | yes          | yes  |
+
 
 **display-type**<br>
 defines the grids display property // e.g. float | inline-block | flex
