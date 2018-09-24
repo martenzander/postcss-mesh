@@ -24,7 +24,7 @@
 	},
 	"homepage": "https://github.com/SlimMarten/postcss-mesh#readme",
 	"dependencies": {
-		"postcss": "^6.0.8"
+		"postcss": "^7.0.2"
 	},
 	"devDependencies": {
 		"eslint-config-standard": "^12.0.0",
