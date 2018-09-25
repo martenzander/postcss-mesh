@@ -14,7 +14,7 @@ Lightweight Grid Compiler for <a href="https://github.com/postcss/postcss">PostC
     - [Responsive Gutter](#responsive-gutter)
     - [Gutter On Outside](#gutter-on-outside)
     - [Mobile First || Desktop First](#mobile-first--desktop-first)
-    - [Unlimited Viewports](#unlimited-viewports)
+    - [Unlimited Breakpoints](#unlimited-breakpoints)
     - [Property Overwrite](#property-overwrite)
 - [Components](#components)
     - [Container](#container)
@@ -32,31 +32,38 @@ Lightweight Grid Compiler for <a href="https://github.com/postcss/postcss">PostC
       - [@mesh-grid{}](#mesh-grid)
       - [@mesh-viewport-VIEWPORTNAME](#mesh-viewport-viewportname)
   - [Usage](#usage)
-- [Roadmap](#roadmap)
 
 ## About Mesh
 
-I know there are a lot of different grid systems already out there and most of them are pretty good. But ☝️ none of them is offering the whole bandwidth of possible options. E.g. I wanted to have the ability to switch between different [display-type](#Properties) (float || inline-block || flex) as well as I wanted to be able to overwrite certain parameters like [gutter](#Properties) or [column-count](#Properties) viewportwise. That's how I came up with the idea to create my very own grid compiler and **Mesh** was born 🎉.
+I know there are a lot of different grid systems already out there and most of them are pretty good. But ☝️ none of them is offering the whole bandwidth of possible options. E.g. I wanted to have the ability to switch between different [display-types](#Properties) _(float || inline-block || flex)_ as well as I wanted to be able to overwrite certain parameters like [gutter](#Properties) or [column-count](#Properties) breakpointwise. That's how I came up with the idea to create my very own grid compiler and **Mesh** was born 🎉.
 
 ## Unique Selling Points
 
 #### Responsive Gutter
 
-Set the [responsive-gutter](#Properties) property to `true` and `margins` & `paddings` of all [Components](#components) (except [Container](#container)) will be calculated on a percentage basis. This means not only the column's width will scale but the gap between two columns to guarantee a true fluid layout.
+Set the [responsive-gutter](#properties) property to `true` and `margins` & `paddings` of all [Components](#components) (except [Container](#container)) will be calculated on a percentage basis. This means not only the column's width will scale but the gap between two columns to guarantee a true fluid layout.
 
-_Notice: This feature only allows to inherit the root columns gap to the first nested level_
+_Notice: This feature only allows to inherit the root columns gap to the first nested level._
 
 #### Gutter On Outside
 
+Allows you to toggle the [Container's](#container) padding which is based on the [gutter](#properties)-Size.
+
 #### Mobile First || Desktop First
 
-#### Unlimited Viewports
+You can decide if your default viewport is a desktop one or a mobile one using the [query-condition](#properties) property. This property takes `min-width` or `max-width` as an argument. If set to `min-width` your default viewport will be a mobile one. As soon as your screen's width hits the next bigger width defined in all of your breakpoints, it snaps to the related breakpoint.
+
+#### Unlimited Breakpoints
+
+Bootstrap comes with five predefined breakpoints (Extra small _<576px_, Small _≥576px_, Medium _≥768px_, Large _≥992px_, Extra Large _≥1200px_). These breakpoints have proved its worth over time. But nevertheless, sometimes your design requires more individual breakpoints.
 
 #### Property Overwrite
 
 ## Components
 
 Lorem ipsum dolor sit amet.
+
+<h3 align="center">Basic Components</h3>
 
 #### Container
 
@@ -81,6 +88,8 @@ Lorem ipsum dolor sit amet.
 .mesh-column-viewport-x {
 }
 ```
+
+<h3 align="center">Transform Components</h3>
 
 #### Push
 
@@ -114,7 +123,7 @@ Lorem ipsum dolor sit amet.
 
 ## Properties
 
-**Mesh** is based on a bunch of properties you can adjust to your needs. Some of them are overwriteable in each defined viewport.
+**Mesh** is based on a bunch of properties you can adjust to your needs. Some of them are overwriteable in each defined breakpoint.
 
 <table>
   <thead>
@@ -205,10 +214,3 @@ mesh works like any other common grid system. See the code below for a simple ex
     </div>
 </div>
 ```
-
-## Roadmap
-
-- set styles via includes so one does not have to use and compile the default classes
-- column-justify
-- quantity based column classes
-- root based column classes for nested columns
