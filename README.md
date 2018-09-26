@@ -1,6 +1,5 @@
 <p align="center">
 	<img src="https://raw.githubusercontent.com/SlimMarten/postcss-mesh/development/assets/img/logo.png" align="center">
-
 <h3 align="center">
 Mesh
 </h3>
@@ -23,113 +22,141 @@ Lightweight Grid Compiler for <a href="https://github.com/postcss/postcss">PostC
     - [Unlimited Breakpoints](#unlimited-breakpoints)
     - [Property Overwrite](#property-overwrite)
 - [Components](#components)
+  - [Basic Components](#basic-components)
     - [Container](#container)
     - [Void](#void)
     - [Column](#column)
-    - [Push](#push)
-    - [Pull](#pull)
+  - [Transform Components](#transform-components)
     - [Offset](#offset)
+    - [Pull](#pull)
+    - [Push](#push)
 - [Properties](#properties)
 - [Common Grid Features](#common-grid-features)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
   - [Grid Setup](#grid-setup)
-  - [@Rules](#rules)
-      - [@mesh-grid{}](#mesh-grid)
-      - [@mesh-viewport-VIEWPORTNAME](#mesh-viewport-viewportname)
-  - [Usage](#usage)
 
 ## About Mesh
 
-I know there are a lot of different grid systems already out there and most of them are pretty good. But ☝️ none of them is offering the whole bandwidth of possible options. E.g. I wanted to have the ability to switch between different [display-types](#Properties) _(float || inline-block || flex)_ as well as I wanted to be able to overwrite certain parameters like [gutter](#Properties) or [column-count](#Properties) breakpointwise. That's how I came up with the idea to create my very own grid compiler and **Mesh** was born 🎉.
+I know there are a lot of different grid systems already out there and most of them are pretty good. But ☝️ none of them is offering the whole bandwidth of possible options. E.g. I wanted to have the ability to switch between different [display-types](#Properties) _(float || inline-block || flex)_ as well as I wanted to be able to overwrite certain parameters like [gutter](#properties) or [column-count](#properties) breakpointwise. That's how I came up with the idea to create my very own grid compiler and Mesh was born 🎉🎉🎉.
 
 ## Unique Selling Points
 
 #### Responsive Gutter
 
-Set the [responsive-gutter](#properties) property to `true` and `margins` & `paddings` of all [Components](#components) (except [Container](#container)) will be calculated on a percentage basis. This means not only the column's width will scale but the gap between two columns to guarantee a true fluid layout.
+Set the [responsive-gutter](#properties) property to `true` and `margins` & `paddings` of all [components](#components) (except [container](#container)) will be calculated on a percentage basis. This means not only the column's width will scale but the gap between two columns to guarantee a true fluid layout.
+
+```css
+@mesh-grid {
+	// true || false, default is true
+	responsive-gutter: true;
+}
+```
 
 _Notice: This feature only allows to inherit the root columns gap to the first nested level._
 
 #### Gutter On Outside
 
-Allows you to toggle the [Container's](#container) padding which is based on the [gutter](#properties)-Size.
+Allows you to toggle the [container's](#container) padding which is based on the [gutter](#properties)-Size.
+
+```css
+@mesh-grid {
+	// true || false, default is true
+	gutter-on-outside: true;
+}
+```
 
 #### Mobile First || Desktop First
 
 You can decide if your default viewport is a desktop one or a mobile one using the [query-condition](#properties) property. This property takes `min-width` or `max-width` as an argument. If set to `min-width` your default viewport will be a mobile one. As soon as your screen's width hits the next bigger width defined in all of your breakpoints, it snaps to the related breakpoint.
 
+```css
+@mesh-grid {
+	// min-width || max-width, default is min-width
+	query-condition: min-width;
+}
+```
+
 #### Unlimited Breakpoints
 
-Bootstrap comes with five predefined breakpoints (Extra small _<576px_, Small _≥576px_, Medium _≥768px_, Large _≥992px_, Extra Large _≥1200px_). These breakpoints have proved its worth over time. But nevertheless, sometimes your design requires more individual breakpoints. In this case **Mesh** is your best friend. With **Mesh** you can define as many or as less breakpoints as you want.
+Bootstrap comes with five predefined breakpoints (Extra small _<576px_, Small _≥576px_, Medium _≥768px_, Large _≥992px_, Extra Large _≥1200px_). These breakpoints have proved its worth over time. But nevertheless, sometimes your design requires more individual breakpoints. In this case Mesh is your best friend. With Mesh you can define as many or as less custom breakpoints as you want using the `@mesh-viewport-VIEWPORTNAME`-@Rule where `VIEWPORTNAME` is the viewport's ID. The ID is used in the viewport specific classes. E.g. `@mesh-viewport-lg` results in `.mesh-column-lg`-classes.
+
+```css
+// this is how you would define a standard large bootstrap breakpoint
+// properties `container-width` & `viewport` are required
+
+@mesh-viewport-lg {
+	container-width: 960px;
+	viewport: 992px;
+}
+```
 
 #### Property Overwrite
 
+Property Overwrite allows you to overwrite some properties breakpointwise, e.g. `gutter`. Learn more about properties [here](#properties).
+
+```css
+@mesh-viewport-lg {
+	// px, default is 30px
+	gutter: 30px;
+}
+```
+
 ## Components
 
-Lorem ipsum dolor sit amet.
+Mesh's compiled Grid is made of three **basic components** and three _(as I like to call)_ **transform components**.
 
-<h3 align="center">Basic Components</h3>
+### Basic Components
+
+The basic components describe the `.mesh-container`, `.mesh-void` & `.mesh-column` classes. These components are necessary to set up a very basic grid.
 
 #### Container
 
-```css
-.mesh-container {
-}
+The container is the most outer component of a grid instance. It sets up the maximum width of the grid and should not be nested.
+
+```html
+<div class="mesh-container"></div>
 ```
 
 #### Void
 
-```css
-.mesh-void {
-}
+The void component is the equivalent to Bootstrap's `row` component and voids its parent gutter. The only immediate child of a void component should be a [column](#column).
+
+```html
+<div class="mesh-void"></div>
 ```
 
 #### Column
 
-```css
-.mesh-column-x {
-}
-// or
-.mesh-column-viewport-x {
-}
+```html
+<div class="mesh-column-x"></div>
 ```
 
-<h3 align="center">Transform Components</h3>
+### Transform Components
 
-#### Push
+The transform components describe the .mesh-offset, .mesh-pull & .mesh-push classes. These components are necessary to transform a [column](#column) with your grid. Using transform components you can reorder your [columns](#column).
 
-```css
-.mesh-push-x {
-}
-// or
-.mesh-push-viewport-x {
-}
+#### Offset
+
+```html
+<div class="mesh-offset-x"></div>
 ```
 
 #### Pull
 
-```css
-.mesh-pull-x {
-}
-// or
-.mesh-pull-viewport-x {
-}
+```html
+<div class="mesh-pull-x"></div>
 ```
 
-#### Offset
+#### Push
 
-```css
-.mesh-offset-x {
-}
-// or
-.mesh-offset-viewport-x {
-}
+```html
+<div class="mesh-push-x"></div>
 ```
 
 ## Properties
 
-**Mesh** is based on a bunch of properties you can adjust to your needs. Some of them are overwriteable in each defined breakpoint.
+Mesh is based on a bunch of properties you can adjust to your needs. Some of them are overwriteable in each defined breakpoint. See the table below to get an overview of what Mesh is offering.
 
 <table>
   <thead>
@@ -191,32 +218,4 @@ This is what a basic Grid Setup using Mesh looks like:
 		...;
 	}
 }
-```
-
-### @Rules
-
-##### @mesh-grid{}
-
-initiates a new grid.
-
-##### @mesh-viewport-VIEWPORTNAME
-
-initiates a new breakpoint where `VIEWPORTNAME` should be the name of the viewport.
-E.g. if you generate a grid using `@mesh-viewport-sm{...}` the class of a column for the specific breakpoint could look like this: `.myGrid-column-sm-12{...}`
-
-### Usage
-
-mesh works like any other common grid system. See the code below for a simple example.
-
-```HTML
-<!-- container to center the grid on your page -->
-<div class="myGrid-container">
-    <!-- additional wrapper to void column padding -->
-    <div class="myGrid-void">
-        <!-- columns with breakpoint specific size -->
-        <div class="myGrid-column-12 myGrid-column-sm-4"></div>
-        <div class="myGrid-column-12 myGrid-column-sm-4"></div>
-        <div class="myGrid-column-12 myGrid-column-sm-4"></div>
-    </div>
-</div>
 ```
