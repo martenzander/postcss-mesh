@@ -47,8 +47,10 @@ I know there are a lot of different grid systems already out there and most of t
 Set the [responsive-gutter](#properties) property to `true` and `margins` & `paddings` of all [components](#components) (except [container](#container)) will be calculated on a percentage basis. This means not only the column's width will scale but the gap between two columns to guarantee a true fluid layout.
 
 ```css
+// true || false
+// default: true
+
 @mesh-grid {
-	// true || false, default is true
 	responsive-gutter: true;
 }
 ```
@@ -60,8 +62,10 @@ _Notice: This feature only allows to inherit the root columns gap to the first n
 Allows you to toggle the [container's](#container) padding which is based on the [gutter](#properties)-Size.
 
 ```css
+// true || false
+// default: true
+
 @mesh-grid {
-	// true || false, default is true
 	gutter-on-outside: true;
 }
 ```
@@ -71,8 +75,10 @@ Allows you to toggle the [container's](#container) padding which is based on the
 You can decide if your default viewport is a desktop one or a mobile one using the [query-condition](#properties) property. This property takes `min-width` or `max-width` as an argument. If set to `min-width` your default viewport will be a mobile one. As soon as your screen's width hits the next bigger width defined in all of your breakpoints, it snaps to the related breakpoint.
 
 ```css
+// min-width || max-width
+// default: min-width
+
 @mesh-grid {
-	// min-width || max-width, default is min-width
 	query-condition: min-width;
 }
 ```
@@ -96,8 +102,10 @@ Bootstrap comes with five predefined breakpoints (Extra small _<576px_, Small _â
 Property Overwrite allows you to overwrite some properties breakpointwise, e.g. `gutter`. Learn more about properties [here](#properties).
 
 ```css
+// px
+// default: 30px
+
 @mesh-viewport-lg {
-	// px, default is 30px
 	gutter: 30px;
 }
 ```
@@ -134,24 +142,41 @@ The void component is the equivalent to Bootstrap's `row` component and voids it
 
 ### Transform Components
 
-The transform components describe the .mesh-offset, .mesh-pull & .mesh-push classes. These components are necessary to transform a [column](#column) with your grid. Using transform components you can reorder your [columns](#column).
+The transform components describe the `.mesh-offset`, `.mesh-pull` & `.mesh-push` classes. These components are necessary to transform a [column](#column) within your grid. Using transform components you can reorder your [columns](#column).
 
 #### Offset
 
+The offset component will add a margin to the respective [column](#column) to create an even bigger gap between two columns.
+
 ```html
-<div class="mesh-offset-x"></div>
+// using the component like below will offset the
+// respective column about the width of a single column.
+
+<div class="mesh-offset-1"></div>
 ```
 
 #### Pull
 
+The pull component will reposition the respective [column](#column) from the right.
+
 ```html
-<div class="mesh-pull-x"></div>
+// using the component like below will pull the
+// respective column about the width of a single column
+// to the left.
+
+<div class="mesh-pull-1"></div>
 ```
 
 #### Push
 
+The push component will reposition the respective [column](#column) from the left.
+
 ```html
-<div class="mesh-push-x"></div>
+// using the component like below will push the
+// respective column about the width of a single column
+// to the right.
+
+<div class="mesh-push-1"></div>
 ```
 
 ## Properties
