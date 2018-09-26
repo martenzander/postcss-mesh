@@ -1,4 +1,6 @@
-<h3 align="center">Mesh</h3>
+<h3 align="center">
+Mesh
+</h3>
 <p align="center">
 Lightweight Grid Compiler for <a href="https://github.com/postcss/postcss">PostCSS</a>
 </p>
@@ -55,7 +57,7 @@ You can decide if your default viewport is a desktop one or a mobile one using t
 
 #### Unlimited Breakpoints
 
-Bootstrap comes with five predefined breakpoints (Extra small _<576px_, Small _≥576px_, Medium _≥768px_, Large _≥992px_, Extra Large _≥1200px_). These breakpoints have proved its worth over time. But nevertheless, sometimes your design requires more individual breakpoints.
+Bootstrap comes with five predefined breakpoints (Extra small _<576px_, Small _≥576px_, Medium _≥768px_, Large _≥992px_, Extra Large _≥1200px_). These breakpoints have proved its worth over time. But nevertheless, sometimes your design requires more individual breakpoints. In this case **Mesh** is your best friend. With **Mesh** you can define as many or as less breakpoints as you want.
 
 #### Property Overwrite
 
