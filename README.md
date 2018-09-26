@@ -15,6 +15,9 @@ Lightweight Grid Compiler for <a href="https://github.com/postcss/postcss">PostC
 <h2>Table of contents</h2>
 
 - [About Mesh](#about-mesh)
+- [Getting Started](#getting-started)
+  - [Installation](#installation)
+  - [Grid Setup](#grid-setup)
 - [Unique Selling Points](#unique-selling-points)
     - [Responsive Gutter](#responsive-gutter)
     - [Gutter On Outside](#gutter-on-outside)
@@ -32,13 +35,54 @@ Lightweight Grid Compiler for <a href="https://github.com/postcss/postcss">PostC
     - [Push](#push)
 - [Properties](#properties)
 - [Common Grid Features](#common-grid-features)
-- [Getting Started](#getting-started)
-  - [Installation](#installation)
-  - [Grid Setup](#grid-setup)
 
 ## About Mesh
 
-I know there are a lot of different grid systems already out there and most of them are pretty good. But ☝️ none of them is offering the whole bandwidth of possible options. E.g. I wanted to have the ability to switch between different [display-types](#Properties) _(float || inline-block || flex)_ as well as I wanted to be able to overwrite certain parameters like [gutter](#properties) or [column-count](#properties) breakpointwise. That's how I came up with the idea to create my very own grid compiler and Mesh was born 🎉🎉🎉.
+There are a lot of different grid systems already out there and most of them are pretty good. But ☝️ none of them is offering the whole bandwidth of possible options. E.g. I wanted to have the ability to switch between different [display-types](#Properties) _(float || inline-block || flex)_ as well as I wanted to be able to overwrite certain parameters like [gutter](#properties) or [column-count](#properties) breakpointwise. That's how I came up with the idea to create my very own grid compiler and Mesh was born 🎉🎉🎉.
+
+## Getting Started
+
+### Installation
+
+```console
+$ npm i postcss-mesh
+```
+
+### Grid Setup
+
+Mesh is based on @-rules. To initiate a new grid use `@mesh-grid`. All breakpoints for a grid should be nested within the respective grid declaration. See the example below for a simple grid setup with bootstrap standards.
+
+```css
+@mesh-grid {
+	name: mesh;
+	display-type: float;
+	gutter: 30px;
+	column-count: 12;
+	container-width: fluid;
+	compile-default-classes: true;
+	mobile-first: true;
+
+	@mesh-viewport-sm {
+		viewport: 576px;
+		container-width: 540px;
+	}
+
+	@mesh-viewport-md {
+		viewport: 768px;
+		container-width: 720px;
+	}
+
+	@mesh-viewport-lg {
+		viewport: 992px;
+		container-width: 960px;
+	}
+
+	@mesh-viewport-lg {
+		viewport: 1200px;
+		container-width: 1140px;
+	}
+}
+```
 
 ## Unique Selling Points
 
@@ -85,11 +129,11 @@ You can decide if your default viewport is a desktop one or a mobile one using t
 
 #### Unlimited Breakpoints
 
-Bootstrap comes with five predefined breakpoints (Extra small _<576px_, Small _≥576px_, Medium _≥768px_, Large _≥992px_, Extra Large _≥1200px_). These breakpoints have proved its worth over time. But nevertheless, sometimes your design requires more individual breakpoints. In this case Mesh is your best friend. With Mesh you can define as many or as less custom breakpoints as you want using the `@mesh-viewport-VIEWPORTNAME`-@Rule where `VIEWPORTNAME` is the viewport's ID. The ID is used in the viewport specific classes. E.g. `@mesh-viewport-lg` results in `.mesh-column-lg`-classes.
+Bootstrap comes with five predefined breakpoints (Extra small _<576px_, Small _≥576px_, Medium _≥768px_, Large _≥992px_, Extra Large _≥1200px_). These breakpoints have proved its worth over time. But nevertheless, sometimes your design requires more individual breakpoints. In this case Mesh is your best friend. With Mesh you can define as many or as less custom breakpoints as you want using the `@mesh-viewport-VIEWPORTNAME`-@-rule where `VIEWPORTNAME` is the viewport's ID. The ID is used in the viewport specific classes. E.g. `@mesh-viewport-lg` results in `.mesh-column-lg`-classes.
 
 ```css
 // this is how you would define a standard large bootstrap breakpoint
-// properties `container-width` & `viewport` are required
+// properties "container-width" & "viewport" are required
 
 @mesh-viewport-lg {
 	container-width: 960px;
@@ -112,7 +156,7 @@ Property Overwrite allows you to overwrite some properties breakpointwise, e.g. 
 
 ## Components
 
-Mesh's compiled Grid is made of three **basic components** and three _(as I like to call)_ **transform components**.
+Mesh's compiled Grid is made of three **basic components** and three **transform components**.
 
 ### Basic Components
 
@@ -136,7 +180,12 @@ The void component is the equivalent to Bootstrap's `row` component and voids it
 
 #### Column
 
+The column component is where you can put your content. All columns should be an immediate child of a [void](#void) component.
+
 ```html
+// replace "x" with a number between 1 and your given column-count
+// for breakpoint specific column widths include your breakpoints ID in the class, e.g. "mesh-column-lg-6"
+
 <div class="mesh-column-x"></div>
 ```
 
@@ -207,40 +256,3 @@ Mesh is based on a bunch of properties you can adjust to your needs. Some of the
 </table>
 
 ## Common Grid Features
-
-## Getting Started
-
-### Installation
-
-```console
-$ npm i postcss-mesh
-```
-
-### Grid Setup
-
-This is what a basic Grid Setup using Mesh looks like:
-
-```css
-@mesh-grid {
-	name: mesh;
-	display-type: inline-block;
-	gutter: 30px;
-	column-count: 12;
-	container-width: fluid;
-	compile-default-classes: true;
-	mobile-first: true;
-
-	@mesh-viewport-viewportname1 {
-		viewport: 1200px;
-		container-width: 1170px;
-	}
-
-	@mesh-viewport-viewportname2 {
-		...;
-	}
-
-	@mesh-viewport-viewportname2 {
-		...;
-	}
-}
-```
