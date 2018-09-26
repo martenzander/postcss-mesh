@@ -54,13 +54,15 @@ Mesh is based on @-rules. To initiate a new grid use `@mesh-grid`. All breakpoin
 
 ```css
 @mesh-grid {
-	name: mesh;
-	display-type: float;
-	gutter: 30px;
 	column-count: 12;
-	container-width: fluid;
 	compile-default-classes: true;
-	mobile-first: true;
+	container-width: 100%;
+	display-type: float;
+	gutter-on-outside: true;
+	gutter: 30px;
+	name: mesh;
+	query-condition: min-width;
+	responsive-gutter: false;
 
 	@mesh-viewport-sm {
 		viewport: 576px;
