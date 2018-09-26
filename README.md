@@ -1,3 +1,6 @@
+<p align="center">
+	<img src="https://raw.githubusercontent.com/SlimMarten/postcss-mesh/development/assets/img/logo.png" align="center">
+
 <h3 align="center">
 Mesh
 </h3>
@@ -7,6 +10,7 @@ Lightweight Grid Compiler for <a href="https://github.com/postcss/postcss">PostC
 <p align="center">
 <a href="https://www.npmjs.com/package/postcss-mesh" rel="nofollow"><img src="https://img.shields.io/npm/v/postcss-mesh.svg" alt="Slack" data-canonical-src="https://img.shields.io/npm/v/postcss-mesh.svg" style="max-width:100%;"></a>
 <a href="https://www.npmjs.com/package/postcss-mesh" rel="nofollow"><img src="https://img.shields.io/npm/dt/postcss-mesh.svg" alt="Slack" data-canonical-src="https://img.shields.io/npm/dt/postcss-mesh.svg" style="max-width:100%;"></a>
+</p>
 </p>
 
 <h2>Table of contents</h2>
