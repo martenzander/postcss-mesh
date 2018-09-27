@@ -127,6 +127,8 @@ Set the [responsive-gutter](#properties) property to `true` and `margins` & `pad
 
 _Notice: This feature only allows to inherit the root columns gap to the first nested level._
 
+<img src="https://raw.githubusercontent.com/SlimMarten/postcss-mesh/development/assets/img/examples/responsive-gutter.gif" align="center">
+
 #### Gutter On Outside
 
 Allows you to toggle the [container's](#container) padding which is based on the [gutter](#properties)-Size.
