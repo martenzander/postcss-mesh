@@ -35,6 +35,8 @@ Powerful Grid Compiler for <a href="https://github.com/postcss/postcss">PostCSS<
     - [Offset](#offset)
     - [Pull](#pull)
     - [Push](#push)
+- [Nesting](#nesting)
+- [Ordering](#ordering)
 - [Properties](#properties)
 
 ## About Mesh
@@ -203,7 +205,7 @@ The container is the most outer component of a grid instance. It sets up the max
 
 #### Void
 
-The void component is the equivalent to Bootstrap's `row` component and voids its parent gutter. The only immediate child of a void component should be a [column](#column).
+The void component is the equivalent to Bootstrap's `row` component and voids its parents gutter. The only immediate child of a void component should be a [column](#column).
 
 ```html
 <div class="mesh-void"></div>
@@ -264,6 +266,23 @@ The push component will reposition the respective [column](#column) from the lef
 
 <div class="mesh-push-1"></div>
 ```
+
+## Nesting
+
+## Ordering
+
+Sometimes you have to switch position of certain [columns](#column) breakpointwise. Using [push](#push) and [pull](#pull) components you can shift your [columns](#column).
+
+```html
+<div class="mesh-container">
+  <div class="mesh-void">
+    <div class="mesh-column-9 mesh-push-3"></div>
+    <div class="mesh-column-3 mesh-pull-9"></div>
+  </div>
+</div>
+```
+
+<img src="https://raw.githubusercontent.com/SlimMarten/postcss-mesh/development/assets/img/examples/ordering.png" align="center">
 
 ## Properties
 
