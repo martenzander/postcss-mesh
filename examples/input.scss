@@ -1,58 +1,31 @@
-/*============================
-=            grid            =
-============================*/
+@mesh-grid {
+	column-count: 12;
+	compile: true;
+	container-width: 100%;
+	display-type: float;
+	gutter-on-outside: true;
+	gutter: 30px;
+	name: mesh;
+	query-condition: min-width;
+	responsive-gutter: false;
 
-/**
-
-	BASED ON:
-	postcss-mesh: https://github.com/SlimMarten/postcss-mesh
-
-	@mesh-grid-NAME{
-		display-type: inline-block;
-		gutter: 30px;
-		column-align: 'tbd';
-		column-count: 12;
-		column-justify: 'tbd';
-		container-width: fluid;
-		compile-default-classes: true;
-		mobile-first: true;
-
-		@mesh-viewport-VIEWPORTNAME {
-			viewport: 1200px;
-			container-width: 1170px;
-		}
-
-		...
+	@mesh-viewport-sm {
+		container-width: 540px;
+		viewport: 576px;
 	}
 
-*/
+	@mesh-viewport-md {
+		container-width: 720px;
+		viewport: 768px;
+	}
 
-@mesh-grid {
-  name: mesh;
-  display-type: inline-block;
-  gutter: 30px;
-  // column-align: "tbd";
-  column-count: 12;
-  // column-justify: "tbd";
-  container-width: fluid;
-  compile-default-classes: true;
-  mobile-first: true;
-  // gutter-on-outside: true;
+	@mesh-viewport-lg {
+		container-width: 960px;
+		viewport: 992px;
+	}
 
-  @mesh-viewport-lg {
-    viewport: 1200px;
-    container-width: 1170px;
-  }
-
-  @mesh-viewport-sm {
-    viewport: 768px;
-    container-width: 750px;
-  }
-
-  @mesh-viewport-md {
-    viewport: 992px;
-    container-width: 970px;
-  }
+	@mesh-viewport-xl {
+		container-width: 1140px;
+		viewport: 1200px;
+	}
 }
-
-/*=====  End of grid  ======*/

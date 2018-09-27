@@ -1,482 +1,476 @@
-var postcss = require("postcss");
-var meta = require("./package.json");
-var name = meta.name;
-var version = meta.version;
-var author = meta.author.name;
-var license = meta.license;
+const postcss = require("postcss");
+const meta = require("./package.json");
+const name = meta.name;
+const settings = require("./lib/settings.json");
+const version = meta.version;
+const author = meta.author.name;
+const license = meta.license;
+const getDisplaySettings = require("./utils/getDisplaySettings");
+const getCalcedContainerWidth = require("./utils/getCalcedContainerWidth");
+const getInlineSettings = require("./utils/getInlineSettings");
+const valueConversion = require("./lib/valueConversion.json");
+const basicComponents = [
+	"push",
+	"push-basic",
+	"pull",
+	"pull-basic",
+	"column",
+	"offset",
+	"void:after"
+];
 
-module.exports = postcss.plugin("postcss-mesh", function(options) {
-  return function(input) {
-    /*===============================================
-		=            constants and variables            =
-		===============================================*/
+function updateSettings(obj) {
+	// columnAlign
+	if ("column-align" in obj) settings.columnAlign = obj["column-align"];
 
-    // inline css settings
-    var inlineSettings = {};
+	// displaySettings
+	settings.displaySettings = getDisplaySettings(obj);
 
-    // generated CSS
-    var mesh = postcss.root();
+	// void
+	settings.void.display.value =
+		settings.displayType.value === "flex" ? "flex" : "block";
+	settings.void["font-size"].value =
+		settings.displayType.value === "inline-block" ? "0" : undefined;
 
-    // mobile first or desktop first
-    var queryCondition = "";
+	// gutter
+	if ("gutter" in obj)
+		settings.gutter =
+			parseInt(obj.gutter.substring(0, obj.gutter.length - 1)) / 2;
 
-    /*=====  End of constants and variables  ======*/
+	// gutterOnOutside
+	if ("gutter-on-outside" in obj)
+		settings.gutterOnOutside =
+			obj["gutter-on-outside"] === "true" ? true : false;
 
-    /*=======================================
-		=            global function            =
-		=======================================*/
+	// responsiveGutter
+	if ("responsive-gutter" in obj) {
+		settings.responsiveGutter =
+			obj["responsive-gutter"] === "true" ? true : false;
 
-    // retrieve css inline settings
-    function getInlineSettings() {
-      input.walkAtRules(function(rule) {
-        // return if at-rule does not match 'mesh-grid'
-        if (!/^mesh-grid/.test(rule.name)) return;
-        var gridName = "mesh";
+		settings.gutterUnit = settings.responsiveGutter ? "%" : "px";
+	}
 
-        rule.walkDecls(function(decl) {
-          if (decl.prop === "name") {
-            gridName = decl.value;
-          }
-        });
+	// containerWidth
+	if ("container-width" in obj) {
+		settings.containerWidth = obj["container-width"];
+		settings.calcedContainerWidth = getCalcedContainerWidth(obj);
+	}
 
-        inlineSettings[gridName] = {};
-        inlineSettings[gridName].name = gridName;
-        inlineSettings[gridName].viewports = {};
+	// viewportWidth
+	if ("viewport" in obj)
+		settings.viewportWidth = parseInt(
+			obj.viewport.substring(0, obj.viewport.length - 1)
+		);
 
-        rule.walkDecls(function(decl) {
-          if (!/^mesh-viewport-/.test(decl.parent.name)) {
-            inlineSettings[gridName][decl.prop] = decl.value;
-          } else {
-            var viewport = decl.parent.name.split("-")[
-              decl.parent.name.split("-").length - 1
-            ];
-            inlineSettings[gridName].viewports[viewport] =
-              inlineSettings[gridName].viewports[viewport] || {};
-            inlineSettings[gridName].viewports[viewport][decl.prop] =
-              decl.value;
-          }
-        });
-        // remove inline at-rules
-        rule.remove();
-      });
+	// viewportName
+	settings.viewportName = obj.name;
 
-      // sort viewports
-      for (var n in inlineSettings) {
-        var currentGrid = inlineSettings[n];
-        currentGrid.sortedViewports = {};
-        var tempSortedViewports = [];
+	// columnCount
+	if ("column-count" in obj)
+		settings.columnCount = parseInt(obj["column-count"]);
 
-        for (var i in currentGrid.viewports) {
-          var currentViewport = currentGrid.viewports[i];
-          var currentBreakpoint = currentViewport.viewport;
-          currentBreakpoint = parseInt(
-            currentBreakpoint.substring(0, currentBreakpoint.length - 2)
-          );
-          tempSortedViewports.push(currentBreakpoint);
-        }
+	// columnSingleWidth
+	settings.columnSingleWidth = 100 / settings.columnCount;
+}
 
-        tempSortedViewports =
-          currentGrid["mobile-first"] === "true"
-            ? tempSortedViewports.sort(function(a, b) {
-                return a - b;
-              })
-            : tempSortedViewports.sort(function(a, b) {
-                return b - a;
-              });
+function updateColumnWidth(fac) {
+	settings.columnWidth = `${settings.columnSingleWidth * fac}%`;
+}
 
-        for (var i = 0; i < tempSortedViewports.length; i++) {
-          var breakpoint = tempSortedViewports[i];
+function getGutterValue(property, referenceWidth) {
+	let value = settings[property.options.globalKey];
+	value = settings.responsiveGutter
+		? (value / Math.floor(referenceWidth)) * 100
+		: value;
+	value = `${value}${settings.gutterUnit}`;
+	return value;
+}
 
-          var relatedViewport = {};
+function getAtRule() {
+	const atRule = postcss.atRule();
+	atRule.name = `media (${settings.queryCondition.value} : ${
+		settings.viewportWidth
+	}px)`;
 
-          for (var j in currentGrid.viewports) {
-            var currentSetting = currentGrid.viewports[j];
-            var currentViewport = currentSetting.viewport;
-            var currentBreakpoint = parseInt(
-              currentViewport.substring(0, currentViewport.length - 2)
-            );
+	return atRule;
+}
 
-            if (currentBreakpoint === breakpoint) {
-              relatedViewport = currentSetting;
-              relatedViewport.name = j;
+function getPropValue(component, property) {
+	let value;
 
-              currentGrid.sortedViewports[j] = relatedViewport;
-            }
-          }
-        }
-      }
+	function defaultValue() {
+		value = property.options["value"]
+			? property.options.value
+			: settings[property.options.globalKey];
+	}
 
-      return inlineSettings;
-    }
+	if (basicComponents.indexOf(component) >= 0) {
+		defaultValue();
+	} else {
+		switch (component) {
+			case "container":
+				if (property.name.indexOf("padding") >= 0) {
+					value = settings.gutterOnOutside ? `${settings.gutter}px` : undefined;
+				} else {
+					defaultValue();
+				}
+				break;
+			case "void:nested":
+				{
+					let percentage = property.index / settings.columnCount;
+					let fac = 1 / percentage;
+					value = settings.gutterOnOutside
+						? getGutterValue(
+								property,
+								settings.calcedContainerWidth / fac - settings.gutter * 2
+						  )
+						: getGutterValue(
+								property,
+								(settings.calcedContainerWidth + settings.gutter * 2) / fac -
+									settings.gutter * 2
+						  );
+					value = value.substring(0, value.length - 1);
+					value = `0 -${value}${settings.gutterUnit}`;
+					value = settings.responsiveGutter
+						? value
+						: `0 -${settings.gutter}${settings.gutterUnit}`;
+				}
+				break;
+			case "void":
+				{
+					if (property.name.indexOf("margin") >= 0) {
+						value = settings.gutterOnOutside
+							? getGutterValue(
+									property,
+									settings.calcedContainerWidth - settings.gutter * 2
+							  )
+							: getGutterValue(property, settings.calcedContainerWidth);
+						value = `-${value}`;
+					} else if (
+						(property.name == "flex-wrap" || property.name == "align-items") &&
+						settings.displayType.value !== "flex"
+					) {
+						value = undefined;
+					} else if (property.name.indexOf("align-items") >= 0) {
+						value = valueConversion[settings[property.options.globalKey]];
+					} else {
+						defaultValue();
+					}
+				}
+				break;
+			case "column:padding":
+				value = settings.gutterOnOutside
+					? getGutterValue(property, settings.calcedContainerWidth)
+					: getGutterValue(
+							property,
+							settings.calcedContainerWidth + settings.gutter * 2
+					  );
+				break;
+			case "column:nested":
+				{
+					let percentage = property.index / settings.columnCount;
+					let fac = 1 / percentage;
+					value = settings.gutterOnOutside
+						? getGutterValue(property, settings.calcedContainerWidth / fac)
+						: getGutterValue(
+								property,
+								(settings.calcedContainerWidth + settings.gutter * 2) / fac
+						  );
+					value = value.substring(0, value.length - 1);
+					value = `0 ${value}${settings.gutterUnit}`;
+					value = settings.responsiveGutter
+						? value
+						: `0 ${settings.gutter}${settings.gutterUnit}`;
+				}
+				break;
+			case "column-basic":
+				{
+					const excludeFlexProps = [
+						"vertical-align",
+						"display",
+						"min-height",
+						"float"
+					];
+					const excludeInlineBlockProps = ["vertical-align", "display"];
+					const excludeFloatProps = ["min-height", "float"];
+					let excludeProps;
+					switch (settings.displayType.value) {
+						case "inline-block":
+							excludeProps = excludeFloatProps;
+							break;
+						case "float":
+							excludeProps = excludeInlineBlockProps;
+							break;
+						case "flex":
+							excludeProps = excludeFlexProps;
+							break;
+					}
+					if (excludeProps.indexOf(property.name) >= 0) return undefined;
 
-    // get display Type
-    function getDisplaySettings(grid) {
-      var displayProperty =
-        grid["display-type"] === "float" ? "float" : "display";
-      var displayValue =
-        grid["display-type"] === "float" ? "left" : grid["display-type"];
+					if (property.name.indexOf("padding") >= 0) {
+						value = settings.gutterOnOutside
+							? getGutterValue(property, settings.calcedContainerWidth)
+							: getGutterValue(
+									property,
+									settings.calcedContainerWidth + settings.gutter * 2
+							  );
+					} else {
+						defaultValue();
+					}
+				}
+				break;
+		}
+	}
 
-      return { property: displayProperty, value: displayValue };
-    }
+	return value;
+}
 
-    // generate rules for .mesh-container
-    function getMeshContainerRules(grid) {
-      var rules = [];
-      var meshContainerRules = postcss.rule();
-      var name = grid.name;
-      meshContainerRules.selector = `.${name}-container`;
+function getComponentRules(viewport, options) {
+	const component = options.component;
+	const props = settings[component];
+	const rule = postcss.rule();
+	rule.selector = options.selector;
 
-      // set display
-      meshContainerRules.append(
-        postcss.decl({ prop: "display", value: "block" })
-      );
-      // set margin
-      meshContainerRules.append(
-        postcss.decl({ prop: "margin", value: "0 auto" })
-      );
-      // set max-width
-      grid["container-width"] == "fluid"
-        ? meshContainerRules.append(
-            postcss.decl({ prop: "max-width", value: "100%" })
-          )
-        : meshContainerRules.append(
-            postcss.decl({ prop: "max-width", value: grid["container-width"] })
-          );
-      // set padding
-      var gutterSize = parseInt(
-        grid["gutter"].substring(0, grid["gutter"].length - 1)
-      );
-      meshContainerRules.append(
-        postcss.decl({ prop: "padding", value: `0 ${gutterSize / 2}px` })
-      );
-      // set position
-      meshContainerRules.append(
-        postcss.decl({ prop: "position", value: "relative" })
-      );
-      // set width
-      meshContainerRules.append(postcss.decl({ prop: "width", value: "100%" }));
+	for (const key in props) {
+		const property = {
+			name: key,
+			options: props[key]
+		};
+		if (options.index) property.index = options.index;
+		const propOptions = props[property.name];
+		let value;
 
-      rules.push(meshContainerRules);
+		if ("viewports" in viewport) {
+			value = getPropValue(component, property);
+		} else if (propOptions.viewportRelevant) {
+			value = getPropValue(component, property);
+		}
+		if (value !== undefined) {
+			rule.append(
+				postcss.decl({
+					prop: property.name,
+					value: value
+				})
+			);
+		}
+	}
+	return rule;
+}
 
-      for (var key in grid.sortedViewports) {
-        var currentViewport = grid.sortedViewports[key];
-        var breakpoint = currentViewport.viewport;
-        var maxWidth = currentViewport["container-width"];
-        maxWidth === "fluid" ? (maxWidth = "100%") : (maxWidth = maxWidth);
-        var atRule = postcss.atRule();
-        atRule.name = `media (${queryCondition} : ${breakpoint})`;
-        // update properties
-        if ("gutter" in currentViewport)
-          gutterSize =
-            parseInt(
-              currentViewport.gutter.substring(
-                0,
-                currentViewport.gutter.length - 1
-              )
-            ) || gutter;
+function getRules(grid) {
+	updateSettings(grid);
+	const rules = [];
 
-        // common viewport rules
-        var meshContainerRule = postcss.rule();
-        meshContainerRule.selector = `.${name}-container`;
+	rules.push(
+		// container
+		getComponentRules(grid, {
+			component: "container",
+			selector: `.${settings.name}-container`
+		}),
+		// void
+		getComponentRules(grid, {
+			component: "void",
+			selector: `.${settings.name}-void`
+		}),
+		// push-basic
+		getComponentRules(grid, {
+			component: "push-basic",
+			selector: `[class*="${settings.name}-push"]`
+		}),
+		// pull-basic
+		getComponentRules(grid, {
+			component: "pull-basic",
+			selector: `[class*="${settings.name}-pull"]`
+		}),
+		// column-basic
+		getComponentRules(grid, {
+			component: "column-basic",
+			selector: `[class*="${settings.name}-column"]`
+		})
+	);
 
-        // set padding
-        meshContainerRule.append(
-          postcss.decl({ prop: "padding", value: `0 ${gutterSize / 2}px` })
-        );
-        // set max-width
-        meshContainerRule.append(
-          postcss.decl({ prop: "max-width", value: maxWidth })
-        );
+	// void:after
+	if (settings.displayType.value === "float") {
+		rules.push(
+			getComponentRules(grid, {
+				component: "void:after",
+				selector: `.${settings.name}-void:after`
+			})
+		);
+	}
 
-        atRule.append(meshContainerRule);
+	for (let i = 0; i <= settings.columnCount; i++) {
+		updateColumnWidth(i);
 
-        rules.push(atRule);
-      }
+		if (i !== 0) {
+			rules.push(
+				// column
+				getComponentRules(grid, {
+					component: "column",
+					selector: `.${settings.name}-column-${i}`
+				}),
+				// column-x column
+				getComponentRules(grid, {
+					component: "column:nested",
+					selector: `[class*="${settings.name}-column-${i}"] [class*="${
+						settings.name
+					}-column"]`,
+					index: i
+				}),
+				// column-x void
+				getComponentRules(grid, {
+					component: "void:nested",
+					selector: `[class*="${settings.name}-column-${i}"] .${
+						settings.name
+					}-void`,
+					index: i
+				})
+			);
+		}
 
-      return rules;
-    }
+		rules.push(
+			// push
+			getComponentRules(grid, {
+				component: "push",
+				selector: `.${settings.name}-push-${i}`
+			}),
+			// pull
+			getComponentRules(grid, {
+				component: "pull",
+				selector: `.${settings.name}-pull-${i}`
+			}),
+			// offset
+			getComponentRules(grid, {
+				component: "offset",
+				selector: `.${settings.name}-offset-${i}`
+			})
+		);
+	}
 
-    // generate rules for .mesh-void
-    function getMeshVoidRules(grid) {
-      var rules = [];
-      var name = grid.name;
-      var meshVoidAfterRule = postcss.rule();
-      var meshVoidRule = postcss.rule();
-      meshVoidAfterRule.selector = `.${name}-void:after`;
-      meshVoidRule.selector = `.${name}-void`;
+	for (const key in grid.sortedViewports) {
+		const curViewport = grid.sortedViewports[key];
+		updateSettings(curViewport);
+		const atRule = getAtRule();
 
-      // set content
-      meshVoidAfterRule.append(postcss.decl({ prop: "content", value: `""` }));
-      // set clear
-      meshVoidAfterRule.append(postcss.decl({ prop: "clear", value: "both" }));
-      // set display
-      meshVoidAfterRule.append(
-        postcss.decl({ prop: "display", value: "block" })
-      );
-      if (getDisplaySettings(grid).value === "flex") {
-        meshVoidRule.append(postcss.decl({ prop: "display", value: "flex" }));
-        meshVoidRule.append(postcss.decl({ prop: "flex-wrap", value: "wrap" }));
-      } else {
-        meshVoidRule.append(postcss.decl({ prop: "display", value: "block" }));
-      }
-      // set margin
-      var gutterSize = parseInt(
-        grid["gutter"].substring(0, grid["gutter"].length - 1)
-      );
-      meshVoidRule.append(
-        postcss.decl({ prop: "margin", value: `0 -${gutterSize / 2}px` })
-      );
-      // set font-size
-      if (getDisplaySettings(grid).value === "inline-block")
-        meshVoidRule.append(postcss.decl({ prop: "font-size", value: "0" }));
-      // set display
+		atRule.append(
+			// container
+			getComponentRules(curViewport, {
+				component: "container",
+				selector: `.${settings.name}-container`
+			}),
+			// void
+			getComponentRules(curViewport, {
+				component: "void",
+				selector: `.${settings.name}-void`
+			}),
+			// column-basic
+			getComponentRules(curViewport, {
+				component: "column-basic",
+				selector: `[class*="${settings.name}-column-${settings.viewportName}"]`
+			})
+		);
 
-      if (getDisplaySettings(grid).property === "float")
-        rules.push(meshVoidAfterRule);
-      rules.push(meshVoidRule);
+		for (let i = 0; i <= settings.columnCount; i++) {
+			updateColumnWidth(i);
 
-      for (var key in grid.sortedViewports) {
-        var currentViewport = grid.sortedViewports[key];
-        var breakpoint = currentViewport.viewport;
-        var atRule = postcss.atRule();
-        atRule.name = `media (${queryCondition} : ${breakpoint})`;
-        // update properties
-        if ("gutter" in currentViewport)
-          gutterSize =
-            parseInt(
-              currentViewport.gutter.substring(
-                0,
-                currentViewport.gutter.length - 1
-              )
-            ) || gutter;
+			if (i !== 0) {
+				atRule.append(
+					// column
+					getComponentRules(curViewport, {
+						component: "column",
+						selector: `.${settings.name}-column-${settings.viewportName}-${i}`
+					}),
+					// column-x column
+					getComponentRules(grid, {
+						component: "column:nested",
+						selector: `[class*="${settings.name}-column-${
+							settings.viewportName
+						}-${i}"] [class*="${settings.name}-column"]`,
+						index: i
+					}),
+					// column-x void
+					getComponentRules(grid, {
+						component: "void:nested",
+						selector: `[class*="${settings.name}-column-${
+							settings.viewportName
+						}-${i}"] .${settings.name}-void`,
+						index: i
+					})
+				);
+			}
 
-        // common viewport rules
-        var meshVoidRule = postcss.rule();
-        meshVoidRule.selector = `.${name}-void`;
+			atRule.append(
+				// push
+				getComponentRules(curViewport, {
+					component: "push",
+					selector: `.${settings.name}-push-${settings.viewportName}-${i}`
+				}),
+				// pull
+				getComponentRules(curViewport, {
+					component: "pull",
+					selector: `.${settings.name}-pull-${settings.viewportName}-${i}`
+				}),
+				// offset
+				getComponentRules(curViewport, {
+					component: "offset",
+					selector: `.${settings.name}-offset-${settings.viewportName}-${i}`
+				})
+			);
+		}
 
-        // set margin
-        meshVoidRule.append(
-          postcss.decl({ prop: "margin", value: `0 -${gutterSize / 2}px` })
-        );
+		rules.push(atRule);
+	}
 
-        atRule.append(meshVoidRule);
+	return rules;
+}
 
-        rules.push(atRule);
-      }
+module.exports = postcss.plugin("postcss-mesh", function() {
+	return function(input) {
+		// inline css settings
+		let inlineSettings = {};
 
-      return rules;
-    }
+		// generated CSS
+		const mesh = postcss.root();
 
-    // generate rules for .mesh-column
-    function getMeshColumnRules(grid) {
-      var rules = [];
-      var name = grid.name;
-      var meshCenterRule = postcss.rule();
-      var meshPushRule = postcss.rule();
-      var meshPullRule = postcss.rule();
-      var meshColumnRule = postcss.rule();
-      meshCenterRule.selector = `[class*="${name}-center"]`;
-      meshPushRule.selector = `[class*="${name}-push"]`;
-      meshPullRule.selector = `[class*="${name}-pull"]`;
-      meshColumnRule.selector = `[class*="${name}-column"]`;
-      var columns = grid["column-count"];
-      var gutterSize = parseInt(
-        grid["gutter"].substring(0, grid["gutter"].length - 1)
-      );
-      var columnSingleWidth = 100 / columns;
+		// generate styles for base classes
+		function generateCSS() {
+			const licenseNotification = postcss.comment();
+			licenseNotification.text = `! Grid generated using ${name} v${version} | ${license} License | ${author} | github.com/SlimMarten/postcss-mesh `;
 
-      // set displayProperty
-      if (getDisplaySettings(grid).value !== "flex")
-        meshColumnRule.append(
-          postcss.decl({
-            prop: getDisplaySettings(grid).property,
-            value: getDisplaySettings(grid).value
-          })
-        );
-      // set padding
-      meshColumnRule.append(
-        postcss.decl({ prop: "padding", value: `0 ${gutterSize / 2}px` })
-      );
-      // set vertical-align
-      if (getDisplaySettings(grid).value === "inline-block")
-        meshColumnRule.append(
-          postcss.decl({ prop: "vertical-align", value: `top` })
-        );
-      //set position
-      meshCenterRule.append(
-        postcss.decl({ prop: "position", value: `relative` })
-      );
-      meshPushRule.append(
-        postcss.decl({ prop: "position", value: `relative` })
-      );
-      meshPullRule.append(
-        postcss.decl({ prop: "position", value: `relative` })
-      );
-      // set left
-      meshCenterRule.append(postcss.decl({ prop: "left", value: `50%` }));
-      // set transform
-      meshCenterRule.append(
-        postcss.decl({ prop: "transform", value: `translate3d(-50%,0,0)` })
-      );
+			// append licenseNotification
+			mesh.append(licenseNotification);
 
-      if (getDisplaySettings(grid).property === "float")
-        meshColumnRule.append(
-          postcss.decl({ prop: "min-height", value: `1px` })
-        );
-      rules.push(meshCenterRule, meshPushRule, meshPullRule, meshColumnRule);
+			for (const key in inlineSettings) {
+				const curGrid = inlineSettings[key];
 
-      for (var i = 0; i <= columns; i++) {
-        var meshOffsetRule = postcss.rule();
-        var meshPushRule = postcss.rule();
-        var meshPullRule = postcss.rule();
-        var meshColumnRule = postcss.rule();
-        var index = i;
-        meshOffsetRule.selector = `.${name}-offset-${index}`;
-        meshPushRule.selector = `.${name}-push-${index}`;
-        meshPullRule.selector = `.${name}-pull-${index}`;
-        meshColumnRule.selector = `.${name}-column-${index}`;
-        // set width
-        meshOffsetRule.append(
-          postcss.decl({
-            prop: "margin-left",
-            value: `${columnSingleWidth * index}%`
-          })
-        );
-        meshPushRule.append(
-          postcss.decl({
-            prop: "left",
-            value: `${columnSingleWidth * index}%`
-          })
-        );
-        meshPullRule.append(
-          postcss.decl({
-            prop: "right",
-            value: `${columnSingleWidth * index}%`
-          })
-        );
-        meshColumnRule.append(
-          postcss.decl({
-            prop: "width",
-            value: `${columnSingleWidth * index}%`
-          })
-        );
+				// set name
+				if (curGrid.name) settings.name = curGrid.name;
 
-        rules.push(meshOffsetRule, meshPushRule, meshPullRule, meshColumnRule);
-      }
+				// set queryCondition
+				if (curGrid["query-condition"])
+					settings.queryCondition.value = curGrid["query-condition"];
 
-      for (var key in grid.sortedViewports) {
-        var currentViewport = grid.sortedViewports[key];
-        var viewportName = currentViewport.name;
-        var breakpoint = currentViewport.viewport;
-        var atRule = postcss.atRule();
-        atRule.name = `media (${queryCondition} : ${breakpoint})`;
-        // update properties
-        columnSingleWidth = 100 / columns;
-        columns = currentViewport.columns || columns;
-        if ("gutter" in currentViewport)
-          gutterSize =
-            parseInt(
-              currentViewport.gutter.substring(
-                0,
-                currentViewport.gutter.length - 1
-              )
-            ) || gutter;
+				// set displayType
+				if (
+					"display-type" in curGrid &&
+					settings.displayType.options.indexOf(curGrid["display-type"]) > -1
+				) {
+					settings.displayType.value = curGrid["display-type"];
+				}
 
-        // common viewport rules
-        var meshColumnRule = postcss.rule();
-        meshColumnRule.selector = `[class*="${name}-column-${viewportName}"]`;
+				if (JSON.parse(curGrid["compile"])) mesh.append(getRules(curGrid));
+			}
 
-        //set padding
-        meshColumnRule.append(
-          postcss.decl({ prop: "padding", value: `0 ${gutterSize / 2}px` })
-        );
+			input.prepend(mesh);
+		}
 
-        atRule.append(meshColumnRule);
+		// main init
+		function init() {
+			inlineSettings = getInlineSettings(input);
+			generateCSS();
+		}
 
-        for (var i = 0; i <= columns; i++) {
-          var meshOffsetRule = postcss.rule();
-          var meshPushRule = postcss.rule();
-          var meshPullRule = postcss.rule();
-          var meshColumnRule = postcss.rule();
-          var index = i;
-          meshOffsetRule.selector = `[class*="${name}-offset-${viewportName}-${index}"]`;
-          meshPushRule.selector = `[class*="${name}-push-${viewportName}-${index}"]`;
-          meshPullRule.selector = `[class*="${name}-pull-${viewportName}-${index}"]`;
-          meshColumnRule.selector = `.${name}-column-${viewportName}-${index}`;
-
-          // set width/offset
-          meshOffsetRule.append(
-            postcss.decl({
-              prop: "margin-left",
-              value: `${columnSingleWidth * index}%`
-            })
-          );
-          meshPushRule.append(
-            postcss.decl({
-              prop: "left",
-              value: `${columnSingleWidth * index}%`
-            })
-          );
-          meshPullRule.append(
-            postcss.decl({
-              prop: "right",
-              value: `${columnSingleWidth * index}%`
-            })
-          );
-          meshColumnRule.append(
-            postcss.decl({
-              prop: "width",
-              value: `${columnSingleWidth * index}%`
-            })
-          );
-
-          atRule.append(
-            meshOffsetRule,
-            meshPushRule,
-            meshPullRule,
-            meshColumnRule
-          );
-        }
-
-        rules.push(atRule);
-      }
-
-      return rules;
-    }
-
-    // generate styles for base classes
-    function generateCSS() {
-      var licenseNotification = postcss.comment();
-      licenseNotification.text = `! Grid generated using ${name} v${version} | ${license} License | ${author} | github.com/SlimMarten/postcss-mesh `;
-
-      // append licenseNotification
-      mesh.append(licenseNotification);
-
-      for (var key in inlineSettings) {
-        var currentGrid = inlineSettings[key];
-        queryCondition =
-          currentGrid["mobile-first"] === "true" ? "min-width" : "max-width";
-
-        if (JSON.parse(currentGrid["compile-default-classes"])) {
-          // append .mesh-container base styles
-          mesh.append(getMeshContainerRules(currentGrid));
-          // append .mesh-void base styles
-          mesh.append(getMeshVoidRules(currentGrid));
-          // append .mesh-column base styles
-          mesh.append(getMeshColumnRules(currentGrid));
-        }
-      }
-
-      input.prepend(mesh);
-    }
-
-    // main init
-    function init() {
-      inlineSettings = getInlineSettings();
-      generateCSS();
-    }
-
-    /*=====  End of global function  ======*/
-    init();
-  };
+		/*=====  End of global function  ======*/
+		init();
+	};
 });
