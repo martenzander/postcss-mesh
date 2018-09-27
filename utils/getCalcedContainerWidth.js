@@ -1,6 +1,7 @@
 module.exports = function(viewport) {
 	const containerWidth = viewport["container-width"];
 	const breakpoint = viewport.viewport;
+	if (!breakpoint) return undefined;
 	const breakpointInt = breakpoint.substring(0, breakpoint.length - 2);
 	const split = containerWidth.split(" ");
 	let int;

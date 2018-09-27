@@ -158,12 +158,6 @@ function getPropValue(component, property) {
 					}
 				}
 				break;
-			case "column-basic:first-of-type":
-				value = `${settings[property.options.globalKey]}px`;
-				break;
-			case "column-basic:last-of-type":
-				value = `${settings[property.options.globalKey]}px`;
-				break;
 			case "column:padding":
 				value = settings.gutterOnOutside
 					? getGutterValue(property, settings.calcedContainerWidth)
@@ -308,12 +302,33 @@ function getRules(grid) {
 	for (let i = 0; i <= settings.columnCount; i++) {
 		updateColumnWidth(i);
 
+		if (i !== 0) {
+			rules.push(
+				// column
+				getComponentRules(grid, {
+					component: "column",
+					selector: `.${settings.name}-column-${i}`
+				}),
+				// column-x column
+				getComponentRules(grid, {
+					component: "column:nested",
+					selector: `[class*="${settings.name}-column-${i}"] [class*="${
+						settings.name
+					}-column"]`,
+					index: i
+				}),
+				// column-x void
+				getComponentRules(grid, {
+					component: "void:nested",
+					selector: `[class*="${settings.name}-column-${i}"] .${
+						settings.name
+					}-void`,
+					index: i
+				})
+			);
+		}
+
 		rules.push(
-			// column
-			getComponentRules(grid, {
-				component: "column",
-				selector: `.${settings.name}-column-${i}`
-			}),
 			// push
 			getComponentRules(grid, {
 				component: "push",
@@ -328,22 +343,6 @@ function getRules(grid) {
 			getComponentRules(grid, {
 				component: "offset",
 				selector: `.${settings.name}-offset-${i}`
-			}),
-			// column-x column
-			getComponentRules(grid, {
-				component: "column:nested",
-				selector: `[class*="${settings.name}-column-${i}"] [class*="${
-					settings.name
-				}-column"]`,
-				index: i
-			}),
-			// column-x void
-			getComponentRules(grid, {
-				component: "void:nested",
-				selector: `[class*="${settings.name}-column-${i}"] .${
-					settings.name
-				}-void`,
-				index: i
 			})
 		);
 	}
@@ -374,12 +373,33 @@ function getRules(grid) {
 		for (let i = 0; i <= settings.columnCount; i++) {
 			updateColumnWidth(i);
 
+			if (i !== 0) {
+				atRule.append(
+					// column
+					getComponentRules(curViewport, {
+						component: "column",
+						selector: `.${settings.name}-column-${settings.viewportName}-${i}`
+					}),
+					// column-x column
+					getComponentRules(grid, {
+						component: "column:nested",
+						selector: `[class*="${settings.name}-column-${
+							settings.viewportName
+						}-${i}"] [class*="${settings.name}-column"]`,
+						index: i
+					}),
+					// column-x void
+					getComponentRules(grid, {
+						component: "void:nested",
+						selector: `[class*="${settings.name}-column-${
+							settings.viewportName
+						}-${i}"] .${settings.name}-void`,
+						index: i
+					})
+				);
+			}
+
 			atRule.append(
-				// column
-				getComponentRules(curViewport, {
-					component: "column",
-					selector: `.${settings.name}-column-${settings.viewportName}-${i}`
-				}),
 				// push
 				getComponentRules(curViewport, {
 					component: "push",
@@ -394,22 +414,6 @@ function getRules(grid) {
 				getComponentRules(curViewport, {
 					component: "offset",
 					selector: `.${settings.name}-offset-${settings.viewportName}-${i}`
-				}),
-				// column-x column
-				getComponentRules(grid, {
-					component: "column:nested",
-					selector: `[class*="${settings.name}-column-${
-						settings.viewportName
-					}-${i}"] [class*="${settings.name}-column"]`,
-					index: i
-				}),
-				// column-x void
-				getComponentRules(grid, {
-					component: "void:nested",
-					selector: `[class*="${settings.name}-column-${
-						settings.viewportName
-					}-${i}"] .${settings.name}-void`,
-					index: i
 				})
 			);
 		}
@@ -454,8 +458,7 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 					settings.displayType.value = curGrid["display-type"];
 				}
 
-				if (JSON.parse(curGrid["compile-default-classes"]))
-					mesh.append(getRules(curGrid));
+				if (JSON.parse(curGrid["compile"])) mesh.append(getRules(curGrid));
 			}
 
 			input.prepend(mesh);

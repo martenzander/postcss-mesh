@@ -18,6 +18,7 @@
 	},
 	"voidDisplay": "block",
 	"viewportName": "default",
+	"viewport": "375px",
 	"container": {
 		"display": {
 			"viewportRelevant": false,
