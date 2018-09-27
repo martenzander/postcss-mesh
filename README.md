@@ -332,7 +332,7 @@ Mesh is based on a bunch of properties you can adjust to your needs. Some of the
     <tr><td><code>gutter-on-outside</code></td><td>If set to <code>false</code> the container won't have a padding.</td><td><code>true</code></td><td><code>true</code> || <code>false</code></td><td>yes</td></tr>
     <tr><td><code>name</code></td><td>Sets the grid's name and adjusts the component's class prefix.</td><td><code>mesh</code></td><td><code>string</code></td><td>-</td></tr>
     <tr><td><code>query-condition</code></td><td>Using this property you can decide if you want the compiled styles to be mobile first or desktop first.</td><td><code>min-width</code></td><td><code>min-width</code> || <code>max-width</code><td>-</td></tr>
-    <tr><td><code>responsive-gutter</code></td><td>If set to `true` paddings and margins of column and void components will be calculated on a percentage basis.</td><td><code>true</code></td><td><code>true</code> || <code>false</code></td><td>yes</td></tr>
+    <tr><td><code>responsive-gutter</code></td><td>If set to <code>true</code> paddings and margins of column and void components will be calculated on a percentage basis.</td><td><code>true</code></td><td><code>true</code> || <code>false</code></td><td>yes</td></tr>
     <tr><td><code>viewport</code></td><td>Defines the screen's width at which a new media-query should be initiated.</td><td>none</td><td><code>px</code></td><td>yes</td></tr>
   </tbody>
 </table>
