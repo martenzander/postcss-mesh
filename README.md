@@ -105,7 +105,7 @@ Mesh is based on @-rules. To initiate a new grid use `@mesh-grid`. All breakpoin
 </div>
 ```
 
-<img src="https://raw.githubusercontent.com/SlimMarten/postcss-mesh/development/assets/img/examples/setup.png" align="center">
+<img width="100%" height="auto" src="https://raw.githubusercontent.com/SlimMarten/postcss-mesh/development/assets/img/examples/setup.png" align="center">
 
 ## Unique Selling Points
 
@@ -130,9 +130,9 @@ _Notice: This feature only allows to inherit the root columns gap to the first n
 ```
 
 <h5>Regular Gutter</h5>
-<img src="https://raw.githubusercontent.com/SlimMarten/postcss-mesh/development/assets/img/examples/non-responsive-gutter.gif" align="center">
+<img width="100%" height="auto" src="https://raw.githubusercontent.com/SlimMarten/postcss-mesh/development/assets/img/examples/non-responsive-gutter.gif" align="center">
 <h5>Responsive Gutter</h5>
-<img src="https://raw.githubusercontent.com/SlimMarten/postcss-mesh/development/assets/img/examples/responsive-gutter.gif" align="center">
+<img width="100%" height="auto" src="https://raw.githubusercontent.com/SlimMarten/postcss-mesh/development/assets/img/examples/responsive-gutter.gif" align="center">
 
 #### Gutter On Outside
 
@@ -269,11 +269,37 @@ The push component will reposition the respective [column](#column) from the lef
 
 ## Nesting
 
+Of course you can also nest your [columns](#column).
+
+```html
+// This is how you can nest columns within columns.
+// If using "responsive-gutter" you can only go one
+// level deep keeping the roots gutter size.
+
+<div class="mesh-container">
+  <div class="mesh-void">
+    <div class="mesh-column-6"></div>
+    <div class="mesh-column-6">
+      <div class="mesh-void">
+        <div class="mesh-column-6"></div>
+        <div class="mesh-column-6"></div>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+<img width="100%" height="auto" src="https://raw.githubusercontent.com/SlimMarten/postcss-mesh/development/assets/img/examples/nesting.png" align="center">
+
 ## Ordering
 
 Sometimes you have to switch position of certain [columns](#column) breakpointwise. Using [push](#push) and [pull](#pull) components you can shift your [columns](#column).
 
 ```html
+// This markup moves the first column by the width of
+// three columns to the right and the second column
+// by the width of nine columns to the left.
+
 <div class="mesh-container">
   <div class="mesh-void">
     <div class="mesh-column-9 mesh-push-3"></div>
@@ -282,7 +308,7 @@ Sometimes you have to switch position of certain [columns](#column) breakpointwi
 </div>
 ```
 
-<img src="https://raw.githubusercontent.com/SlimMarten/postcss-mesh/development/assets/img/examples/ordering.png" align="center">
+<img width="100%" height="auto" src="https://raw.githubusercontent.com/SlimMarten/postcss-mesh/development/assets/img/examples/ordering.png" align="center">
 
 ## Properties
 
