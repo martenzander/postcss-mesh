@@ -111,6 +111,8 @@ Mesh is based on @-rules. To initiate a new grid use `@mesh-grid`. All breakpoin
 
 Set the [responsive-gutter](#properties) property to `true` and `margins` & `paddings` of all [components](#components) (except [container](#container)) will be calculated on a percentage basis. This means not only the column's width will scale but the gap between two columns to guarantee a true fluid layout. This feature requires a viewport context even in your default settings.
 
+_Notice: This feature only allows to inherit the root columns gap to the first nested level._
+
 ```css
 // This set up uses 375px as context.
 // If your screen is 375px wide the gap
@@ -125,9 +127,9 @@ Set the [responsive-gutter](#properties) property to `true` and `margins` & `pad
 }
 ```
 
-_Notice: This feature only allows to inherit the root columns gap to the first nested level._
-
+<h5>Regular Gutter</h5>
 <img src="https://raw.githubusercontent.com/SlimMarten/postcss-mesh/development/assets/img/examples/non-responsive-gutter.gif" align="center">
+<h5>Responsive Gutter</h5>
 <img src="https://raw.githubusercontent.com/SlimMarten/postcss-mesh/development/assets/img/examples/responsive-gutter.gif" align="center">
 
 #### Gutter On Outside
