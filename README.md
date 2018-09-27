@@ -18,6 +18,8 @@ Lightweight Grid Compiler for <a href="https://github.com/postcss/postcss">PostC
 - [Getting Started](#getting-started)
   - [Installation](#installation)
   - [Grid Setup](#grid-setup)
+    - [SCSS](#scss)
+    - [HTML](#html)
 - [Unique Selling Points](#unique-selling-points)
     - [Responsive Gutter](#responsive-gutter)
     - [Gutter On Outside](#gutter-on-outside)
@@ -34,7 +36,6 @@ Lightweight Grid Compiler for <a href="https://github.com/postcss/postcss">PostC
     - [Pull](#pull)
     - [Push](#push)
 - [Properties](#properties)
-- [Common Grid Features](#common-grid-features)
 
 ## About Mesh
 
@@ -49,6 +50,8 @@ $ npm i postcss-mesh
 ```
 
 ### Grid Setup
+
+#### SCSS
 
 Mesh is based on @-rules. To initiate a new grid use `@mesh-grid`. All breakpoints for a grid should be nested within the respective grid declaration. See the example below for a simple grid setup with bootstrap standards.
 
@@ -65,30 +68,43 @@ Mesh is based on @-rules. To initiate a new grid use `@mesh-grid`. All breakpoin
 	responsive-gutter: false;
 
 	@mesh-viewport-sm {
-		viewport: 576px;
 		container-width: 540px;
+		viewport: 576px;
 	}
 
 	@mesh-viewport-md {
-		viewport: 768px;
 		container-width: 720px;
+		viewport: 768px;
 	}
 
 	@mesh-viewport-lg {
-		viewport: 992px;
 		container-width: 960px;
+		viewport: 992px;
 	}
 
 	@mesh-viewport-lg {
-		viewport: 1200px;
 		container-width: 1140px;
+		viewport: 1200px;
 	}
 }
+```
+
+#### HTML
+
+```html
+<div class=".mesh-container">
+  <div class=".mesh-void">
+    <div class=".mesh-column-6"></div>
+    <div class=".mesh-column-6"></div>
+  </div>
+</div>
 ```
 
 ## Unique Selling Points
 
 #### Responsive Gutter
+
+**info über viewport property in grid declaration**
 
 Set the [responsive-gutter](#properties) property to `true` and `margins` & `paddings` of all [components](#components) (except [container](#container)) will be calculated on a percentage basis. This means not only the column's width will scale but the gap between two columns to guarantee a true fluid layout.
 
@@ -256,5 +272,3 @@ Mesh is based on a bunch of properties you can adjust to your needs. Some of the
     <tr><td><code>viewport</code></td><td>Defines the screen's width at which a new media-query should be initiated</td><td>none</td><td><code>px</code></td><td>yes</td></tr>
   </tbody>
 </table>
-
-## Common Grid Features
