@@ -1,3 +1,7 @@
+## **v1.0.0** _- 2018-09-27_
+
+- major update. See READEME.md for documentation.
+
 ## **v0.0.6** _- 2018-09-19_
 
 - You can now set the grid's name via the `name` property.
