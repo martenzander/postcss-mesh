@@ -103,7 +103,7 @@ Mesh is based on @-rules. To initiate a new grid use `@mesh-grid`. All breakpoin
 </div>
 ```
 
-<img src="https://raw.githubusercontent.com/SlimMarten/postcss-mesh/development/assets/gifs/test.png" align="center">
+<img src="https://raw.githubusercontent.com/SlimMarten/postcss-mesh/development/assets/img/examples/setup.png" align="center">
 
 ## Unique Selling Points
 
