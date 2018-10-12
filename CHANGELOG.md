@@ -31,4 +31,4 @@
 
 ## **0.0.1** _- 2017-09-22_
 
-✨ First release v0.0.1
+✨ First pre-release v0.0.1
