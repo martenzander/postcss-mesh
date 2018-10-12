@@ -1,3 +1,8 @@
+## **v1.0.1** _- 2018-10-12_
+
+- README.md update
+- postcss-mesh.org GoLive
+
 ## **v1.0.0** _- 2018-09-27_
 
 - major update. See READEME.md for documentation.
