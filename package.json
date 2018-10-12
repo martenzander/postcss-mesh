@@ -1,7 +1,7 @@
 {
 	"name": "postcss-mesh",
-	"version": "1.0.0",
-	"description": "postcss-mesh is a work in progress grid system",
+	"version": "1.0.1",
+	"description": "Powerful Grid Compiler for PostCSS",
 	"main": "index.js",
 	"scripts": {
 		"start": "postcss examples/input.scss -o examples/output.css --config postcss.config.js --no-map"
@@ -22,7 +22,7 @@
 	"bugs": {
 		"url": "https://github.com/SlimMarten/postcss-mesh/issues"
 	},
-	"homepage": "https://github.com/SlimMarten/postcss-mesh#readme",
+	"homepage": "http://www.postcss-mesh.org/",
 	"dependencies": {
 		"postcss": "^7.0.2"
 	},
