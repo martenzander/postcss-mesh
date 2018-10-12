@@ -22,7 +22,7 @@
 	"bugs": {
 		"url": "https://github.com/SlimMarten/postcss-mesh/issues"
 	},
-	"homepage": "https://github.com/SlimMarten/postcss-mesh#readme",
+	"homepage": "http://www.postcss-mesh.org/",
 	"dependencies": {
 		"postcss": "^7.0.2"
 	},
