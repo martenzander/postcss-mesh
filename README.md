@@ -27,21 +27,19 @@ Powerful Grid Compiler for <a href="https://github.com/postcss/postcss">PostCSS<
     - [Unlimited Breakpoints](#unlimited-breakpoints)
     - [Property Overwrite](#property-overwrite)
 - [Components](#components)
-  - [Basic Components](#basic-components)
-    - [Container](#container)
-    - [Void](#void)
-    - [Column](#column)
-  - [Transform Components](#transform-components)
-    - [Offset](#offset)
-    - [Pull](#pull)
-    - [Push](#push)
+  - [Container](#container)
+  - [Void](#void)
+  - [Column](#column)
+  - [Offset](#offset)
+  - [Pull](#pull)
+  - [Push](#push)
 - [Nesting](#nesting)
 - [Ordering](#ordering)
 - [Properties](#properties)
 
 ## About Mesh
 
-There are a lot of different grid systems already out there and most of them are pretty good. But ☝️ none of them is offering the whole bandwidth of possible options. E.g. I wanted to have the ability to switch between different [display-types](#Properties) _(float || inline-block || flex)_ as well as I wanted to be able to overwrite certain parameters like [gutter](#properties) or [column-count](#properties) breakpointwise. That's how I came up with the idea to create my very own grid compiler and Mesh was born 🎉🎉🎉.
+There are a lot of different grid systems already out there and most of them are pretty good. But ☝️ none of them is offering the whole bandwidth of possible options. E.g. I wanted to switch between a `flex`, `inline-block` or `float` based grid as well as I wanted to be able to overwrite certain parameters like [gutter](#properties) or [column-count](#properties) breakpointwise. That is how I came up with the idea to create my very own grid compiler and Mesh was born 🎉🎉🎉.
 
 ## Getting Started
 
@@ -111,9 +109,9 @@ Mesh is based on @-rules. To initiate a new grid use `@mesh-grid`. All breakpoin
 
 #### Responsive Gutter
 
-Set the [responsive-gutter](#properties) property to `true` and `margins` & `paddings` of all [components](#components) (except [container](#container)) will be calculated on a percentage basis. This means not only the column's width will scale but the gap between two columns to guarantee a true fluid layout. This feature requires a viewport context even in your default settings.
+Set the [responsive-gutter](#properties) property to `true` to scale the gutter as your [container](#container) grows. This makes your grid less static and more fluid. To make this feature work you have to set a `viewport` context even in your default settings of the grid.
 
-_Notice: This feature only allows to inherit the root columns gap to the first nested level._
+_This feature inherits the gutter size for the first nested level only._
 
 ```css
 // This set up uses 375px as context.
@@ -136,7 +134,7 @@ _Notice: This feature only allows to inherit the root columns gap to the first n
 
 #### Gutter On Outside
 
-Allows you to toggle the [container's](#container) padding which is based on the [gutter](#properties)-Size.
+Allows you to toggle the [container's](#container) padding which is based on the [gutter](#properties) size.
 
 ```css
 // true || false
@@ -179,7 +177,6 @@ Bootstrap comes with five predefined breakpoints (Extra small _<576px_, Small _�
 Property Overwrite allows you to overwrite some properties breakpointwise, e.g. `gutter`. Learn more about properties [here](#properties).
 
 ```css
-// px
 // default: 30px
 
 @mesh-viewport-lg {
@@ -189,13 +186,9 @@ Property Overwrite allows you to overwrite some properties breakpointwise, e.g. 
 
 ## Components
 
-Mesh's compiled Grid is made of three **basic components** and three **transform components**.
+Mesh's compiled Grid is made of three basic components and three transform components. The basic components describe the `.mesh-container`, `.mesh-void` & `.mesh-column` classes. These components are necessary to set up a very basic grid. The transform components describe the `.mesh-offset`, `.mesh-pull` & `.mesh-push` classes. These components are necessary to transform a [column](#column) within your grid and should be added to a column component only. Using transform components you can reorder your columns.
 
-### Basic Components
-
-The basic components describe the `.mesh-container`, `.mesh-void` & `.mesh-column` classes. These components are necessary to set up a very basic grid.
-
-#### Container
+### Container
 
 The container is the most outer component of a grid instance. It sets up the maximum width of the grid and should not be nested.
 
@@ -203,66 +196,62 @@ The container is the most outer component of a grid instance. It sets up the max
 <div class="mesh-container"></div>
 ```
 
-#### Void
+### Void
 
-The void component is the equivalent to Bootstrap's `row` component and voids its parents gutter. The only immediate child of a void component should be a [column](#column).
+The void component is the equivalent to Bootstrap's `row` component and voids its parent's [gutter](#gutter). The only immediate child of a void component should be a [column](#column).
 
 ```html
 <div class="mesh-void"></div>
 ```
 
-#### Column
+### Column
 
-The column component is where you can put your content. All columns should be an immediate child of a [void](#void) component.
+The column component is where you can put your content. All columns should be an immediate child of a [void](#void) component. Replace `x` with a number between 1 and your given column-count.
 
 ```html
-// replace "x" with a number between 1 and your given column-count
-// for breakpoint specific column widths include your breakpoints ID in the class, e.g. "mesh-column-lg-6"
+<!--
+For breakpoint specific column widths include your
+breakpoint's ID in the class, e.g. 'mesh-column-lg-6'.
+-->
 
 <div class="mesh-column-x"></div>
 ```
 
-### Transform Components
+### Offset
 
-The transform components describe the `.mesh-offset`, `.mesh-pull` & `.mesh-push` classes. These components are necessary to transform a [column](#column) within your grid and should be added to a [column](#column) component only. Using transform components you can reorder your [columns](#column).
-
-#### Offset
-
-The offset component will add a margin to the respective [column](#column) to create an even bigger gap between two columns.
+The offset component will add a margin to the respective [column](#column) to create an even bigger gap between two columns. Using the component like below will offset the column about the width of a single column.
 
 ```html
-// Using the component like below will offset the
-// respective column about the width of a single column.
-// For breakpoint specific column offsets include your
-// breakpoints ID in the class, e.g. "mesh-offset-lg-1".
+<!--
+For breakpoint specific column offsets include your
+breakpoint's ID in the class, e.g. 'mesh-offset-lg-1'.
+-->
 
 <div class="mesh-offset-1"></div>
 ```
 
-#### Pull
+### Pull
 
-The pull component will reposition the respective [column](#column) from the right.
+The pull component will reposition the respective [column](#column) from the right. Using the component like below will pull the column about the width of a single column to the left.
 
 ```html
-// Using the component like below will pull the
-// respective column about the width of a single column
-// to the left.
-// For breakpoint specific column pulls include your
-// breakpoints ID in the class, e.g. "mesh-pull-lg-1".
+<!--
+For breakpoint specific column pulls include your
+breakpoint's ID in the class, e.g. 'mesh-pull-lg-1'.
+-->
 
 <div class="mesh-pull-1"></div>
 ```
 
-#### Push
+### Push
 
-The push component will reposition the respective [column](#column) from the left.
+The push component will reposition the respective [column](#column) from the left. Using the component like below will push the column about the width of a single column to the right.
 
 ```html
-// Using the component like below will push the
-// respective column about the width of a single column
-// to the right.
-// For breakpoint specific column pushes include your
-// breakpoints ID in the class, e.g. "mesh-push-lg-1".
+<!--
+For breakpoint specific column pushes include your
+breakpoint's ID in the class, e.g. 'mesh-push-lg-1'.
+-->
 
 <div class="mesh-push-1"></div>
 ```
@@ -272,9 +261,11 @@ The push component will reposition the respective [column](#column) from the lef
 Of course you can also nest your [columns](#column).
 
 ```html
-// This is how you can nest columns within columns.
-// If using "responsive-gutter" you can only go one
-// level deep keeping the roots gutter size.
+<!--
+This is how you can nest columns within columns.
+If using "responsive-gutter" you can only go one
+level deep keeping the roots gutter size.
+-->
 
 <div class="mesh-container">
   <div class="mesh-void">
@@ -293,12 +284,14 @@ Of course you can also nest your [columns](#column).
 
 ## Ordering
 
-Sometimes you have to switch position of certain [columns](#column) breakpointwise. Using [push](#push) and [pull](#pull) components you can shift your [columns](#column).
+Sometimes you have to switch position of certain [columns](#column) breakpointwise. Using [push](#push) and [pull](#pull) components you can shift your columns.
 
 ```html
-// This markup moves the first column by the width of
-// three columns to the right and the second column
-// by the width of nine columns to the left.
+<!--
+This markup moves the first column by the width of
+three columns to the right and the second column
+by the width of nine columns to the left.
+-->
 
 <div class="mesh-container">
   <div class="mesh-void">
@@ -317,22 +310,77 @@ Mesh is based on a bunch of properties you can adjust to your needs. Some of the
 <table>
   <thead>
     <tr>
-      <th align="left">Property</th><th align="left">Description</th><th align="left">Default</th><th align="left">Required Options</th><th align="left">Overwriteable</th>
+      <th align="left">Property</th><th align="left">Description</th><th align="left">Options</th><th align="left">Overwrite</th>
     </tr>
   </thead>
   <tbody>
     <!-- <tr><th colspan="5" align="center">Basic Properties</th></tr> -->
     <!-- <tr><th colspan="5" align="center">Viewport-Relevant Properties</th></tr> -->
-    <tr><td><code>column-align</code></td><td>Aligns all columns at the <code>top</code>, <code>middle</code> or <code>bottom</code> of a row. Only works using <code>inline-block</code> or <code>flex</code> as <code>display-type</code>.</td><td><code>top</code></td><td><code>top</code> || <code>middle</code> || <code>bottom</code></td><td>yes</td></tr>
-    <tr><td><code>column-count</code></td><td>Defines how many columns fit in one row.</td><td><code>12</code></td><td><code>int</code></td><td>yes</td></tr>
-    <tr><td><code>compile</code></td><td>If set to <code>false</code> Mesh won't compile the current's grid classes.</td><td><code>true</code></td><td><code>true</code> || <code>false</code><td>-</td></tr>
-    <tr><td><code>container-width</code></td><td>Defines the containers <code>max-width</code> property for current viewport.</td><td>none</td><td><code>px</code> or <code>%</code></td><td>yes</td></tr>
-    <tr><td><code>display-type</code></td><td>Defines if the grid is based on inline-block columns, floated columns or flexed columns.<br><br><i>Notice: If set to <code>inline-block</code> the <a href="#void">void</a> component gets a <code>font-size: 0</code> to remove the little default gap between inline-block elements.</i></td><td><code>inline-block</code></td><td><code>inline-block</code> || <code>float</code> || <code>flex</code><td>-</td></tr>
-    <tr><td><code>gutter</code></td><td>Sets the gap between columns.</td><td><code>30px</code></td><td><code>px</code></td><td>yes</td></tr>
-    <tr><td><code>gutter-on-outside</code></td><td>If set to <code>false</code> the container won't have a padding.</td><td><code>true</code></td><td><code>true</code> || <code>false</code></td><td>yes</td></tr>
-    <tr><td><code>name</code></td><td>Sets the grid's name and adjusts the component's class prefix.</td><td><code>mesh</code></td><td><code>string</code></td><td>-</td></tr>
-    <tr><td><code>query-condition</code></td><td>Using this property you can decide if you want the compiled styles to be mobile first or desktop first.</td><td><code>min-width</code></td><td><code>min-width</code> || <code>max-width</code><td>-</td></tr>
-    <tr><td><code>responsive-gutter</code></td><td>If set to <code>true</code> paddings and margins of column and void components will be calculated on a percentage basis.</td><td><code>true</code></td><td><code>true</code> || <code>false</code></td><td>yes</td></tr>
-    <tr><td><code>viewport</code></td><td>Defines the screen's width at which a new media-query should be initiated.</td><td>none</td><td><code>px</code></td><td>yes</td></tr>
+    <tr>
+      <td><code>column-align</code></td>
+      <td>Aligns all columns at the top, middle or bottom of a void.</td>
+      <td><code>top</code> || <code>middle</code> || <code>bottom</code></td>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <td><code>column-count</code></td>
+      <td>Defines how many columns fit in one void.</td>
+      <td><code>number</code></td>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <td><code>compile</code></td>
+      <td>If set to <code>false</code> Mesh won't compile classes of the current grid.</td>
+      <td><code>true</code> || <code>false</code></td>
+      <td>no</td>
+    </tr>
+    <tr>
+      <td><code>container-width</code></td>
+      <td>Defines the container's <code>max-width</code> property for current viewport.</td>
+      <td><code>px</code> || <code>%</code></td>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <td><code>display-type</code></td>
+      <td>Defines if the grid is inline-block, float or flex based.</td>
+      <td><code>inline-block</code> || <code>float</code> || <code>flex</code></td>
+      <td>no</td>
+    </tr>
+    <tr>
+      <td><code>gutter</code></td>
+      <td>Sets the gap between columns.</td>
+      <td><code>px</code></td>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <td><code>gutter-on-outside</code></td>
+      <td>If set to <code>false</code> the container won't have a padding.</td>
+      <td><code>true</code> || <code>false</code></td>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <td><code>name</code></td>
+      <td>Sets the grid's name and adjusts the component's class prefix.</td>
+      <td><code>string</code></td>
+      <td>no</td>
+    </tr>
+    <tr>
+      <td><code>query-condition</code></td>
+      <td>Using this property you can decide if you want the compiled styles to be mobile first or desktop first.</td>
+      <td><code>min-width</code> || <code>max-width</code></td>
+      <td>no</td>
+    </tr>
+    <tr>
+      <td><code>responsive-gutter</code></td>
+      <td>If set to <code>true</code> the gutter scales as the container grows.</td>
+      <td><code>true</code> || <code>false</code></td>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <td><code>viewport</code></td>
+      <td>Defines the screen's width at which a new media-query should be initiated.</td>
+      <td><code>px</code></td>
+      <td>yes</td>
+    </tr>
   </tbody>
 </table>
