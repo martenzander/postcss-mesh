@@ -123,12 +123,12 @@ function getPropValue(component, property) {
 						? getGutterValue(
 							property,
 							settings.calcedContainerWidth / fac - settings.gutter * 2
-						  )
+						)
 						: getGutterValue(
 							property,
 							(settings.calcedContainerWidth + settings.gutter * 2) / fac -
 									settings.gutter * 2
-						  );
+						);
 					value = value.substring(0, value.length - 1);
 					value = `0 -${value}${settings.gutterUnit}`;
 					value = settings.responsiveGutter
@@ -143,7 +143,7 @@ function getPropValue(component, property) {
 							? getGutterValue(
 								property,
 								settings.calcedContainerWidth - settings.gutter * 2
-							  )
+							)
 							: getGutterValue(property, settings.calcedContainerWidth);
 						value = `-${value}`;
 					} else if (
@@ -164,7 +164,7 @@ function getPropValue(component, property) {
 					: getGutterValue(
 						property,
 						settings.calcedContainerWidth + settings.gutter * 2
-					  );
+					);
 				break;
 			case "column:nested":
 				{
@@ -175,7 +175,7 @@ function getPropValue(component, property) {
 						: getGutterValue(
 							property,
 							(settings.calcedContainerWidth + settings.gutter * 2) / fac
-						  );
+						);
 					value = value.substring(0, value.length - 1);
 					value = `0 ${value}${settings.gutterUnit}`;
 					value = settings.responsiveGutter
@@ -213,7 +213,7 @@ function getPropValue(component, property) {
 							: getGutterValue(
 								property,
 								settings.calcedContainerWidth + settings.gutter * 2
-							  );
+							);
 					} else {
 						defaultValue();
 					}
