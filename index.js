@@ -121,12 +121,12 @@ function getPropValue(component, property) {
 					let fac = 1 / percentage;
 					value = settings.gutterOnOutside
 						? getGutterValue(
-								property,
-								settings.calcedContainerWidth / fac - settings.gutter * 2
+							property,
+							settings.calcedContainerWidth / fac - settings.gutter * 2
 						  )
 						: getGutterValue(
-								property,
-								(settings.calcedContainerWidth + settings.gutter * 2) / fac -
+							property,
+							(settings.calcedContainerWidth + settings.gutter * 2) / fac -
 									settings.gutter * 2
 						  );
 					value = value.substring(0, value.length - 1);
@@ -141,8 +141,8 @@ function getPropValue(component, property) {
 					if (property.name.indexOf("margin") >= 0) {
 						value = settings.gutterOnOutside
 							? getGutterValue(
-									property,
-									settings.calcedContainerWidth - settings.gutter * 2
+								property,
+								settings.calcedContainerWidth - settings.gutter * 2
 							  )
 							: getGutterValue(property, settings.calcedContainerWidth);
 						value = `-${value}`;
@@ -162,8 +162,8 @@ function getPropValue(component, property) {
 				value = settings.gutterOnOutside
 					? getGutterValue(property, settings.calcedContainerWidth)
 					: getGutterValue(
-							property,
-							settings.calcedContainerWidth + settings.gutter * 2
+						property,
+						settings.calcedContainerWidth + settings.gutter * 2
 					  );
 				break;
 			case "column:nested":
@@ -173,8 +173,8 @@ function getPropValue(component, property) {
 					value = settings.gutterOnOutside
 						? getGutterValue(property, settings.calcedContainerWidth / fac)
 						: getGutterValue(
-								property,
-								(settings.calcedContainerWidth + settings.gutter * 2) / fac
+							property,
+							(settings.calcedContainerWidth + settings.gutter * 2) / fac
 						  );
 					value = value.substring(0, value.length - 1);
 					value = `0 ${value}${settings.gutterUnit}`;
@@ -211,8 +211,8 @@ function getPropValue(component, property) {
 						value = settings.gutterOnOutside
 							? getGutterValue(property, settings.calcedContainerWidth)
 							: getGutterValue(
-									property,
-									settings.calcedContainerWidth + settings.gutter * 2
+								property,
+								settings.calcedContainerWidth + settings.gutter * 2
 							  );
 					} else {
 						defaultValue();

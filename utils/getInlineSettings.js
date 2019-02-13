@@ -51,10 +51,10 @@ module.exports = function(input) {
 		tempSortedViewports =
 			currentGrid["query-condition"] === "min-width"
 				? tempSortedViewports.sort(function(a, b) {
-						return a - b;
+					return a - b;
 				  })
 				: tempSortedViewports.sort(function(a, b) {
-						return b - a;
+					return b - a;
 				  });
 
 		for (let i = 0; i < tempSortedViewports.length; i++) {
