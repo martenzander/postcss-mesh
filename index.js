@@ -71,6 +71,21 @@ function updateSettings(obj) {
 
 	// columnSingleWidth
 	settings.columnSingleWidth = 100 / settings.columnCount;
+
+	const namingProps = [
+		"column_single",
+		"column_column",
+		"column_mq",
+		"offset_single",
+		"offset_column",
+		"offset_mq",
+	];
+
+	for(let i = 0; i < namingProps.length; i++){
+		const namingProp = `naming_${namingProps[i]}`;
+		if (namingProp in obj)
+			settings[namingProp] = obj[namingProp];
+	}
 }
 
 function updateColumnWidth(fac) {
@@ -121,14 +136,14 @@ function getPropValue(component, property) {
 					let fac = 1 / percentage;
 					value = settings.gutterOnOutside
 						? getGutterValue(
-								property,
-								settings.calcedContainerWidth / fac - settings.gutter * 2
-						  )
+							property,
+							settings.calcedContainerWidth / fac - settings.gutter * 2
+						)
 						: getGutterValue(
-								property,
-								(settings.calcedContainerWidth + settings.gutter * 2) / fac -
+							property,
+							(settings.calcedContainerWidth + settings.gutter * 2) / fac -
 									settings.gutter * 2
-						  );
+						);
 					value = value.substring(0, value.length - 1);
 					value = `0 -${value}${settings.gutterUnit}`;
 					value = settings.responsiveGutter
@@ -141,9 +156,9 @@ function getPropValue(component, property) {
 					if (property.name.indexOf("margin") >= 0) {
 						value = settings.gutterOnOutside
 							? getGutterValue(
-									property,
-									settings.calcedContainerWidth - settings.gutter * 2
-							  )
+								property,
+								settings.calcedContainerWidth - settings.gutter * 2
+							)
 							: getGutterValue(property, settings.calcedContainerWidth);
 						value = `-${value}`;
 					} else if (
@@ -162,9 +177,9 @@ function getPropValue(component, property) {
 				value = settings.gutterOnOutside
 					? getGutterValue(property, settings.calcedContainerWidth)
 					: getGutterValue(
-							property,
-							settings.calcedContainerWidth + settings.gutter * 2
-					  );
+						property,
+						settings.calcedContainerWidth + settings.gutter * 2
+					);
 				break;
 			case "column:nested":
 				{
@@ -173,9 +188,9 @@ function getPropValue(component, property) {
 					value = settings.gutterOnOutside
 						? getGutterValue(property, settings.calcedContainerWidth / fac)
 						: getGutterValue(
-								property,
-								(settings.calcedContainerWidth + settings.gutter * 2) / fac
-						  );
+							property,
+							(settings.calcedContainerWidth + settings.gutter * 2) / fac
+						);
 					value = value.substring(0, value.length - 1);
 					value = `0 ${value}${settings.gutterUnit}`;
 					value = settings.responsiveGutter
@@ -211,9 +226,9 @@ function getPropValue(component, property) {
 						value = settings.gutterOnOutside
 							? getGutterValue(property, settings.calcedContainerWidth)
 							: getGutterValue(
-									property,
-									settings.calcedContainerWidth + settings.gutter * 2
-							  );
+								property,
+								settings.calcedContainerWidth + settings.gutter * 2
+							);
 					} else {
 						defaultValue();
 					}
@@ -257,6 +272,30 @@ function getComponentRules(viewport, options) {
 	return rule;
 }
 
+function getSelectorByNamePattern(type,data){
+	const haveMQ = data.mq != null;
+	const haveColumn = data.column != null;
+	let pattern;
+	switch(true){
+		case haveMQ : {
+			pattern = settings[`naming_${type}_mq`];
+			break;
+		}
+		case haveColumn : {
+			pattern = settings[`naming_${type}_column`];
+			break;
+		}
+		default :{
+			pattern = settings[`naming_${type}_single`];
+		}
+	}
+	const selector = pattern.replace(/\|NAME\|/gm,data.name)
+		.replace(/\|COLUMN\|/gm,data.column)
+		.replace(/\|MQ\|/gm,data.mq);
+
+	return selector;
+}
+
 function getRules(grid) {
 	updateSettings(grid);
 	const rules = [];
@@ -285,7 +324,7 @@ function getRules(grid) {
 		// column-basic
 		getComponentRules(grid, {
 			component: "column-basic",
-			selector: `[class*="${settings.name}-column"]`
+			selector: `[class*="${getSelectorByNamePattern("column",{name:settings.name})}"]`
 		})
 	);
 
@@ -307,20 +346,18 @@ function getRules(grid) {
 				// column
 				getComponentRules(grid, {
 					component: "column",
-					selector: `.${settings.name}-column-${i}`
+					selector: `.${getSelectorByNamePattern("column",{name:settings.name,column:i})}`
 				}),
 				// column-x column
 				getComponentRules(grid, {
 					component: "column:nested",
-					selector: `[class*="${settings.name}-column-${i}"] [class*="${
-						settings.name
-					}-column"]`,
+					selector: `[class*="${getSelectorByNamePattern("column",{name:settings.name,column:i})}"] [class*="${getSelectorByNamePattern("column",{name:settings.name})}"]`,
 					index: i
 				}),
 				// column-x void
 				getComponentRules(grid, {
 					component: "void:nested",
-					selector: `[class*="${settings.name}-column-${i}"] .${
+					selector: `[class*="${getSelectorByNamePattern("column",{name:settings.name,column:i})}"] .${
 						settings.name
 					}-void`,
 					index: i
@@ -342,7 +379,7 @@ function getRules(grid) {
 			// offset
 			getComponentRules(grid, {
 				component: "offset",
-				selector: `.${settings.name}-offset-${i}`
+				selector: `.${getSelectorByNamePattern("offset",{name:settings.name,column:i})}`
 			})
 		);
 	}
@@ -378,22 +415,18 @@ function getRules(grid) {
 					// column
 					getComponentRules(curViewport, {
 						component: "column",
-						selector: `.${settings.name}-column-${settings.viewportName}-${i}`
+						selector: `.${getSelectorByNamePattern("column",{name:settings.name,column:i,mq:settings.viewportName})}`
 					}),
 					// column-x column
 					getComponentRules(grid, {
 						component: "column:nested",
-						selector: `[class*="${settings.name}-column-${
-							settings.viewportName
-						}-${i}"] [class*="${settings.name}-column"]`,
+						selector: `[class*="${getSelectorByNamePattern("column",{name:settings.name,column:i,mq:settings.viewportName})}"] [class*="${settings.name}-column"]`,
 						index: i
 					}),
 					// column-x void
 					getComponentRules(grid, {
 						component: "void:nested",
-						selector: `[class*="${settings.name}-column-${
-							settings.viewportName
-						}-${i}"] .${settings.name}-void`,
+						selector: `[class*="${getSelectorByNamePattern("column",{name:settings.name,column:i,mq:settings.viewportName})}"] .${settings.name}-void`,
 						index: i
 					})
 				);
@@ -413,7 +446,7 @@ function getRules(grid) {
 				// offset
 				getComponentRules(curViewport, {
 					component: "offset",
-					selector: `.${settings.name}-offset-${settings.viewportName}-${i}`
+					selector: `.${getSelectorByNamePattern("offset",{name:settings.name,column:i,mq:settings.viewportName})}`
 				})
 			);
 		}

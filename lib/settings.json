@@ -12,6 +12,12 @@
 	"gutter": 15,
 	"gutterUnit": "px",
 	"name": "mesh",
+	"naming_column_single": "|NAME|-column",
+	"naming_column_column": "|NAME|-column-|COLUMN|",
+	"naming_column_mq": "|NAME|-column-|MQ|-|COLUMN|",
+	"naming_offset_single": "|NAME|-offset",
+	"naming_offset_column": "|NAME|-offset-|COLUMN|",
+	"naming_offset_mq": "|NAME|-offset-|MQ|-|COLUMN|",
 	"queryCondition": {
 		"value": "min-width",
 		"options": ["min-width", "max-width"]
