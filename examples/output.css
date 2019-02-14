@@ -247,7 +247,7 @@
         margin-left: -15px;
         margin-right: -15px
     }
-    [class*="mesh-column-sm"] {
+    [class*="mesh-col-sm"] {
         padding-left: 15px;
         padding-right: 15px
     }
@@ -469,7 +469,7 @@
         margin-left: -15px;
         margin-right: -15px
     }
-    [class*="mesh-column-md"] {
+    [class*="mesh-col-md"] {
         padding-left: 15px;
         padding-right: 15px
     }
@@ -691,7 +691,7 @@
         margin-left: -15px;
         margin-right: -15px
     }
-    [class*="mesh-column-lg"] {
+    [class*="mesh-col-lg"] {
         padding-left: 15px;
         padding-right: 15px
     }
@@ -913,7 +913,7 @@
         margin-left: -15px;
         margin-right: -15px
     }
-    [class*="mesh-column-xl"] {
+    [class*="mesh-col-xl"] {
         padding-left: 15px;
         padding-right: 15px
     }

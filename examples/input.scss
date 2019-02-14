@@ -8,10 +8,12 @@
 	name: mesh;
 	naming-column: |NAME|-col;
 	naming-column-span: |NAME|-col-|SPAN|;
-	naming-column-mq: |NAME|-col-|MQ|-|SPAN|;
+	naming-column-mq: |NAME|-col-|MQ|;
+	naming-column-mq-span: |NAME|-col-|MQ|-|SPAN|;
 	naming-offset: |NAME|-off;
 	naming-offset-span: |NAME|-off-|SPAN|;
-	naming-offset-mq: |NAME|-off-|MQ|-|SPAN|;
+	naming-offset-mq: |NAME|-off-|MQ|;
+	naming-offset-mq-span: |NAME|-off-|MQ|-|SPAN|;
 	exclude-columns: 1,2;
 	query-condition: min-width;
 	responsive-gutter: false;

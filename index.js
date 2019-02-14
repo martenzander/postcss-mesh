@@ -53,7 +53,7 @@ function updateSettings(obj) {
     // columnSingleWidth
     settings.columnSingleWidth = 100 / settings.columnCount;
 
-    const namingProps = ["column", "column-span", "column-mq", "offset", "offset-span", "offset-mq"];
+    const namingProps = ["column", "column-span", "column-mq", "column-mq-span", "offset", "offset-span", "offset-mq", "offset-mq-span"];
 
     for (let i = 0; i < namingProps.length; i++) {
         const namingProp = `naming-${namingProps[i]}`;
@@ -213,8 +213,13 @@ function getComponentRules(viewport, options) {
 function getSelectorByNamePattern(type, data) {
     const haveMQ = data.mq != null;
     const haveColumn = data.column != null;
+    const haveColumnMQ = haveColumn && haveMQ;
     let pattern;
     switch (true) {
+        case haveColumnMQ: {
+            pattern = settings[`naming-${type}-mq-span`];
+            break;
+        }
         case haveMQ: {
             pattern = settings[`naming-${type}-mq`];
             break;
@@ -347,7 +352,7 @@ function getRules(grid) {
             // column-basic
             getComponentRules(curViewport, {
                 component: "column-basic",
-                selector: `[class*="${settings.name}-column-${settings.viewportName}"]`,
+                selector: `[class*="${getSelectorByNamePattern("column", { name: settings.name, mq: settings.viewportName })}"]`,
             }),
         );
 
