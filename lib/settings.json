@@ -1,175 +1,175 @@
 {
-    "containerWidth": "100%",
-    "columnAlign": "top",
-    "columnCount": 12,
-    "columnWidth": "0%",
-    "displayType": {
-        "value": "inline-block",
-        "options": ["inline-block", "flex", "float"]
-    },
-    "gutterOnOutside": false,
-    "responsiveGutter": true,
-    "gutter": 15,
-    "gutterUnit": "px",
-    "name": "mesh",
-    "naming-column": "|NAME|-column",
-    "naming-column-span": "|NAME|-column-|SPAN|",
-    "naming-column-mq": "|NAME|-column-|MQ|",
-    "naming-column-mq-span": "|NAME|-column-|MQ|-|SPAN|",
-    "naming-offset": "|NAME|-offset",
-    "naming-offset-span": "|NAME|-offset-|SPAN|",
-    "naming-offset-mq": "|NAME|-offset-|MQ|",
-    "naming-offset-mq-span": "|NAME|-offset-|MQ|-|SPAN|",
-    "exclude-columns": "",
-    "queryCondition": {
-        "value": "min-width",
-        "options": ["min-width", "max-width"]
-    },
-    "voidDisplay": "block",
-    "viewportName": "default",
-    "viewport": "375px",
-    "container": {
-        "display": {
-            "viewportRelevant": false,
-            "value": "block"
-        },
-        "margin": {
-            "viewportRelevant": false,
-            "value": "0 auto"
-        },
-        "max-width": {
-            "viewportRelevant": true,
-            "globalKey": "containerWidth"
-        },
-        "padding-left": {
-            "viewportRelevant": true,
-            "globalKey": "gutter"
-        },
-        "padding-right": {
-            "viewportRelevant": true,
-            "globalKey": "gutter"
-        },
-        "position": {
-            "viewportRelevant": false,
-            "value": "relative"
-        },
-        "width": {
-            "viewportRelevant": false,
-            "value": "100%"
-        }
-    },
-    "void": {
-        "align-items": {
-            "viewportRelevant": true,
-            "globalKey": "columnAlign"
-        },
-        "display": {
-            "viewportRelevant": false,
-            "value": "block"
-        },
-        "flex-wrap": {
-            "viewportRelevant": false,
-            "value": "wrap"
-        },
-        "font-size": {
-            "viewportRelevant": false,
-            "value": "0"
-        },
-        "margin-left": {
-            "viewportRelevant": true,
-            "globalKey": "gutter"
-        },
-        "margin-right": {
-            "viewportRelevant": true,
-            "globalKey": "gutter"
-        }
-    },
-    "void:after": {
-        "clear": {
-            "viewportRelevant": false,
-            "value": "both"
-        },
-        "content": {
-            "viewportRelevant": false,
-            "value": "''"
-        },
-        "display": {
-            "viewportRelevant": false,
-            "value": "block"
-        }
-    },
-    "void:nested": {
-        "margin": {
-            "viewportRelevant": true,
-            "globalKey": "gutter"
-        }
-    },
-    "offset": {
-        "margin-left": {
-            "viewportRelevant": true,
-            "globalKey": "columnWidth"
-        }
-    },
-    "push": {
-        "left": {
-            "viewportRelevant": true,
-            "globalKey": "columnWidth"
-        }
-    },
-    "push-basic": {
-        "position": {
-            "viewportRelevant": false,
-            "value": "relative"
-        }
-    },
-    "pull": {
-        "right": {
-            "viewportRelevant": true,
-            "globalKey": "columnWidth"
-        }
-    },
-    "pull-basic": {
-        "position": {
-            "viewportRelevant": false,
-            "value": "relative"
-        }
-    },
-    "column:nested": {
-        "padding": {
-            "viewportRelevant": true,
-            "globalKey": "gutter"
-        }
-    },
-    "column": {
-        "width": {
-            "viewportRelevant": true,
-            "globalKey": "columnWidth"
-        }
-    },
-    "column-basic": {
-        "display": {
-            "viewportRelevant": false,
-            "value": "inline-block"
-        },
-        "float": {
-            "viewportRelevant": false,
-            "value": "left"
-        },
-        "padding-left": {
-            "viewportRelevant": true,
-            "globalKey": "gutter"
-        },
-        "padding-right": {
-            "viewportRelevant": true,
-            "globalKey": "gutter"
-        },
-        "vertical-align": {
-            "viewportRelevant": true,
-            "globalKey": "columnAlign"
-        },
-        "min-height": {
-            "viewportRelevant": false,
-            "value": "1px"
-        }
-    }
+	"containerWidth": "100%",
+	"columnAlign": "top",
+	"columnCount": 12,
+	"columnWidth": "0%",
+	"displayType": {
+		"value": "inline-block",
+		"options": ["inline-block", "flex", "float"]
+	},
+	"gutterOnOutside": false,
+	"responsiveGutter": true,
+	"gutter": 15,
+	"gutterUnit": "px",
+	"name": "mesh",
+	"naming-column": "|NAME|-column",
+	"naming-column-span": "|NAME|-column-|SPAN|",
+	"naming-column-mq": "|NAME|-column-|MQ|",
+	"naming-column-mq-span": "|NAME|-column-|MQ|-|SPAN|",
+	"naming-offset": "|NAME|-offset",
+	"naming-offset-span": "|NAME|-offset-|SPAN|",
+	"naming-offset-mq": "|NAME|-offset-|MQ|",
+	"naming-offset-mq-span": "|NAME|-offset-|MQ|-|SPAN|",
+	"exclude-columns": "",
+	"queryCondition": {
+		"value": "min-width",
+		"options": ["min-width", "max-width"]
+	},
+	"voidDisplay": "block",
+	"viewportName": "default",
+	"viewport": "375px",
+	"container": {
+		"display": {
+			"viewportRelevant": false,
+			"value": "block"
+		},
+		"margin": {
+			"viewportRelevant": false,
+			"value": "0 auto"
+		},
+		"max-width": {
+			"viewportRelevant": true,
+			"globalKey": "containerWidth"
+		},
+		"padding-left": {
+			"viewportRelevant": true,
+			"globalKey": "gutter"
+		},
+		"padding-right": {
+			"viewportRelevant": true,
+			"globalKey": "gutter"
+		},
+		"position": {
+			"viewportRelevant": false,
+			"value": "relative"
+		},
+		"width": {
+			"viewportRelevant": false,
+			"value": "100%"
+		}
+	},
+	"void": {
+		"align-items": {
+			"viewportRelevant": true,
+			"globalKey": "columnAlign"
+		},
+		"display": {
+			"viewportRelevant": false,
+			"value": "block"
+		},
+		"flex-wrap": {
+			"viewportRelevant": false,
+			"value": "wrap"
+		},
+		"font-size": {
+			"viewportRelevant": false,
+			"value": "0"
+		},
+		"margin-left": {
+			"viewportRelevant": true,
+			"globalKey": "gutter"
+		},
+		"margin-right": {
+			"viewportRelevant": true,
+			"globalKey": "gutter"
+		}
+	},
+	"void:after": {
+		"clear": {
+			"viewportRelevant": false,
+			"value": "both"
+		},
+		"content": {
+			"viewportRelevant": false,
+			"value": "''"
+		},
+		"display": {
+			"viewportRelevant": false,
+			"value": "block"
+		}
+	},
+	"void:nested": {
+		"margin": {
+			"viewportRelevant": true,
+			"globalKey": "gutter"
+		}
+	},
+	"offset": {
+		"margin-left": {
+			"viewportRelevant": true,
+			"globalKey": "columnWidth"
+		}
+	},
+	"push": {
+		"left": {
+			"viewportRelevant": true,
+			"globalKey": "columnWidth"
+		}
+	},
+	"push-basic": {
+		"position": {
+			"viewportRelevant": false,
+			"value": "relative"
+		}
+	},
+	"pull": {
+		"right": {
+			"viewportRelevant": true,
+			"globalKey": "columnWidth"
+		}
+	},
+	"pull-basic": {
+		"position": {
+			"viewportRelevant": false,
+			"value": "relative"
+		}
+	},
+	"column:nested": {
+		"padding": {
+			"viewportRelevant": true,
+			"globalKey": "gutter"
+		}
+	},
+	"column": {
+		"width": {
+			"viewportRelevant": true,
+			"globalKey": "columnWidth"
+		}
+	},
+	"column-basic": {
+		"display": {
+			"viewportRelevant": false,
+			"value": "inline-block"
+		},
+		"float": {
+			"viewportRelevant": false,
+			"value": "left"
+		},
+		"padding-left": {
+			"viewportRelevant": true,
+			"globalKey": "gutter"
+		},
+		"padding-right": {
+			"viewportRelevant": true,
+			"globalKey": "gutter"
+		},
+		"vertical-align": {
+			"viewportRelevant": true,
+			"globalKey": "columnAlign"
+		},
+		"min-height": {
+			"viewportRelevant": false,
+			"value": "1px"
+		}
+	}
 }
