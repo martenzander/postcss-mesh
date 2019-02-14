@@ -12,6 +12,7 @@
 	naming_offset_single: |NAME|-off;
 	naming_offset_column: |NAME|-off-|COLUMN|;
 	naming_offset_mq: |NAME|-off-|MQ|-|COLUMN|;
+	exclude-columns: 1,2;
 	query-condition: min-width;
 	responsive-gutter: false;
 

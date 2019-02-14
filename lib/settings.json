@@ -18,6 +18,7 @@
 	"naming_offset_single": "|NAME|-offset",
 	"naming_offset_column": "|NAME|-offset-|COLUMN|",
 	"naming_offset_mq": "|NAME|-offset-|MQ|-|COLUMN|",
+	"exclude-columns":"",
 	"queryCondition": {
 		"value": "min-width",
 		"options": ["min-width", "max-width"]

@@ -86,6 +86,9 @@ function updateSettings(obj) {
 		if (namingProp in obj)
 			settings[namingProp] = obj[namingProp];
 	}
+	// exclude-columns
+	if ("exclude-columns" in obj)
+		settings["exclude-columns"] = obj["exclude-columns"].split(",").map( col => parseInt(col) );
 }
 
 function updateColumnWidth(fac) {
@@ -296,6 +299,10 @@ function getSelectorByNamePattern(type,data){
 	return selector;
 }
 
+function excludeColumn(column){
+	return settings["exclude-columns"].includes(column);
+}
+
 function getRules(grid) {
 	updateSettings(grid);
 	const rules = [];
@@ -341,7 +348,7 @@ function getRules(grid) {
 	for (let i = 0; i <= settings.columnCount; i++) {
 		updateColumnWidth(i);
 
-		if (i !== 0) {
+		if (i !== 0 && !excludeColumn(i)) {
 			rules.push(
 				// column
 				getComponentRules(grid, {
@@ -410,7 +417,7 @@ function getRules(grid) {
 		for (let i = 0; i <= settings.columnCount; i++) {
 			updateColumnWidth(i);
 
-			if (i !== 0) {
+			if (i !== 0 && !excludeColumn(i)) {
 				atRule.append(
 					// column
 					getComponentRules(curViewport, {
