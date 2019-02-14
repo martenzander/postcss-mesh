@@ -73,16 +73,16 @@ function updateSettings(obj) {
 	settings.columnSingleWidth = 100 / settings.columnCount;
 
 	const namingProps = [
-		"column_single",
-		"column_column",
-		"column_mq",
-		"offset_single",
-		"offset_column",
-		"offset_mq",
+		"column",
+		"column-span",
+		"column-mq",
+		"offset",
+		"offset-span",
+		"offset-mq",
 	];
 
 	for(let i = 0; i < namingProps.length; i++){
-		const namingProp = `naming_${namingProps[i]}`;
+		const namingProp = `naming-${namingProps[i]}`;
 		if (namingProp in obj)
 			settings[namingProp] = obj[namingProp];
 	}
@@ -281,19 +281,19 @@ function getSelectorByNamePattern(type,data){
 	let pattern;
 	switch(true){
 		case haveMQ : {
-			pattern = settings[`naming_${type}_mq`];
+			pattern = settings[`naming-${type}-mq`];
 			break;
 		}
 		case haveColumn : {
-			pattern = settings[`naming_${type}_column`];
+			pattern = settings[`naming-${type}-span`];
 			break;
 		}
 		default :{
-			pattern = settings[`naming_${type}_single`];
+			pattern = settings[`naming-${type}`];
 		}
 	}
 	const selector = pattern.replace(/\|NAME\|/gm,data.name)
-		.replace(/\|COLUMN\|/gm,data.column)
+		.replace(/\|SPAN\|/gm,data.column)
 		.replace(/\|MQ\|/gm,data.mq);
 
 	return selector;

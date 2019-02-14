@@ -6,12 +6,12 @@
 	gutter-on-outside: true;
 	gutter: 30px;
 	name: mesh;
-	naming_column_single: |NAME|-col;
-	naming_column_column: |NAME|-col-|COLUMN|;
-	naming_column_mq: |NAME|-col-|MQ|-|COLUMN|;
-	naming_offset_single: |NAME|-off;
-	naming_offset_column: |NAME|-off-|COLUMN|;
-	naming_offset_mq: |NAME|-off-|MQ|-|COLUMN|;
+	naming-column: |NAME|-col;
+	naming-column-span: |NAME|-col-|SPAN|;
+	naming-column-mq: |NAME|-col-|MQ|-|SPAN|;
+	naming-offset: |NAME|-off;
+	naming-offset-span: |NAME|-off-|SPAN|;
+	naming-offset-mq: |NAME|-off-|MQ|-|SPAN|;
 	exclude-columns: 1,2;
 	query-condition: min-width;
 	responsive-gutter: false;
