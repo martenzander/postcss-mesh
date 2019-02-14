@@ -212,11 +212,11 @@ function getComponentRules(viewport, options) {
 
 function getSelectorByNamePattern(type, data) {
     const haveMQ = data.mq != null;
-    const haveColumn = data.column != null;
-    const haveColumnMQ = haveColumn && haveMQ;
+    const haveSpan = data.span != null;
+    const haveSpanMQ = haveSpan && haveMQ;
     let pattern;
     switch (true) {
-        case haveColumnMQ: {
+        case haveSpanMQ: {
             pattern = settings[`naming-${type}-mq-span`];
             break;
         }
@@ -224,7 +224,7 @@ function getSelectorByNamePattern(type, data) {
             pattern = settings[`naming-${type}-mq`];
             break;
         }
-        case haveColumn: {
+        case haveSpan: {
             pattern = settings[`naming-${type}-span`];
             break;
         }
@@ -234,7 +234,7 @@ function getSelectorByNamePattern(type, data) {
     }
     const selector = pattern
         .replace(/\|NAME\|/gm, data.name)
-        .replace(/\|SPAN\|/gm, data.column)
+        .replace(/\|SPAN\|/gm, data.span)
         .replace(/\|MQ\|/gm, data.mq);
 
     return selector;
@@ -294,21 +294,21 @@ function getRules(grid) {
                 // column
                 getComponentRules(grid, {
                     component: "column",
-                    selector: `.${getSelectorByNamePattern("column", { name: settings.name, column: i })}`,
+                    selector: `.${getSelectorByNamePattern("column", { name: settings.name, span: i })}`,
                 }),
                 // column-x column
                 getComponentRules(grid, {
                     component: "column:nested",
                     selector: `[class*="${getSelectorByNamePattern("column", {
                         name: settings.name,
-                        column: i,
+                        span: i,
                     })}"] [class*="${getSelectorByNamePattern("column", { name: settings.name })}"]`,
                     index: i,
                 }),
                 // column-x void
                 getComponentRules(grid, {
                     component: "void:nested",
-                    selector: `[class*="${getSelectorByNamePattern("column", { name: settings.name, column: i })}"] .${settings.name}-void`,
+                    selector: `[class*="${getSelectorByNamePattern("column", { name: settings.name, span: i })}"] .${settings.name}-void`,
                     index: i,
                 }),
             );
@@ -328,7 +328,7 @@ function getRules(grid) {
             // offset
             getComponentRules(grid, {
                 component: "offset",
-                selector: `.${getSelectorByNamePattern("offset", { name: settings.name, column: i })}`,
+                selector: `.${getSelectorByNamePattern("offset", { name: settings.name, span: i })}`,
             }),
         );
     }
@@ -364,14 +364,14 @@ function getRules(grid) {
                     // column
                     getComponentRules(curViewport, {
                         component: "column",
-                        selector: `.${getSelectorByNamePattern("column", { name: settings.name, column: i, mq: settings.viewportName })}`,
+                        selector: `.${getSelectorByNamePattern("column", { name: settings.name, span: i, mq: settings.viewportName })}`,
                     }),
                     // column-x column
                     getComponentRules(grid, {
                         component: "column:nested",
                         selector: `[class*="${getSelectorByNamePattern("column", {
                             name: settings.name,
-                            column: i,
+                            span: i,
                             mq: settings.viewportName,
                         })}"] [class*="${settings.name}-column"]`,
                         index: i,
@@ -381,7 +381,7 @@ function getRules(grid) {
                         component: "void:nested",
                         selector: `[class*="${getSelectorByNamePattern("column", {
                             name: settings.name,
-                            column: i,
+                            span: i,
                             mq: settings.viewportName,
                         })}"] .${settings.name}-void`,
                         index: i,
@@ -403,7 +403,7 @@ function getRules(grid) {
                 // offset
                 getComponentRules(curViewport, {
                     component: "offset",
-                    selector: `.${getSelectorByNamePattern("offset", { name: settings.name, column: i, mq: settings.viewportName })}`,
+                    selector: `.${getSelectorByNamePattern("offset", { name: settings.name, span: i, mq: settings.viewportName })}`,
                 }),
             );
         }
