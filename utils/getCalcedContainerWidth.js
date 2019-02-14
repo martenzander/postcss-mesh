@@ -11,12 +11,7 @@ module.exports = function(viewport) {
 			let fac = parseFloat(split[0].replace("%", "")) / 100;
 			int = parseInt(breakpointInt) * fac;
 		} else if (split[0].indexOf("px") >= 0) {
-			int = parseInt(
-				split[0].substring(
-					0,
-					split[0].length - (split[0].length - split[0].indexOf("px"))
-				)
-			);
+			int = parseInt(split[0].substring(0, split[0].length - (split[0].length - split[0].indexOf("px"))));
 		} else {
 			int = parseInt(split[0]);
 		}
@@ -25,10 +20,7 @@ module.exports = function(viewport) {
 			const curSnippet = split[i];
 
 			if (curSnippet.indexOf("px") >= 0) {
-				const value = curSnippet.substring(
-					0,
-					curSnippet.length - (curSnippet.length - curSnippet.indexOf("px"))
-				);
+				const value = curSnippet.substring(0, curSnippet.length - (curSnippet.length - curSnippet.indexOf("px")));
 				int = breakpointInt - parseInt(value);
 			}
 		}
