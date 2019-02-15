@@ -57,49 +57,48 @@ Mesh is based on @-rules. To initiate a new grid use `@mesh-grid`. All breakpoin
 
 ```css
 @mesh-grid {
-	column-count: 12;
-	compile: true;
-	container-width: 100%;
-	display-type: float;
-	gutter-on-outside: true;
-	gutter: 30px;
-	name: mesh;
-	query-condition: min-width;
-	responsive-gutter: false;
+    column-count: 12;
+    compile: true;
+    container-width: 100%;
+    display-type: float;
+    gutter-on-outside: true;
+    gutter: 30px;
+    name: mesh;
+    query-condition: min-width;
+    responsive-gutter: false;
 
-	@mesh-viewport-sm {
-		container-width: 540px;
-		viewport: 576px;
-	}
+    @mesh-viewport-sm {
+        container-width: 540px;
+        viewport: 576px;
+    }
 
-	@mesh-viewport-md {
-		container-width: 720px;
-		viewport: 768px;
-	}
+    @mesh-viewport-md {
+        container-width: 720px;
+        viewport: 768px;
+    }
 
-	@mesh-viewport-lg {
-		container-width: 960px;
-		viewport: 992px;
-	}
+    @mesh-viewport-lg {
+        container-width: 960px;
+        viewport: 992px;
+    }
 
-	@mesh-viewport-xl {
-		container-width: 1140px;
-		viewport: 1200px;
-	}
+    @mesh-viewport-xl {
+        container-width: 1140px;
+        viewport: 1200px;
+    }
 }
 ```
 
 #### HTML
 
 ```html
-// This markup is a two column grid with equal widths
-// for all defined breakpoints.
+// This markup is a two column grid with equal widths // for all defined breakpoints.
 
 <div class="mesh-container">
-  <div class="mesh-void">
-    <div class="mesh-column-6 mesh-column-sm-6 mesh-column-md-6 mesh-column-lg-6 mesh-column-xl-6"></div>
-    <div class="mesh-column-6 mesh-column-sm-6 mesh-column-md-6 mesh-column-lg-6 mesh-column-xl-6"></div>
-  </div>
+    <div class="mesh-void">
+        <div class="mesh-column-6 mesh-column-sm-6 mesh-column-md-6 mesh-column-lg-6 mesh-column-xl-6"></div>
+        <div class="mesh-column-6 mesh-column-sm-6 mesh-column-md-6 mesh-column-lg-6 mesh-column-xl-6"></div>
+    </div>
 </div>
 ```
 
@@ -121,9 +120,9 @@ _This feature inherits the gutter size for the first nested level only._
 // If your screen gets smaller, the gap scales down.
 
 @mesh-grid {
-	viewport: 375px;
-	gutter: 30px;
-	responsive-gutter: true;
+    viewport: 375px;
+    gutter: 30px;
+    responsive-gutter: true;
 }
 ```
 
@@ -141,7 +140,7 @@ Allows you to toggle the [container's](#container) padding which is based on the
 // default: true
 
 @mesh-grid {
-	gutter-on-outside: true;
+    gutter-on-outside: true;
 }
 ```
 
@@ -154,7 +153,7 @@ You can decide if your default viewport is a desktop one or a mobile one using t
 // default: min-width
 
 @mesh-grid {
-	query-condition: min-width;
+    query-condition: min-width;
 }
 ```
 
@@ -167,8 +166,8 @@ Bootstrap comes with five predefined breakpoints (Extra small _<576px_, Small _â
 // properties "container-width" & "viewport" are required
 
 @mesh-viewport-lg {
-	container-width: 960px;
-	viewport: 992px;
+    container-width: 960px;
+    viewport: 992px;
 }
 ```
 
@@ -180,7 +179,7 @@ Property Overwrite allows you to overwrite some properties breakpointwise, e.g. 
 // default: 30px
 
 @mesh-viewport-lg {
-	gutter: 30px;
+    gutter: 30px;
 }
 ```
 
@@ -268,15 +267,15 @@ level deep keeping the roots gutter size.
 -->
 
 <div class="mesh-container">
-  <div class="mesh-void">
-    <div class="mesh-column-6"></div>
-    <div class="mesh-column-6">
-      <div class="mesh-void">
+    <div class="mesh-void">
         <div class="mesh-column-6"></div>
-        <div class="mesh-column-6"></div>
-      </div>
+        <div class="mesh-column-6">
+            <div class="mesh-void">
+                <div class="mesh-column-6"></div>
+                <div class="mesh-column-6"></div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 ```
 
@@ -294,10 +293,10 @@ by the width of nine columns to the left.
 -->
 
 <div class="mesh-container">
-  <div class="mesh-void">
-    <div class="mesh-column-9 mesh-push-3"></div>
-    <div class="mesh-column-3 mesh-pull-9"></div>
-  </div>
+    <div class="mesh-void">
+        <div class="mesh-column-9 mesh-push-3"></div>
+        <div class="mesh-column-3 mesh-pull-9"></div>
+    </div>
 </div>
 ```
 
