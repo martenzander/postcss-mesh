@@ -23,7 +23,8 @@
     float: left;
     padding-left: 15px;
     padding-right: 15px;
-    min-height: 1px
+    min-height: 1px;
+    font-size: 1rem
 }
 .mesh-void:after {
     clear: both;

@@ -170,6 +170,10 @@
 		"min-height": {
 			"viewportRelevant": false,
 			"value": "1px"
+		},
+		"font-size": {
+			"viewportRelevant": false,
+			"value": "1rem"
 		}
 	}
 }
