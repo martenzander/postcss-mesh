@@ -53,12 +53,15 @@ function updateSettings(obj) {
 	// columnSingleWidth
 	settings.columnSingleWidth = 100 / settings.columnCount;
 
-	const namingProps = ["column", "column-span", "column-mq", "column-mq-span", "offset", "offset-span", "offset-mq", "offset-mq-span"];
-
+	// naming
+	const namingProps = ["span", "offset", "void", "container", "push", "pull"];
 	for (let i = 0; i < namingProps.length; i++) {
 		const namingProp = `naming-${namingProps[i]}`;
 		if (namingProp in obj) settings[namingProp] = obj[namingProp];
 	}
+
+	if ("use-name-prefix" in obj) settings["use-name-prefix"] = obj["use-name-prefix"] == "true";
+
 	// exclude-columns
 	if ("exclude-columns" in obj) settings["exclude-columns"] = obj["exclude-columns"].split(",").map(col => parseInt(col));
 }
@@ -203,39 +206,105 @@ function getComponentRules(viewport, options) {
 				postcss.decl({
 					prop: property.name,
 					value: value,
-				}),
+				})
 			);
 		}
 	}
 	return rule;
 }
 
-function getSelectorByNamePattern(type, data) {
+function getSelectorByType(type, data = {}) {
+	const namingPatterns = {
+		"naming-column": "|NAME||COLUMN|",
+		"naming-column-span": "|NAME||COLUMN|-|SPAN|",
+		"naming-column-mq": "|NAME||COLUMN|-|MQ|",
+		"naming-column-mq-span": "|NAME||COLUMN|-|MQ|-|SPAN|",
+		"naming-offset": "|NAME||OFFSET|",
+		"naming-offset-span": "|NAME||OFFSET|-|SPAN|",
+		"naming-offset-mq": "|NAME||OFFSET|-|MQ|",
+		"naming-offset-mq-span": "|NAME||OFFSET|-|MQ|-|SPAN|",
+		"naming-container": "|NAME||CONTAINER|",
+		"naming-void": "|NAME||VOID|",
+		"naming-push": "|NAME||PUSH|",
+		"naming-push-span": "|NAME||PUSH|-|SPAN|",
+		"naming-push-mq-span": "|NAME||PUSH|-|MQ|-|SPAN|",
+		"naming-pull": "|NAME||PULL|",
+		"naming-pull-span": "|NAME||PULL|-|SPAN|",
+		"naming-pull-mq-span": "|NAME||PULL|-|MQ|-|SPAN|",
+	};
+
+	const useNamePrefix = settings["use-name-prefix"];
+
 	const haveMQ = data.mq != null;
 	const haveSpan = data.span != null;
 	const haveSpanMQ = haveSpan && haveMQ;
+
 	let pattern;
 	switch (true) {
-		case haveSpanMQ: {
-			pattern = settings[`naming-${type}-mq-span`];
+		case type == "container": {
+			pattern = namingPatterns["naming-container"];
 			break;
 		}
-		case haveMQ: {
-			pattern = settings[`naming-${type}-mq`];
+		case type == "void": {
+			pattern = namingPatterns["naming-void"];
 			break;
 		}
-		case haveSpan: {
-			pattern = settings[`naming-${type}-span`];
+		case type == "push": {
+			if (haveSpanMQ) {
+				pattern = namingPatterns["naming-push-mq-span"];
+			} else if (haveSpan) {
+				pattern = namingPatterns["naming-push-span"];
+			} else {
+				pattern = namingPatterns["naming-push"];
+			}
 			break;
 		}
-		default: {
-			pattern = settings[`naming-${type}`];
+		case type == "pull": {
+			if (haveSpanMQ) {
+				pattern = namingPatterns["naming-pull-mq-span"];
+			} else if (haveSpan) {
+				pattern = namingPatterns["naming-pull-span"];
+			} else {
+				pattern = namingPatterns["naming-pull"];
+			}
+			break;
 		}
 	}
-	const selector = pattern
-		.replace(/\|NAME\|/gm, data.name)
-		.replace(/\|SPAN\|/gm, data.span)
-		.replace(/\|MQ\|/gm, data.mq);
+	if (pattern == null) {
+		switch (true) {
+			case haveSpanMQ: {
+				pattern = namingPatterns[`naming-${type}-mq-span`];
+				break;
+			}
+			case haveMQ: {
+				pattern = namingPatterns[`naming-${type}-mq`];
+				break;
+			}
+			case haveSpan: {
+				pattern = namingPatterns[`naming-${type}-span`];
+				break;
+			}
+			default: {
+				pattern = namingPatterns[`naming-${type}`];
+			}
+		}
+	}
+
+	let selector = pattern.replace(/\|SPAN\|/gm, data.span).replace(/\|MQ\|/gm, data.mq);
+
+	selector = selector
+		.replace(/\|COLUMN\|/gm, settings["naming-span"])
+		.replace(/\|OFFSET\|/gm, settings["naming-offset"])
+		.replace(/\|VOID\|/gm, settings["naming-void"])
+		.replace(/\|CONTAINER\|/gm, settings["naming-container"])
+		.replace(/\|PUSH\|/gm, settings["naming-push"])
+		.replace(/\|PULL\|/gm, settings["naming-pull"]);
+
+	if (useNamePrefix) {
+		selector = selector.replace(/\|NAME\|/gm, `${settings.name}-`);
+	} else {
+		selector = selector.replace(/\|NAME\|/gm, "");
+	}
 
 	return selector;
 }
@@ -252,28 +321,28 @@ function getRules(grid) {
 		// container
 		getComponentRules(grid, {
 			component: "container",
-			selector: `.${settings.name}-container`,
+			selector: `.${getSelectorByType("container")}`,
 		}),
 		// void
 		getComponentRules(grid, {
 			component: "void",
-			selector: `.${settings.name}-void`,
+			selector: `.${getSelectorByType("void")}`,
 		}),
 		// push-basic
 		getComponentRules(grid, {
 			component: "push-basic",
-			selector: `[class*="${settings.name}-push"]`,
+			selector: `[class*="${getSelectorByType("push")}"]`,
 		}),
 		// pull-basic
 		getComponentRules(grid, {
 			component: "pull-basic",
-			selector: `[class*="${settings.name}-pull"]`,
+			selector: `[class*="${getSelectorByType("pull")}"]`,
 		}),
 		// column-basic
 		getComponentRules(grid, {
 			component: "column-basic",
-			selector: `[class*="${getSelectorByNamePattern("column", { name: settings.name })}"]`,
-		}),
+			selector: `[class*="${getSelectorByType("column", { name: settings.name })}"]`,
+		})
 	);
 
 	// void:after
@@ -281,8 +350,8 @@ function getRules(grid) {
 		rules.push(
 			getComponentRules(grid, {
 				component: "void:after",
-				selector: `.${settings.name}-void:after`,
-			}),
+				selector: `.${getSelectorByType("void")}:after`,
+			})
 		);
 	}
 
@@ -294,23 +363,22 @@ function getRules(grid) {
 				// column
 				getComponentRules(grid, {
 					component: "column",
-					selector: `.${getSelectorByNamePattern("column", { name: settings.name, span: i })}`,
+					selector: `.${getSelectorByType("column", { span: i })}`,
 				}),
 				// column-x column
 				getComponentRules(grid, {
 					component: "column:nested",
-					selector: `[class*="${getSelectorByNamePattern("column", {
-						name: settings.name,
+					selector: `[class*="${getSelectorByType("column", {
 						span: i,
-					})}"] [class*="${getSelectorByNamePattern("column", { name: settings.name })}"]`,
+					})}"] [class*="${getSelectorByType("column", { name: settings.name })}"]`,
 					index: i,
 				}),
 				// column-x void
 				getComponentRules(grid, {
 					component: "void:nested",
-					selector: `[class*="${getSelectorByNamePattern("column", { name: settings.name, span: i })}"] .${settings.name}-void`,
+					selector: `[class*="${getSelectorByType("column", { span: i })}"] .${getSelectorByType("void")}`,
 					index: i,
-				}),
+				})
 			);
 		}
 
@@ -318,18 +386,18 @@ function getRules(grid) {
 			// push
 			getComponentRules(grid, {
 				component: "push",
-				selector: `.${settings.name}-push-${i}`,
+				selector: `.${getSelectorByType("push", { span: i })}`,
 			}),
 			// pull
 			getComponentRules(grid, {
 				component: "pull",
-				selector: `.${settings.name}-pull-${i}`,
+				selector: `.${getSelectorByType("pull", { span: i })}`,
 			}),
 			// offset
 			getComponentRules(grid, {
 				component: "offset",
-				selector: `.${getSelectorByNamePattern("offset", { name: settings.name, span: i })}`,
-			}),
+				selector: `.${getSelectorByType("offset", { span: i })}`,
+			})
 		);
 	}
 
@@ -342,18 +410,18 @@ function getRules(grid) {
 			// container
 			getComponentRules(curViewport, {
 				component: "container",
-				selector: `.${settings.name}-container`,
+				selector: `.${getSelectorByType("container")}`,
 			}),
 			// void
 			getComponentRules(curViewport, {
 				component: "void",
-				selector: `.${settings.name}-void`,
+				selector: `.${getSelectorByType("void")}`,
 			}),
 			// column-basic
 			getComponentRules(curViewport, {
 				component: "column-basic",
-				selector: `[class*="${getSelectorByNamePattern("column", { name: settings.name, mq: settings.viewportName })}"]`,
-			}),
+				selector: `[class*="${getSelectorByType("column", { mq: settings.viewportName })}"]`,
+			})
 		);
 
 		for (let i = 0; i <= settings.columnCount; i++) {
@@ -364,47 +432,45 @@ function getRules(grid) {
 					// column
 					getComponentRules(curViewport, {
 						component: "column",
-						selector: `.${getSelectorByNamePattern("column", { name: settings.name, span: i, mq: settings.viewportName })}`,
+						selector: `.${getSelectorByType("column", { span: i, mq: settings.viewportName })}`,
 					}),
 					// column-x column
 					getComponentRules(grid, {
 						component: "column:nested",
-						selector: `[class*="${getSelectorByNamePattern("column", {
-							name: settings.name,
+						selector: `[class*="${getSelectorByType("column", {
 							span: i,
 							mq: settings.viewportName,
-						})}"] [class*="${settings.name}-column"]`,
+						})}"] [class*="${getSelectorByType("column")}"]`,
 						index: i,
 					}),
 					// column-x void
 					getComponentRules(grid, {
 						component: "void:nested",
-						selector: `[class*="${getSelectorByNamePattern("column", {
-							name: settings.name,
+						selector: `[class*="${getSelectorByType("column", {
 							span: i,
 							mq: settings.viewportName,
-						})}"] .${settings.name}-void`,
+						})}"] .${getSelectorByType("void")}`,
 						index: i,
-					}),
+					})
 				);
 			}
 
 			atRule.append(
-				// push
+				// push HIER
 				getComponentRules(curViewport, {
 					component: "push",
-					selector: `.${settings.name}-push-${settings.viewportName}-${i}`,
+					selector: `.${getSelectorByType("push", { mq: settings.viewportName, span: i })}`,
 				}),
 				// pull
 				getComponentRules(curViewport, {
 					component: "pull",
-					selector: `.${settings.name}-pull-${settings.viewportName}-${i}`,
+					selector: `.${getSelectorByType("pull", { mq: settings.viewportName, span: i })}`,
 				}),
 				// offset
 				getComponentRules(curViewport, {
 					component: "offset",
-					selector: `.${getSelectorByNamePattern("offset", { name: settings.name, span: i, mq: settings.viewportName })}`,
-				}),
+					selector: `.${getSelectorByType("offset", { span: i, mq: settings.viewportName })}`,
+				})
 			);
 		}
 
