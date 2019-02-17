@@ -241,52 +241,20 @@ function getSelectorByType(type, data = {}) {
 
 	let pattern;
 	switch (true) {
-		case type == "container": {
-			pattern = namingPatterns["naming-container"];
+		case haveSpanMQ: {
+			pattern = namingPatterns[`naming-${type}-mq-span`];
 			break;
 		}
-		case type == "void": {
-			pattern = namingPatterns["naming-void"];
+		case haveMQ: {
+			pattern = namingPatterns[`naming-${type}-mq`];
 			break;
 		}
-		case type == "push": {
-			if (haveSpanMQ) {
-				pattern = namingPatterns["naming-push-mq-span"];
-			} else if (haveSpan) {
-				pattern = namingPatterns["naming-push-span"];
-			} else {
-				pattern = namingPatterns["naming-push"];
-			}
+		case haveSpan: {
+			pattern = namingPatterns[`naming-${type}-span`];
 			break;
 		}
-		case type == "pull": {
-			if (haveSpanMQ) {
-				pattern = namingPatterns["naming-pull-mq-span"];
-			} else if (haveSpan) {
-				pattern = namingPatterns["naming-pull-span"];
-			} else {
-				pattern = namingPatterns["naming-pull"];
-			}
-			break;
-		}
-	}
-	if (pattern == null) {
-		switch (true) {
-			case haveSpanMQ: {
-				pattern = namingPatterns[`naming-${type}-mq-span`];
-				break;
-			}
-			case haveMQ: {
-				pattern = namingPatterns[`naming-${type}-mq`];
-				break;
-			}
-			case haveSpan: {
-				pattern = namingPatterns[`naming-${type}-span`];
-				break;
-			}
-			default: {
-				pattern = namingPatterns[`naming-${type}`];
-			}
+		default: {
+			pattern = namingPatterns[`naming-${type}`];
 		}
 	}
 
