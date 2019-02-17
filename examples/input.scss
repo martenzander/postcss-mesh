@@ -7,12 +7,12 @@
 	gutter: 30px;
 	name: mesh;
 	use-name-prefix: false;
-	naming-column: spalte;
-	naming-offset: abstand;
-	naming-void: reihe;
-	naming-container: kiste;
-	naming-push: rechts;
-	naming-pull: links;
+	naming-column: col;
+	naming-offset: off;
+	naming-void: row;
+	naming-container: container;
+	naming-push: push;
+	naming-pull: pull;
 	exclude-columns: 1,2;
 	query-condition: min-width;
 	responsive-gutter: false;
