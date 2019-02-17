@@ -54,7 +54,7 @@ function updateSettings(obj) {
 	settings.columnSingleWidth = 100 / settings.columnCount;
 
 	// naming
-	const namingProps = ["span", "offset", "void", "container", "push", "pull"];
+	const namingProps = ["column", "offset", "void", "container", "push", "pull"];
 	for (let i = 0; i < namingProps.length; i++) {
 		const namingProp = `naming-${namingProps[i]}`;
 		if (namingProp in obj) settings[namingProp] = obj[namingProp];
@@ -293,7 +293,7 @@ function getSelectorByType(type, data = {}) {
 	let selector = pattern.replace(/\|SPAN\|/gm, data.span).replace(/\|MQ\|/gm, data.mq);
 
 	selector = selector
-		.replace(/\|COLUMN\|/gm, settings["naming-span"])
+		.replace(/\|COLUMN\|/gm, settings["naming-column"])
 		.replace(/\|OFFSET\|/gm, settings["naming-offset"])
 		.replace(/\|VOID\|/gm, settings["naming-void"])
 		.replace(/\|CONTAINER\|/gm, settings["naming-container"])
