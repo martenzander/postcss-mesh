@@ -41,6 +41,8 @@ function updateSettings(obj) {
 		settings.calcedContainerWidth = getCalcedContainerWidth(obj);
 	}
 
+	if ("container-base-width-unit" in obj) settings.containerBaseWidthUnit = obj["container-base-width-unit"];
+
 	// viewportWidth
 	if ("viewport" in obj) settings.viewportWidth = parseInt(obj.viewport.substring(0, obj.viewport.length - 1));
 
@@ -98,6 +100,9 @@ function getPropValue(component, property) {
 			case "container":
 				if (property.name.indexOf("padding") >= 0) {
 					value = settings.gutterOnOutside ? `${settings.gutter}px` : undefined;
+				} else if (property.name === "width") {
+					defaultValue();
+					value += settings.containerBaseWidthUnit;
 				} else {
 					defaultValue();
 				}

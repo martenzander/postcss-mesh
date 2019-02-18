@@ -1,5 +1,6 @@
 {
 	"containerWidth": "100%",
+	"containerBaseWidthUnit": "%",
 	"columnAlign": "top",
 	"columnCount": 12,
 	"columnWidth": "0%",
@@ -54,7 +55,7 @@
 		},
 		"width": {
 			"viewportRelevant": false,
-			"value": "100%"
+			"value": "100"
 		}
 	},
 	"void": {
