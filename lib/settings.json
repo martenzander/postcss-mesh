@@ -21,6 +21,9 @@
 	"naming-push": "push",
 	"naming-pull": "pull",
 	"exclude-columns": "",
+	"exclude-offsets": "",
+	"exclude-pulls": "",
+	"exclude-pushes": "",
 	"queryCondition": {
 		"value": "min-width",
 		"options": ["min-width", "max-width"]

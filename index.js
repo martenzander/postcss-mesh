@@ -62,10 +62,15 @@ function updateSettings(obj) {
 		if (namingProp in obj) settings[namingProp] = obj[namingProp];
 	}
 
+	// use-name-prefix
 	if ("use-name-prefix" in obj) settings["use-name-prefix"] = obj["use-name-prefix"] == "true";
 
-	// exclude-columns
-	if ("exclude-columns" in obj) settings["exclude-columns"] = obj["exclude-columns"].split(",").map(col => parseInt(col));
+	// excludes
+	const excludes = ["columns", "offsets", "pulls", "pushes"];
+	for (let i = 0; i < excludes.length; i++) {
+		const exclude = `exclude-${excludes[i]}`;
+		if (exclude in obj) settings[exclude] = obj[exclude].split(",").map(col => parseInt(col));
+	}
 }
 
 function updateColumnWidth(fac) {
@@ -282,8 +287,8 @@ function getSelectorByType(type, data = {}) {
 	return selector;
 }
 
-function excludeColumn(column) {
-	return settings["exclude-columns"].includes(column);
+function excludeSpanByType(type, span) {
+	return settings[`exclude-${type}`].includes(span);
 }
 
 function getRules(grid) {
@@ -331,7 +336,7 @@ function getRules(grid) {
 	for (let i = 0; i <= settings.columnCount; i++) {
 		updateColumnWidth(i);
 
-		if (i !== 0 && !excludeColumn(i)) {
+		if (i !== 0 && !excludeSpanByType("columns", i)) {
 			rules.push(
 				// column
 				getComponentRules(grid, {
@@ -355,23 +360,33 @@ function getRules(grid) {
 			);
 		}
 
-		rules.push(
-			// push
-			getComponentRules(grid, {
-				component: "push",
-				selector: `.${getSelectorByType("push", { span: i })}`,
-			}),
-			// pull
-			getComponentRules(grid, {
-				component: "pull",
-				selector: `.${getSelectorByType("pull", { span: i })}`,
-			}),
-			// offset
-			getComponentRules(grid, {
-				component: "offset",
-				selector: `.${getSelectorByType("offset", { span: i })}`,
-			})
-		);
+		if (!excludeSpanByType("pushes", i)) {
+			rules.push(
+				// push
+				getComponentRules(grid, {
+					component: "push",
+					selector: `.${getSelectorByType("push", { span: i })}`,
+				})
+			);
+		}
+		if (!excludeSpanByType("pulls", i)) {
+			rules.push(
+				// pull
+				getComponentRules(grid, {
+					component: "pull",
+					selector: `.${getSelectorByType("pull", { span: i })}`,
+				})
+			);
+		}
+		if (!excludeSpanByType("offsets", i)) {
+			rules.push(
+				// offset
+				getComponentRules(grid, {
+					component: "offset",
+					selector: `.${getSelectorByType("offset", { span: i })}`,
+				})
+			);
+		}
 	}
 
 	for (const key in grid.sortedViewports) {
@@ -400,7 +415,7 @@ function getRules(grid) {
 		for (let i = 0; i <= settings.columnCount; i++) {
 			updateColumnWidth(i);
 
-			if (i !== 0 && !excludeColumn(i)) {
+			if (i !== 0 && !excludeSpanByType("columns", i)) {
 				atRule.append(
 					// column
 					getComponentRules(curViewport, {
@@ -428,23 +443,35 @@ function getRules(grid) {
 				);
 			}
 
-			atRule.append(
-				// push HIER
-				getComponentRules(curViewport, {
-					component: "push",
-					selector: `.${getSelectorByType("push", { mq: settings.viewportName, span: i })}`,
-				}),
-				// pull
-				getComponentRules(curViewport, {
-					component: "pull",
-					selector: `.${getSelectorByType("pull", { mq: settings.viewportName, span: i })}`,
-				}),
-				// offset
-				getComponentRules(curViewport, {
-					component: "offset",
-					selector: `.${getSelectorByType("offset", { span: i, mq: settings.viewportName })}`,
-				})
-			);
+			if (!excludeSpanByType("pushes", i)) {
+				atRule.append(
+					// push
+					getComponentRules(curViewport, {
+						component: "push",
+						selector: `.${getSelectorByType("push", { mq: settings.viewportName, span: i })}`,
+					})
+				);
+			}
+
+			if (!excludeSpanByType("pulls", i)) {
+				atRule.append(
+					// pull
+					getComponentRules(curViewport, {
+						component: "pull",
+						selector: `.${getSelectorByType("pull", { mq: settings.viewportName, span: i })}`,
+					})
+				);
+			}
+
+			if (!excludeSpanByType("offsets", i)) {
+				atRule.append(
+					// offset
+					getComponentRules(curViewport, {
+						component: "offset",
+						selector: `.${getSelectorByType("offset", { span: i, mq: settings.viewportName })}`,
+					})
+				);
+			}
 		}
 
 		rules.push(atRule);
