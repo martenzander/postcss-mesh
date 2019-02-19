@@ -71,6 +71,11 @@ function updateSettings(obj) {
 		const exclude = `exclude-${excludes[i]}`;
 		if (exclude in obj) settings[exclude] = obj[exclude].split(",").map(col => parseInt(col));
 	}
+
+	// exclude-debug-style
+	if ("exclude-debug-styles-enabled" in obj) settings.excludeDebugStyles.enabled = obj["exclude-debug-styles-enabled"] == "true";
+	if ("exclude-debug-styles-prop" in obj) settings.excludeDebugStyles.style.prop = obj["exclude-debug-styles-prop"];
+	if ("exclude-debug-styles-value" in obj) settings.excludeDebugStyles.style.value = obj["exclude-debug-styles-value"];
 }
 
 function updateColumnWidth(fac) {
@@ -219,6 +224,10 @@ function getComponentRules(viewport, options) {
 				})
 			);
 		}
+
+		if (options.drawDebug) {
+			rule.append(postcss.decl(settings.excludeDebugStyles.style));
+		}
 	}
 	return rule;
 }
@@ -295,6 +304,8 @@ function getRules(grid) {
 	updateSettings(grid);
 	const rules = [];
 
+	const debugStyles = settings.excludeDebugStyles.enabled;
+
 	rules.push(
 		// container
 		getComponentRules(grid, {
@@ -333,15 +344,22 @@ function getRules(grid) {
 		);
 	}
 
+	let excludeIt = false;
+	let drawDebug = false;
+
 	for (let i = 0; i <= settings.columnCount; i++) {
 		updateColumnWidth(i);
 
-		if (i !== 0 && !excludeSpanByType("columns", i)) {
+		excludeIt = excludeSpanByType("columns", i);
+		drawDebug = excludeSpanByType("columns", i) && debugStyles;
+
+		if (i !== 0 && (!excludeIt || debugStyles)) {
 			rules.push(
 				// column
 				getComponentRules(grid, {
 					component: "column",
 					selector: `.${getSelectorByType("column", { span: i })}`,
+					drawDebug,
 				}),
 				// column-x column
 				getComponentRules(grid, {
@@ -360,30 +378,44 @@ function getRules(grid) {
 			);
 		}
 
-		if (!excludeSpanByType("pushes", i)) {
+		excludeIt = excludeSpanByType("pushes", i);
+		drawDebug = excludeSpanByType("pushes", i) && debugStyles;
+
+		if (!excludeIt || debugStyles) {
 			rules.push(
 				// push
 				getComponentRules(grid, {
 					component: "push",
 					selector: `.${getSelectorByType("push", { span: i })}`,
+					drawDebug,
 				})
 			);
 		}
-		if (!excludeSpanByType("pulls", i)) {
+
+		excludeIt = excludeSpanByType("pulls", i);
+		drawDebug = excludeSpanByType("pulls", i) && debugStyles;
+
+		if (!excludeIt || debugStyles) {
 			rules.push(
 				// pull
 				getComponentRules(grid, {
 					component: "pull",
 					selector: `.${getSelectorByType("pull", { span: i })}`,
+					drawDebug,
 				})
 			);
 		}
-		if (!excludeSpanByType("offsets", i)) {
+
+		excludeIt = excludeSpanByType("offsets", i);
+		drawDebug = excludeSpanByType("offsets", i) && debugStyles;
+
+		if (!excludeIt || debugStyles) {
 			rules.push(
 				// offset
 				getComponentRules(grid, {
 					component: "offset",
 					selector: `.${getSelectorByType("offset", { span: i })}`,
+					drawDebug,
 				})
 			);
 		}
