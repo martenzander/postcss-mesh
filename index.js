@@ -351,7 +351,7 @@ function getRules(grid) {
 		updateColumnWidth(i);
 
 		excludeIt = excludeSpanByType("columns", i);
-		drawDebug = excludeSpanByType("columns", i) && debugStyles;
+		drawDebug = excludeIt && debugStyles;
 
 		if (i !== 0 && (!excludeIt || debugStyles)) {
 			rules.push(
@@ -368,18 +368,20 @@ function getRules(grid) {
 						span: i,
 					})}"] [class*="${getSelectorByType("column", { name: settings.name })}"]`,
 					index: i,
+					drawDebug,
 				}),
 				// column-x void
 				getComponentRules(grid, {
 					component: "void:nested",
 					selector: `[class*="${getSelectorByType("column", { span: i })}"] .${getSelectorByType("void")}`,
 					index: i,
+					drawDebug,
 				})
 			);
 		}
 
 		excludeIt = excludeSpanByType("pushes", i);
-		drawDebug = excludeSpanByType("pushes", i) && debugStyles;
+		drawDebug = excludeIt && debugStyles;
 
 		if (!excludeIt || debugStyles) {
 			rules.push(
@@ -393,7 +395,7 @@ function getRules(grid) {
 		}
 
 		excludeIt = excludeSpanByType("pulls", i);
-		drawDebug = excludeSpanByType("pulls", i) && debugStyles;
+		drawDebug = excludeIt && debugStyles;
 
 		if (!excludeIt || debugStyles) {
 			rules.push(
@@ -407,7 +409,7 @@ function getRules(grid) {
 		}
 
 		excludeIt = excludeSpanByType("offsets", i);
-		drawDebug = excludeSpanByType("offsets", i) && debugStyles;
+		drawDebug = excludeIt && debugStyles;
 
 		if (!excludeIt || debugStyles) {
 			rules.push(
@@ -447,12 +449,16 @@ function getRules(grid) {
 		for (let i = 0; i <= settings.columnCount; i++) {
 			updateColumnWidth(i);
 
-			if (i !== 0 && !excludeSpanByType("columns", i)) {
+			excludeIt = excludeSpanByType("columns", i);
+			drawDebug = excludeIt && debugStyles;
+
+			if (i !== 0 && (!excludeIt || debugStyles)) {
 				atRule.append(
 					// column
 					getComponentRules(curViewport, {
 						component: "column",
 						selector: `.${getSelectorByType("column", { span: i, mq: settings.viewportName })}`,
+						drawDebug,
 					}),
 					// column-x column
 					getComponentRules(grid, {
@@ -462,6 +468,7 @@ function getRules(grid) {
 							mq: settings.viewportName,
 						})}"] [class*="${getSelectorByType("column")}"]`,
 						index: i,
+						drawDebug,
 					}),
 					// column-x void
 					getComponentRules(grid, {
@@ -471,36 +478,49 @@ function getRules(grid) {
 							mq: settings.viewportName,
 						})}"] .${getSelectorByType("void")}`,
 						index: i,
+						drawDebug,
 					})
 				);
 			}
 
-			if (!excludeSpanByType("pushes", i)) {
+			excludeIt = excludeSpanByType("pushes", i);
+			drawDebug = excludeIt && debugStyles;
+
+			if (!excludeIt || debugStyles) {
 				atRule.append(
 					// push
 					getComponentRules(curViewport, {
 						component: "push",
 						selector: `.${getSelectorByType("push", { mq: settings.viewportName, span: i })}`,
+						drawDebug,
 					})
 				);
 			}
 
-			if (!excludeSpanByType("pulls", i)) {
+			excludeIt = excludeSpanByType("pulls", i);
+			drawDebug = excludeIt && debugStyles;
+
+			if (!excludeIt || debugStyles) {
 				atRule.append(
 					// pull
 					getComponentRules(curViewport, {
 						component: "pull",
 						selector: `.${getSelectorByType("pull", { mq: settings.viewportName, span: i })}`,
+						drawDebug,
 					})
 				);
 			}
 
-			if (!excludeSpanByType("offsets", i)) {
+			excludeIt = excludeSpanByType("offsets", i);
+			drawDebug = excludeIt && debugStyles;
+
+			if (!excludeIt || debugStyles) {
 				atRule.append(
 					// offset
 					getComponentRules(curViewport, {
 						component: "offset",
 						selector: `.${getSelectorByType("offset", { span: i, mq: settings.viewportName })}`,
+						drawDebug,
 					})
 				);
 			}
