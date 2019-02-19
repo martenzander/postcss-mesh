@@ -20,6 +20,10 @@
 	query-condition: min-width;
 	responsive-gutter: false;
 
+	exclude-debug-styles-enabled: true;
+	exclude-debug-styles-prop: border;
+	exclude-debug-styles-value: 1px solid yellow;
+
 	@mesh-viewport-sm {
 		container-width: 540px;
 		viewport: 576px;

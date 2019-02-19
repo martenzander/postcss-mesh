@@ -24,6 +24,13 @@
 	"exclude-offsets": "",
 	"exclude-pulls": "",
 	"exclude-pushes": "",
+	"excludeDebugStyles": {
+		"enabled": false,
+		"style": {
+			"prop": "outline",
+			"value": "2px dotted green"
+		}
+	},
 	"queryCondition": {
 		"value": "min-width",
 		"options": ["min-width", "max-width"]
