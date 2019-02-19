@@ -304,7 +304,7 @@ function getRules(grid) {
 	updateSettings(grid);
 	const rules = [];
 
-	const debugStyles = settings.excludeDebugStyles.enabled;
+	const debugStyles = settings.excludeDebugStyles.enabled && process.env.NODE_ENV !== "production";
 
 	rules.push(
 		// container
