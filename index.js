@@ -11,7 +11,7 @@ const getInlineSettings = require("./utils/getInlineSettings");
 const valueConversion = require("./lib/valueConversion.json");
 const basicComponents = ["push", "push-basic", "pull", "pull-basic", "column", "offset", "void:after"];
 
-function updateSettings(obj) {
+function updateSettings(obj, viewportRelevant) {
 	// columnAlign
 	if ("column-align" in obj) settings.columnAlign = obj["column-align"];
 
@@ -41,7 +41,8 @@ function updateSettings(obj) {
 		settings.calcedContainerWidth = getCalcedContainerWidth(obj);
 	}
 
-	if ("container-base-width-unit" in obj) settings.containerBaseWidthUnit = obj["container-base-width-unit"];
+	// containerBaseWidthUnit
+	if ("container-base-width-unit" in obj && !viewportRelevant) settings.containerBaseWidthUnit = obj["container-base-width-unit"];
 
 	// viewportWidth
 	if ("viewport" in obj) settings.viewportWidth = parseInt(obj.viewport.substring(0, obj.viewport.length - 1));
@@ -59,11 +60,11 @@ function updateSettings(obj) {
 	const namingProps = ["column", "offset", "void", "container", "push", "pull"];
 	for (let i = 0; i < namingProps.length; i++) {
 		const namingProp = `naming-${namingProps[i]}`;
-		if (namingProp in obj) settings[namingProp] = obj[namingProp];
+		if (namingProp in obj && !viewportRelevant) settings[namingProp] = obj[namingProp];
 	}
 
 	// use-name-prefix
-	if ("use-name-prefix" in obj) settings["use-name-prefix"] = obj["use-name-prefix"] == "true";
+	if ("use-name-prefix" in obj && !viewportRelevant) settings["use-name-prefix"] = obj["use-name-prefix"] == "true";
 
 	// excludes
 	const excludes = ["columns", "offsets", "pulls", "pushes"];
@@ -73,9 +74,9 @@ function updateSettings(obj) {
 	}
 
 	// debug-style
-	if ("debug" in obj) settings.debug.enabled = obj["debug"] == "true";
-	if ("debug-property" in obj) settings.debug.style.prop = obj["debug-property"];
-	if ("debug-value" in obj) settings.debug.style.value = obj["debug-value"];
+	if ("debug" in obj && !viewportRelevant) settings.debug.enabled = obj["debug"] == "true";
+	if ("debug-property" in obj && !viewportRelevant) settings.debug.style.prop = obj["debug-property"];
+	if ("debug-value" in obj && !viewportRelevant) settings.debug.style.value = obj["debug-value"];
 }
 
 function updateColumnWidth(fac) {
@@ -301,7 +302,7 @@ function excludeSpanByType(type, span) {
 }
 
 function getRules(grid) {
-	updateSettings(grid);
+	updateSettings(grid, false);
 	const rules = [];
 
 	const debug = settings.debug.enabled && process.env.NODE_ENV !== "production";
@@ -425,7 +426,7 @@ function getRules(grid) {
 
 	for (const key in grid.sortedViewports) {
 		const curViewport = grid.sortedViewports[key];
-		updateSettings(curViewport);
+		updateSettings(curViewport, true);
 		const atRule = getAtRule();
 
 		atRule.append(
