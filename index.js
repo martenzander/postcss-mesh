@@ -72,10 +72,10 @@ function updateSettings(obj) {
 		if (exclude in obj) settings[exclude] = obj[exclude].split(",").map(col => parseInt(col));
 	}
 
-	// exclude-debug-style
-	if ("exclude-debug-styles-enabled" in obj) settings.excludeDebugStyles.enabled = obj["exclude-debug-styles-enabled"] == "true";
-	if ("exclude-debug-styles-prop" in obj) settings.excludeDebugStyles.style.prop = obj["exclude-debug-styles-prop"];
-	if ("exclude-debug-styles-value" in obj) settings.excludeDebugStyles.style.value = obj["exclude-debug-styles-value"];
+	// debug-style
+	if ("debug" in obj) settings.debug.enabled = obj["debug"] == "true";
+	if ("debug-property" in obj) settings.debug.style.prop = obj["debug-property"];
+	if ("debug-value" in obj) settings.debug.style.value = obj["debug-value"];
 }
 
 function updateColumnWidth(fac) {
@@ -226,7 +226,7 @@ function getComponentRules(viewport, options) {
 		}
 
 		if (options.drawDebug) {
-			rule.append(postcss.decl(settings.excludeDebugStyles.style));
+			rule.append(postcss.decl(settings.debug.style));
 		}
 	}
 	return rule;
@@ -304,7 +304,7 @@ function getRules(grid) {
 	updateSettings(grid);
 	const rules = [];
 
-	const debugStyles = settings.excludeDebugStyles.enabled && process.env.NODE_ENV !== "production";
+	const debug = settings.debug.enabled && process.env.NODE_ENV !== "production";
 
 	rules.push(
 		// container
@@ -351,9 +351,9 @@ function getRules(grid) {
 		updateColumnWidth(i);
 
 		excludeIt = excludeSpanByType("columns", i);
-		drawDebug = excludeIt && debugStyles;
+		drawDebug = excludeIt && debug;
 
-		if (i !== 0 && (!excludeIt || debugStyles)) {
+		if (i !== 0 && (!excludeIt || debug)) {
 			rules.push(
 				// column
 				getComponentRules(grid, {
@@ -381,9 +381,9 @@ function getRules(grid) {
 		}
 
 		excludeIt = excludeSpanByType("pushes", i);
-		drawDebug = excludeIt && debugStyles;
+		drawDebug = excludeIt && debug;
 
-		if (!excludeIt || debugStyles) {
+		if (!excludeIt || debug) {
 			rules.push(
 				// push
 				getComponentRules(grid, {
@@ -395,9 +395,9 @@ function getRules(grid) {
 		}
 
 		excludeIt = excludeSpanByType("pulls", i);
-		drawDebug = excludeIt && debugStyles;
+		drawDebug = excludeIt && debug;
 
-		if (!excludeIt || debugStyles) {
+		if (!excludeIt || debug) {
 			rules.push(
 				// pull
 				getComponentRules(grid, {
@@ -409,9 +409,9 @@ function getRules(grid) {
 		}
 
 		excludeIt = excludeSpanByType("offsets", i);
-		drawDebug = excludeIt && debugStyles;
+		drawDebug = excludeIt && debug;
 
-		if (!excludeIt || debugStyles) {
+		if (!excludeIt || debug) {
 			rules.push(
 				// offset
 				getComponentRules(grid, {
@@ -450,9 +450,9 @@ function getRules(grid) {
 			updateColumnWidth(i);
 
 			excludeIt = excludeSpanByType("columns", i);
-			drawDebug = excludeIt && debugStyles;
+			drawDebug = excludeIt && debug;
 
-			if (i !== 0 && (!excludeIt || debugStyles)) {
+			if (i !== 0 && (!excludeIt || debug)) {
 				atRule.append(
 					// column
 					getComponentRules(curViewport, {
@@ -484,9 +484,9 @@ function getRules(grid) {
 			}
 
 			excludeIt = excludeSpanByType("pushes", i);
-			drawDebug = excludeIt && debugStyles;
+			drawDebug = excludeIt && debug;
 
-			if (!excludeIt || debugStyles) {
+			if (!excludeIt || debug) {
 				atRule.append(
 					// push
 					getComponentRules(curViewport, {
@@ -498,9 +498,9 @@ function getRules(grid) {
 			}
 
 			excludeIt = excludeSpanByType("pulls", i);
-			drawDebug = excludeIt && debugStyles;
+			drawDebug = excludeIt && debug;
 
-			if (!excludeIt || debugStyles) {
+			if (!excludeIt || debug) {
 				atRule.append(
 					// pull
 					getComponentRules(curViewport, {
@@ -512,9 +512,9 @@ function getRules(grid) {
 			}
 
 			excludeIt = excludeSpanByType("offsets", i);
-			drawDebug = excludeIt && debugStyles;
+			drawDebug = excludeIt && debug;
 
-			if (!excludeIt || debugStyles) {
+			if (!excludeIt || debug) {
 				atRule.append(
 					// offset
 					getComponentRules(curViewport, {

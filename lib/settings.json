@@ -20,17 +20,17 @@
 	"naming-container": "container",
 	"naming-push": "push",
 	"naming-pull": "pull",
-	"exclude-columns": "",
-	"exclude-offsets": "",
-	"exclude-pulls": "",
-	"exclude-pushes": "",
-	"excludeDebugStyles": {
+	"debug": {
 		"enabled": false,
 		"style": {
 			"prop": "outline",
 			"value": "2px dotted green"
 		}
 	},
+	"exclude-columns": "",
+	"exclude-offsets": "",
+	"exclude-pulls": "",
+	"exclude-pushes": "",
 	"queryCondition": {
 		"value": "min-width",
 		"options": ["min-width", "max-width"]
