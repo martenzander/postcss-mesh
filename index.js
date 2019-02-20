@@ -567,7 +567,7 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 				if (JSON.parse(curGrid["compile"])) mesh.append(getRules(curGrid));
 			}
 
-			input.prepend(mesh);
+			input.append(mesh);
 		}
 
 		// main init
