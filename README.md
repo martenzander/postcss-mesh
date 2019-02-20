@@ -411,13 +411,13 @@ Mesh is based on a bunch of properties you can adjust to your needs. Some of the
     <tr>
       <td><code>exclude-pulls</code></td>
       <td>Given integers define spans to exclude from pull classes.</td>
-      <td><code>int</code></td>
+      <td><code>int, int</code></td>
       <td>yes</td>
     </tr>
     <tr>
       <td><code>exclude-pushes</code></td>
       <td>Given integers define spans to exclude from push classes.</td>
-      <td><code>int</code></td>
+      <td><code>int, int</code></td>
       <td>yes</td>
     </tr>
     <tr>
