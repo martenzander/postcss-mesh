@@ -364,16 +364,16 @@ function getRules(grid) {
 				// column-x column
 				getComponentRules(grid, {
 					component: "column:nested",
-					selector: `[class*="${getSelectorByType("column", {
+					selector: `.${getSelectorByType("column", {
 						span: i,
-					})}"] [class*="${getSelectorByType("column", { name: settings.name })}"]`,
+					})} [class*="${getSelectorByType("column", { name: settings.name })}"]`,
 					index: i,
 					drawDebug,
 				}),
 				// column-x void
 				getComponentRules(grid, {
 					component: "void:nested",
-					selector: `[class*="${getSelectorByType("column", { span: i })}"] .${getSelectorByType("void")}`,
+					selector: `.${getSelectorByType("column", { span: i })} .${getSelectorByType("void")}`,
 					index: i,
 					drawDebug,
 				})
@@ -463,20 +463,20 @@ function getRules(grid) {
 					// column-x column
 					getComponentRules(grid, {
 						component: "column:nested",
-						selector: `[class*="${getSelectorByType("column", {
+						selector: `.${getSelectorByType("column", {
 							span: i,
 							mq: settings.viewportName,
-						})}"] [class*="${getSelectorByType("column")}"]`,
+						})} [class*="${getSelectorByType("column")}"]`,
 						index: i,
 						drawDebug,
 					}),
 					// column-x void
 					getComponentRules(grid, {
 						component: "void:nested",
-						selector: `[class*="${getSelectorByType("column", {
+						selector: `.${getSelectorByType("column", {
 							span: i,
 							mq: settings.viewportName,
-						})}"] .${getSelectorByType("void")}`,
+						})} .${getSelectorByType("void")}`,
 						index: i,
 						drawDebug,
 					})
