@@ -1,3 +1,13 @@
+## **v1.1.0** _- 2019-02-20_
+
+- custom classNames
+- exclude components by span
+- debug mode to display excluded classes
+- `container-base-width-unit` to set the default unit of container
+- `use-name-prefix` to to toggle classNames prefix
+- minor changes
+- documentation update
+
 ## **v1.0.1** _- 2018-10-12_
 
 - README.md update

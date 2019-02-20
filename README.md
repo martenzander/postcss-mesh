@@ -26,6 +26,8 @@ Powerful Grid Compiler for <a href="https://github.com/postcss/postcss">PostCSS<
     - [Mobile First || Desktop First](#mobile-first--desktop-first)
     - [Unlimited Breakpoints](#unlimited-breakpoints)
     - [Property Overwrite](#property-overwrite)
+    - [Custom Class Names](#custom-class-names)
+    - [Excluding](#excluding)
 - [Components](#components)
   - [Container](#container)
   - [Void](#void)
@@ -39,7 +41,7 @@ Powerful Grid Compiler for <a href="https://github.com/postcss/postcss">PostCSS<
 
 ## About Mesh
 
-There are a lot of different grid systems already out there and most of them are pretty good. But ☝️ none of them is offering the whole bandwidth of possible options. E.g. I wanted to switch between a `flex`, `inline-block` or `float` based grid as well as I wanted to be able to overwrite certain parameters like [gutter](#properties) or [column-count](#properties) breakpointwise. That is how I came up with the idea to create my very own grid compiler and Mesh was born 🎉🎉🎉.
+There are a lot of different grid systems already out there and most of them are pretty good. But ☝️ none of them is offering the whole bandwidth of possible options. E.g. I wanted to switch between a `flex`, `inline-block` or `float` based grid as well as I wanted to be able to overwrite certain parameters like [gutter](#properties) or [column-count](#properties) breakpoint wise. That is how I came up with the idea to create my very own grid compiler and Mesh was born 🎉🎉🎉.
 
 ## Getting Started
 
@@ -57,49 +59,48 @@ Mesh is based on @-rules. To initiate a new grid use `@mesh-grid`. All breakpoin
 
 ```css
 @mesh-grid {
-	column-count: 12;
-	compile: true;
-	container-width: 100%;
-	display-type: float;
-	gutter-on-outside: true;
-	gutter: 30px;
-	name: mesh;
-	query-condition: min-width;
-	responsive-gutter: false;
+    column-count: 12;
+    compile: true;
+    container-width: 100%;
+    display-type: float;
+    gutter-on-outside: true;
+    gutter: 30px;
+    name: mesh;
+    query-condition: min-width;
+    responsive-gutter: false;
 
-	@mesh-viewport-sm {
-		container-width: 540px;
-		viewport: 576px;
-	}
+    @mesh-viewport-sm {
+        container-width: 540px;
+        viewport: 576px;
+    }
 
-	@mesh-viewport-md {
-		container-width: 720px;
-		viewport: 768px;
-	}
+    @mesh-viewport-md {
+        container-width: 720px;
+        viewport: 768px;
+    }
 
-	@mesh-viewport-lg {
-		container-width: 960px;
-		viewport: 992px;
-	}
+    @mesh-viewport-lg {
+        container-width: 960px;
+        viewport: 992px;
+    }
 
-	@mesh-viewport-xl {
-		container-width: 1140px;
-		viewport: 1200px;
-	}
+    @mesh-viewport-xl {
+        container-width: 1140px;
+        viewport: 1200px;
+    }
 }
 ```
 
 #### HTML
 
 ```html
-// This markup is a two column grid with equal widths
-// for all defined breakpoints.
+// This markup is a two column grid with equal widths // for all defined breakpoints.
 
 <div class="mesh-container">
-  <div class="mesh-void">
-    <div class="mesh-column-6 mesh-column-sm-6 mesh-column-md-6 mesh-column-lg-6 mesh-column-xl-6"></div>
-    <div class="mesh-column-6 mesh-column-sm-6 mesh-column-md-6 mesh-column-lg-6 mesh-column-xl-6"></div>
-  </div>
+    <div class="mesh-void">
+        <div class="mesh-column-6 mesh-column-sm-6 mesh-column-md-6 mesh-column-lg-6 mesh-column-xl-6"></div>
+        <div class="mesh-column-6 mesh-column-sm-6 mesh-column-md-6 mesh-column-lg-6 mesh-column-xl-6"></div>
+    </div>
 </div>
 ```
 
@@ -121,9 +122,9 @@ _This feature inherits the gutter size for the first nested level only._
 // If your screen gets smaller, the gap scales down.
 
 @mesh-grid {
-	viewport: 375px;
-	gutter: 30px;
-	responsive-gutter: true;
+    viewport: 375px;
+    gutter: 30px;
+    responsive-gutter: true;
 }
 ```
 
@@ -141,7 +142,7 @@ Allows you to toggle the [container's](#container) padding which is based on the
 // default: true
 
 @mesh-grid {
-	gutter-on-outside: true;
+    gutter-on-outside: true;
 }
 ```
 
@@ -154,7 +155,7 @@ You can decide if your default viewport is a desktop one or a mobile one using t
 // default: min-width
 
 @mesh-grid {
-	query-condition: min-width;
+    query-condition: min-width;
 }
 ```
 
@@ -167,22 +168,47 @@ Bootstrap comes with five predefined breakpoints (Extra small _<576px_, Small _�
 // properties "container-width" & "viewport" are required
 
 @mesh-viewport-lg {
-	container-width: 960px;
-	viewport: 992px;
+    container-width: 960px;
+    viewport: 992px;
 }
 ```
 
 #### Property Overwrite
 
-Property Overwrite allows you to overwrite some properties breakpointwise, e.g. `gutter`. Learn more about properties [here](#properties).
+Property Overwrite allows you to overwrite some properties breakpoint wise, e.g. `gutter`. Learn more about properties [here](#properties).
 
 ```css
 // default: 30px
 
 @mesh-viewport-lg {
-	gutter: 30px;
+    gutter: 30px;
 }
 ```
+
+#### Custom Class Names
+Overwrite the default classNames to keep them unique, short or both. See the [properties list](#properties) for the whole range of naming properties.
+
+```CSS
+// this changes all selectors containing "column"
+// e.g. ".mesh-column-1" to ".mesh-col-1"
+
+@mesh-grid{
+  naming-column: col;
+}
+```
+
+
+#### Excluding
+It's a fact: Most projects don't use the whole bandwith of available column-spans. This leads to many lines of unused CSS in the final bundle. Thanks to this feature it is possible to exclude certain column-spans for certain [components](#components) viewport wise.
+
+```CSS
+// this how you would exclude ".mesh-column-1" & ".mesh-column-2"
+
+@mesh-grid{
+  exclude-columns: 1,2;
+}
+```
+You can also `exclude-pushes`, `exclude-pulls` & `exclude-offsets`. See the [properties list](#properties) for the whole range of excluding properties.
 
 ## Components
 
@@ -268,15 +294,15 @@ level deep keeping the roots gutter size.
 -->
 
 <div class="mesh-container">
-  <div class="mesh-void">
-    <div class="mesh-column-6"></div>
-    <div class="mesh-column-6">
-      <div class="mesh-void">
+    <div class="mesh-void">
         <div class="mesh-column-6"></div>
-        <div class="mesh-column-6"></div>
-      </div>
+        <div class="mesh-column-6">
+            <div class="mesh-void">
+                <div class="mesh-column-6"></div>
+                <div class="mesh-column-6"></div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 ```
 
@@ -284,7 +310,7 @@ level deep keeping the roots gutter size.
 
 ## Ordering
 
-Sometimes you have to switch position of certain [columns](#column) breakpointwise. Using [push](#push) and [pull](#pull) components you can shift your columns.
+Sometimes you have to switch position of certain [columns](#column) breakpoint wise. Using [push](#push) and [pull](#pull) components you can shift your columns.
 
 ```html
 <!--
@@ -294,10 +320,10 @@ by the width of nine columns to the left.
 -->
 
 <div class="mesh-container">
-  <div class="mesh-void">
-    <div class="mesh-column-9 mesh-push-3"></div>
-    <div class="mesh-column-3 mesh-pull-9"></div>
-  </div>
+    <div class="mesh-void">
+        <div class="mesh-column-9 mesh-push-3"></div>
+        <div class="mesh-column-3 mesh-pull-9"></div>
+    </div>
 </div>
 ```
 
@@ -335,16 +361,64 @@ Mesh is based on a bunch of properties you can adjust to your needs. Some of the
       <td>no</td>
     </tr>
     <tr>
+      <td><code>container-base-width-unit</code></td>
+      <td>Defines the container's <code>width</code> unit.</td>
+      <td><code>%</code> || <code>vw</code></td>
+      <td>yes</td>
+    </tr>
+    <tr>
       <td><code>container-width</code></td>
       <td>Defines the container's <code>max-width</code> property for current viewport.</td>
       <td><code>px</code> || <code>%</code></td>
       <td>yes</td>
     </tr>
     <tr>
+      <td><code>debug</code></td>
+      <td>If set to <code>true</code> Mesh generates excluded classes and extends the style with <code>debug-property</code> of <code>debug-value</code></td>
+      <td><code>true</code> || <code>false</code></td>
+      <td>no</td>
+    </tr>
+    <tr>
+      <td><code>debug-property</code></td>
+      <td>A valid CSS Property for <code>debug</code> style extension.</td>
+      <td>e.g. <code>border</code></td>
+      <td>no</td>
+    </tr>
+    <tr>
+      <td><code>debug-value</code></td>
+      <td>A value for the given <code>debug-property</code>.</td>
+      <td>e.g. <code>1px dotted red</code></td>
+      <td>no</td>
+    </tr>
+    <tr>
       <td><code>display-type</code></td>
       <td>Defines if the grid is inline-block, float or flex based.</td>
       <td><code>inline-block</code> || <code>float</code> || <code>flex</code></td>
       <td>no</td>
+    </tr>
+    <tr>
+      <td><code>exclude-columns</code></td>
+      <td>Given integers define spans to exclude from column classes.</td>
+      <td><code>int, int</code></td>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <td><code>exclude-offsets</code></td>
+      <td>Given integers define spans to exclude from offset classes.</td>
+      <td><code>int, int</code></td>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <td><code>exclude-pulls</code></td>
+      <td>Given integers define spans to exclude from pull classes.</td>
+      <td><code>int, int</code></td>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <td><code>exclude-pushes</code></td>
+      <td>Given integers define spans to exclude from push classes.</td>
+      <td><code>int, int</code></td>
+      <td>yes</td>
     </tr>
     <tr>
       <td><code>gutter</code></td>
@@ -365,6 +439,42 @@ Mesh is based on a bunch of properties you can adjust to your needs. Some of the
       <td>no</td>
     </tr>
     <tr>
+      <td><code>naming-column</code></td>
+      <td>Given string replaces <code>column</code> in all generated selectors.</td>
+      <td><code>string</code></td>
+      <td>no</td>
+    </tr>
+    <tr>
+      <td><code>naming-container</code></td>
+      <td>Given string replaces <code>container</code> in all generated selectors.</td>
+      <td><code>string</code></td>
+      <td>no</td>
+    </tr>
+    <tr>
+      <td><code>naming-offset</code></td>
+      <td>Given string replaces <code>offset</code> in all generated selectors.</td>
+      <td><code>string</code></td>
+      <td>no</td>
+    </tr>
+    <tr>
+      <td><code>naming-pull</code></td>
+      <td>Given string replaces <code>pull</code> in all generated selectors.</td>
+      <td><code>string</code></td>
+      <td>no</td>
+    </tr>
+    <tr>
+      <td><code>naming-push</code></td>
+      <td>Given string replaces <code>push</code> in all generated selectors.</td>
+      <td><code>string</code></td>
+      <td>no</td>
+    </tr>
+    <tr>
+      <td><code>naming-void</code></td>
+      <td>Given string replaces <code>void</code> in all generated selectors.</td>
+      <td><code>string</code></td>
+      <td>no</td>
+    </tr>
+    <tr>
       <td><code>query-condition</code></td>
       <td>Using this property you can decide if you want the compiled styles to be mobile first or desktop first.</td>
       <td><code>min-width</code> || <code>max-width</code></td>
@@ -375,6 +485,12 @@ Mesh is based on a bunch of properties you can adjust to your needs. Some of the
       <td>If set to <code>true</code> the gutter scales as the container grows.</td>
       <td><code>true</code> || <code>false</code></td>
       <td>yes</td>
+    </tr>
+    <tr>
+      <td><code>use-name-prefix</code></td>
+      <td>If set to <code>false</code> Mesh won't use the grid's name as a class prefix.</td>
+      <td><code>true</code> || <code>false</code></td>
+      <td>no</td>
     </tr>
     <tr>
       <td><code>viewport</code></td>

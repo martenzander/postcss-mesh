@@ -1,5 +1,6 @@
 {
 	"containerWidth": "100%",
+	"containerBaseWidthUnit": "%",
 	"columnAlign": "top",
 	"columnCount": 12,
 	"columnWidth": "0%",
@@ -12,6 +13,24 @@
 	"gutter": 15,
 	"gutterUnit": "px",
 	"name": "mesh",
+	"use-name-prefix": true,
+	"naming-column": "column",
+	"naming-offset": "offset",
+	"naming-void": "void",
+	"naming-container": "container",
+	"naming-push": "push",
+	"naming-pull": "pull",
+	"debug": {
+		"enabled": false,
+		"style": {
+			"prop": "outline",
+			"value": "2px dotted green"
+		}
+	},
+	"exclude-columns": "",
+	"exclude-offsets": "",
+	"exclude-pulls": "",
+	"exclude-pushes": "",
 	"queryCondition": {
 		"value": "min-width",
 		"options": ["min-width", "max-width"]
@@ -46,7 +65,7 @@
 		},
 		"width": {
 			"viewportRelevant": false,
-			"value": "100%"
+			"value": "100"
 		}
 	},
 	"void": {
@@ -161,6 +180,10 @@
 		"min-height": {
 			"viewportRelevant": false,
 			"value": "1px"
+		},
+		"font-size": {
+			"viewportRelevant": false,
+			"value": "1rem"
 		}
 	}
 }

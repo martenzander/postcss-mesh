@@ -1,13 +1,28 @@
 @mesh-grid {
 	column-count: 12;
 	compile: true;
+	container-base-width-unit: %;
 	container-width: 100%;
+	debug-property: border;
+	debug-value: 1px solid yellow;
+	debug: true;
 	display-type: float;
+	exclude-columns: 1,2;
+	exclude-offsets: 3,4;
+	exclude-pulls: 5,6;
+	exclude-pushes: 7,8;
 	gutter-on-outside: true;
 	gutter: 30px;
 	name: mesh;
+	naming-column: col;
+	naming-container: container;
+	naming-offset: off;
+	naming-pull: pull;
+	naming-push: push;
+	naming-void: row;
 	query-condition: min-width;
 	responsive-gutter: false;
+	use-name-prefix: false;
 
 	@mesh-viewport-sm {
 		container-width: 540px;

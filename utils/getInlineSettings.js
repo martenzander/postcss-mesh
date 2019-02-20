@@ -21,11 +21,8 @@ module.exports = function(input) {
 			if (!/^mesh-viewport-/.test(decl.parent.name)) {
 				inlineSettings[gridName][decl.prop] = decl.value;
 			} else {
-				const viewport = decl.parent.name.split("-")[
-					decl.parent.name.split("-").length - 1
-				];
-				inlineSettings[gridName].viewports[viewport] =
-					inlineSettings[gridName].viewports[viewport] || {};
+				const viewport = decl.parent.name.split("-")[decl.parent.name.split("-").length - 1];
+				inlineSettings[gridName].viewports[viewport] = inlineSettings[gridName].viewports[viewport] || {};
 				inlineSettings[gridName].viewports[viewport][decl.prop] = decl.value;
 			}
 		});
@@ -42,9 +39,7 @@ module.exports = function(input) {
 		for (const i in currentGrid.viewports) {
 			const currentViewport = currentGrid.viewports[i];
 			let currentBreakpoint = currentViewport.viewport;
-			currentBreakpoint = parseInt(
-				currentBreakpoint.substring(0, currentBreakpoint.length - 2)
-			);
+			currentBreakpoint = parseInt(currentBreakpoint.substring(0, currentBreakpoint.length - 2));
 			tempSortedViewports.push(currentBreakpoint);
 		}
 
@@ -64,9 +59,7 @@ module.exports = function(input) {
 			for (const j in currentGrid.viewports) {
 				const currentSetting = currentGrid.viewports[j];
 				const currentViewport = currentSetting.viewport;
-				const currentBreakpoint = parseInt(
-					currentViewport.substring(0, currentViewport.length - 2)
-				);
+				const currentBreakpoint = parseInt(currentViewport.substring(0, currentViewport.length - 2));
 
 				if (currentBreakpoint === breakpoint) {
 					relatedViewport = currentSetting;
