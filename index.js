@@ -1,5 +1,6 @@
 const postcss = require("postcss");
 const meta = require("./package.json");
+const mesh = postcss.root();
 const name = meta.name;
 const settings = require("./lib/settings.json");
 const version = meta.version;
@@ -201,6 +202,8 @@ function getComponentRules(viewport, options) {
 	const component = options.component;
 	const props = settings[component];
 	const rule = postcss.rule();
+	const debugRule = postcss.rule();
+	debugRule.selector = options.selector;
 	rule.selector = options.selector;
 
 	for (const key in props) {
@@ -227,7 +230,8 @@ function getComponentRules(viewport, options) {
 		}
 
 		if (options.drawDebug) {
-			rule.append(postcss.decl(settings.debug.style));
+			debugRule.append(postcss.decl(settings.debug.style));
+			mesh.append(debugRule);
 		}
 	}
 	return rule;
@@ -537,9 +541,6 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 	return function(input) {
 		// inline css settings
 		let inlineSettings = {};
-
-		// generated CSS
-		const mesh = postcss.root();
 
 		// generate styles for base classes
 		function generateCSS() {

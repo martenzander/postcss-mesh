@@ -1,4 +1,184 @@
 /* ! Grid generated using postcss-mesh v1.0.2 | MIT License | Marten Zander | github.com/SlimMarten/postcss-mesh  */
+.col-1 {
+    border: 1px solid yellow
+}
+.col-1 [class*="col"] {
+    border: 1px solid yellow
+}
+.col-1 .row {
+    border: 1px solid yellow
+}
+.col-2 {
+    border: 1px solid yellow
+}
+.col-2 [class*="col"] {
+    border: 1px solid yellow
+}
+.col-2 .row {
+    border: 1px solid yellow
+}
+.off-3 {
+    border: 1px solid yellow
+}
+.off-4 {
+    border: 1px solid yellow
+}
+.pull-5 {
+    border: 1px solid yellow
+}
+.pull-6 {
+    border: 1px solid yellow
+}
+.push-7 {
+    border: 1px solid yellow
+}
+.push-8 {
+    border: 1px solid yellow
+}
+.col-sm-1 {
+    border: 1px solid yellow
+}
+.col-sm-1 [class*="col"] {
+    border: 1px solid yellow
+}
+.col-sm-1 .row {
+    border: 1px solid yellow
+}
+.col-sm-2 {
+    border: 1px solid yellow
+}
+.col-sm-2 [class*="col"] {
+    border: 1px solid yellow
+}
+.col-sm-2 .row {
+    border: 1px solid yellow
+}
+.off-sm-3 {
+    border: 1px solid yellow
+}
+.off-sm-4 {
+    border: 1px solid yellow
+}
+.pull-sm-5 {
+    border: 1px solid yellow
+}
+.pull-sm-6 {
+    border: 1px solid yellow
+}
+.push-sm-7 {
+    border: 1px solid yellow
+}
+.push-sm-8 {
+    border: 1px solid yellow
+}
+.col-md-1 {
+    border: 1px solid yellow
+}
+.col-md-1 [class*="col"] {
+    border: 1px solid yellow
+}
+.col-md-1 .row {
+    border: 1px solid yellow
+}
+.col-md-2 {
+    border: 1px solid yellow
+}
+.col-md-2 [class*="col"] {
+    border: 1px solid yellow
+}
+.col-md-2 .row {
+    border: 1px solid yellow
+}
+.off-md-3 {
+    border: 1px solid yellow
+}
+.off-md-4 {
+    border: 1px solid yellow
+}
+.pull-md-5 {
+    border: 1px solid yellow
+}
+.pull-md-6 {
+    border: 1px solid yellow
+}
+.push-md-7 {
+    border: 1px solid yellow
+}
+.push-md-8 {
+    border: 1px solid yellow
+}
+.col-lg-1 {
+    border: 1px solid yellow
+}
+.col-lg-1 [class*="col"] {
+    border: 1px solid yellow
+}
+.col-lg-1 .row {
+    border: 1px solid yellow
+}
+.col-lg-2 {
+    border: 1px solid yellow
+}
+.col-lg-2 [class*="col"] {
+    border: 1px solid yellow
+}
+.col-lg-2 .row {
+    border: 1px solid yellow
+}
+.off-lg-3 {
+    border: 1px solid yellow
+}
+.off-lg-4 {
+    border: 1px solid yellow
+}
+.pull-lg-5 {
+    border: 1px solid yellow
+}
+.pull-lg-6 {
+    border: 1px solid yellow
+}
+.push-lg-7 {
+    border: 1px solid yellow
+}
+.push-lg-8 {
+    border: 1px solid yellow
+}
+.col-xl-1 {
+    border: 1px solid yellow
+}
+.col-xl-1 [class*="col"] {
+    border: 1px solid yellow
+}
+.col-xl-1 .row {
+    border: 1px solid yellow
+}
+.col-xl-2 {
+    border: 1px solid yellow
+}
+.col-xl-2 [class*="col"] {
+    border: 1px solid yellow
+}
+.col-xl-2 .row {
+    border: 1px solid yellow
+}
+.off-xl-3 {
+    border: 1px solid yellow
+}
+.off-xl-4 {
+    border: 1px solid yellow
+}
+.pull-xl-5 {
+    border: 1px solid yellow
+}
+.pull-xl-6 {
+    border: 1px solid yellow
+}
+.push-xl-7 {
+    border: 1px solid yellow
+}
+.push-xl-8 {
+    border: 1px solid yellow
+}
 .container {
     display: block;
     margin: 0 auto;
@@ -41,16 +221,13 @@
     margin-left: 0%
 }
 .col-1 {
-    width: 8.333333333333334%;
-    border: 1px solid yellow
+    width: 8.333333333333334%
 }
 .col-1 [class*="col"] {
-    padding: 0 15px;
-    border: 1px solid yellow
+    padding: 0 15px
 }
 .col-1 .row {
-    margin: 0 -15px;
-    border: 1px solid yellow
+    margin: 0 -15px
 }
 .push-1 {
     left: 8.333333333333334%
@@ -62,16 +239,13 @@
     margin-left: 8.333333333333334%
 }
 .col-2 {
-    width: 16.666666666666668%;
-    border: 1px solid yellow
+    width: 16.666666666666668%
 }
 .col-2 [class*="col"] {
-    padding: 0 15px;
-    border: 1px solid yellow
+    padding: 0 15px
 }
 .col-2 .row {
-    margin: 0 -15px;
-    border: 1px solid yellow
+    margin: 0 -15px
 }
 .push-2 {
     left: 16.666666666666668%
@@ -98,8 +272,7 @@
     right: 25%
 }
 .off-3 {
-    margin-left: 25%;
-    border: 1px solid yellow
+    margin-left: 25%
 }
 .col-4 {
     width: 33.333333333333336%
@@ -117,8 +290,7 @@
     right: 33.333333333333336%
 }
 .off-4 {
-    margin-left: 33.333333333333336%;
-    border: 1px solid yellow
+    margin-left: 33.333333333333336%
 }
 .col-5 {
     width: 41.66666666666667%
@@ -133,8 +305,7 @@
     left: 41.66666666666667%
 }
 .pull-5 {
-    right: 41.66666666666667%;
-    border: 1px solid yellow
+    right: 41.66666666666667%
 }
 .off-5 {
     margin-left: 41.66666666666667%
@@ -152,8 +323,7 @@
     left: 50%
 }
 .pull-6 {
-    right: 50%;
-    border: 1px solid yellow
+    right: 50%
 }
 .off-6 {
     margin-left: 50%
@@ -168,8 +338,7 @@
     margin: 0 -15px
 }
 .push-7 {
-    left: 58.333333333333336%;
-    border: 1px solid yellow
+    left: 58.333333333333336%
 }
 .pull-7 {
     right: 58.333333333333336%
@@ -187,8 +356,7 @@
     margin: 0 -15px
 }
 .push-8 {
-    left: 66.66666666666667%;
-    border: 1px solid yellow
+    left: 66.66666666666667%
 }
 .pull-8 {
     right: 66.66666666666667%
@@ -292,16 +460,13 @@
         margin-left: 0%
     }
     .col-sm-1 {
-        width: 8.333333333333334%;
-        border: 1px solid yellow
+        width: 8.333333333333334%
     }
     .col-sm-1 [class*="col"] {
-        padding: 0 15px;
-        border: 1px solid yellow
+        padding: 0 15px
     }
     .col-sm-1 .row {
-        margin: 0 -15px;
-        border: 1px solid yellow
+        margin: 0 -15px
     }
     .push-sm-1 {
         left: 8.333333333333334%
@@ -313,16 +478,13 @@
         margin-left: 8.333333333333334%
     }
     .col-sm-2 {
-        width: 16.666666666666668%;
-        border: 1px solid yellow
+        width: 16.666666666666668%
     }
     .col-sm-2 [class*="col"] {
-        padding: 0 15px;
-        border: 1px solid yellow
+        padding: 0 15px
     }
     .col-sm-2 .row {
-        margin: 0 -15px;
-        border: 1px solid yellow
+        margin: 0 -15px
     }
     .push-sm-2 {
         left: 16.666666666666668%
@@ -349,8 +511,7 @@
         right: 25%
     }
     .off-sm-3 {
-        margin-left: 25%;
-        border: 1px solid yellow
+        margin-left: 25%
     }
     .col-sm-4 {
         width: 33.333333333333336%
@@ -368,8 +529,7 @@
         right: 33.333333333333336%
     }
     .off-sm-4 {
-        margin-left: 33.333333333333336%;
-        border: 1px solid yellow
+        margin-left: 33.333333333333336%
     }
     .col-sm-5 {
         width: 41.66666666666667%
@@ -384,8 +544,7 @@
         left: 41.66666666666667%
     }
     .pull-sm-5 {
-        right: 41.66666666666667%;
-        border: 1px solid yellow
+        right: 41.66666666666667%
     }
     .off-sm-5 {
         margin-left: 41.66666666666667%
@@ -403,8 +562,7 @@
         left: 50%
     }
     .pull-sm-6 {
-        right: 50%;
-        border: 1px solid yellow
+        right: 50%
     }
     .off-sm-6 {
         margin-left: 50%
@@ -419,8 +577,7 @@
         margin: 0 -15px
     }
     .push-sm-7 {
-        left: 58.333333333333336%;
-        border: 1px solid yellow
+        left: 58.333333333333336%
     }
     .pull-sm-7 {
         right: 58.333333333333336%
@@ -438,8 +595,7 @@
         margin: 0 -15px
     }
     .push-sm-8 {
-        left: 66.66666666666667%;
-        border: 1px solid yellow
+        left: 66.66666666666667%
     }
     .pull-sm-8 {
         right: 66.66666666666667%
@@ -544,16 +700,13 @@
         margin-left: 0%
     }
     .col-md-1 {
-        width: 8.333333333333334%;
-        border: 1px solid yellow
+        width: 8.333333333333334%
     }
     .col-md-1 [class*="col"] {
-        padding: 0 15px;
-        border: 1px solid yellow
+        padding: 0 15px
     }
     .col-md-1 .row {
-        margin: 0 -15px;
-        border: 1px solid yellow
+        margin: 0 -15px
     }
     .push-md-1 {
         left: 8.333333333333334%
@@ -565,16 +718,13 @@
         margin-left: 8.333333333333334%
     }
     .col-md-2 {
-        width: 16.666666666666668%;
-        border: 1px solid yellow
+        width: 16.666666666666668%
     }
     .col-md-2 [class*="col"] {
-        padding: 0 15px;
-        border: 1px solid yellow
+        padding: 0 15px
     }
     .col-md-2 .row {
-        margin: 0 -15px;
-        border: 1px solid yellow
+        margin: 0 -15px
     }
     .push-md-2 {
         left: 16.666666666666668%
@@ -601,8 +751,7 @@
         right: 25%
     }
     .off-md-3 {
-        margin-left: 25%;
-        border: 1px solid yellow
+        margin-left: 25%
     }
     .col-md-4 {
         width: 33.333333333333336%
@@ -620,8 +769,7 @@
         right: 33.333333333333336%
     }
     .off-md-4 {
-        margin-left: 33.333333333333336%;
-        border: 1px solid yellow
+        margin-left: 33.333333333333336%
     }
     .col-md-5 {
         width: 41.66666666666667%
@@ -636,8 +784,7 @@
         left: 41.66666666666667%
     }
     .pull-md-5 {
-        right: 41.66666666666667%;
-        border: 1px solid yellow
+        right: 41.66666666666667%
     }
     .off-md-5 {
         margin-left: 41.66666666666667%
@@ -655,8 +802,7 @@
         left: 50%
     }
     .pull-md-6 {
-        right: 50%;
-        border: 1px solid yellow
+        right: 50%
     }
     .off-md-6 {
         margin-left: 50%
@@ -671,8 +817,7 @@
         margin: 0 -15px
     }
     .push-md-7 {
-        left: 58.333333333333336%;
-        border: 1px solid yellow
+        left: 58.333333333333336%
     }
     .pull-md-7 {
         right: 58.333333333333336%
@@ -690,8 +835,7 @@
         margin: 0 -15px
     }
     .push-md-8 {
-        left: 66.66666666666667%;
-        border: 1px solid yellow
+        left: 66.66666666666667%
     }
     .pull-md-8 {
         right: 66.66666666666667%
@@ -796,16 +940,13 @@
         margin-left: 0%
     }
     .col-lg-1 {
-        width: 8.333333333333334%;
-        border: 1px solid yellow
+        width: 8.333333333333334%
     }
     .col-lg-1 [class*="col"] {
-        padding: 0 15px;
-        border: 1px solid yellow
+        padding: 0 15px
     }
     .col-lg-1 .row {
-        margin: 0 -15px;
-        border: 1px solid yellow
+        margin: 0 -15px
     }
     .push-lg-1 {
         left: 8.333333333333334%
@@ -817,16 +958,13 @@
         margin-left: 8.333333333333334%
     }
     .col-lg-2 {
-        width: 16.666666666666668%;
-        border: 1px solid yellow
+        width: 16.666666666666668%
     }
     .col-lg-2 [class*="col"] {
-        padding: 0 15px;
-        border: 1px solid yellow
+        padding: 0 15px
     }
     .col-lg-2 .row {
-        margin: 0 -15px;
-        border: 1px solid yellow
+        margin: 0 -15px
     }
     .push-lg-2 {
         left: 16.666666666666668%
@@ -853,8 +991,7 @@
         right: 25%
     }
     .off-lg-3 {
-        margin-left: 25%;
-        border: 1px solid yellow
+        margin-left: 25%
     }
     .col-lg-4 {
         width: 33.333333333333336%
@@ -872,8 +1009,7 @@
         right: 33.333333333333336%
     }
     .off-lg-4 {
-        margin-left: 33.333333333333336%;
-        border: 1px solid yellow
+        margin-left: 33.333333333333336%
     }
     .col-lg-5 {
         width: 41.66666666666667%
@@ -888,8 +1024,7 @@
         left: 41.66666666666667%
     }
     .pull-lg-5 {
-        right: 41.66666666666667%;
-        border: 1px solid yellow
+        right: 41.66666666666667%
     }
     .off-lg-5 {
         margin-left: 41.66666666666667%
@@ -907,8 +1042,7 @@
         left: 50%
     }
     .pull-lg-6 {
-        right: 50%;
-        border: 1px solid yellow
+        right: 50%
     }
     .off-lg-6 {
         margin-left: 50%
@@ -923,8 +1057,7 @@
         margin: 0 -15px
     }
     .push-lg-7 {
-        left: 58.333333333333336%;
-        border: 1px solid yellow
+        left: 58.333333333333336%
     }
     .pull-lg-7 {
         right: 58.333333333333336%
@@ -942,8 +1075,7 @@
         margin: 0 -15px
     }
     .push-lg-8 {
-        left: 66.66666666666667%;
-        border: 1px solid yellow
+        left: 66.66666666666667%
     }
     .pull-lg-8 {
         right: 66.66666666666667%
@@ -1048,16 +1180,13 @@
         margin-left: 0%
     }
     .col-xl-1 {
-        width: 8.333333333333334%;
-        border: 1px solid yellow
+        width: 8.333333333333334%
     }
     .col-xl-1 [class*="col"] {
-        padding: 0 15px;
-        border: 1px solid yellow
+        padding: 0 15px
     }
     .col-xl-1 .row {
-        margin: 0 -15px;
-        border: 1px solid yellow
+        margin: 0 -15px
     }
     .push-xl-1 {
         left: 8.333333333333334%
@@ -1069,16 +1198,13 @@
         margin-left: 8.333333333333334%
     }
     .col-xl-2 {
-        width: 16.666666666666668%;
-        border: 1px solid yellow
+        width: 16.666666666666668%
     }
     .col-xl-2 [class*="col"] {
-        padding: 0 15px;
-        border: 1px solid yellow
+        padding: 0 15px
     }
     .col-xl-2 .row {
-        margin: 0 -15px;
-        border: 1px solid yellow
+        margin: 0 -15px
     }
     .push-xl-2 {
         left: 16.666666666666668%
@@ -1105,8 +1231,7 @@
         right: 25%
     }
     .off-xl-3 {
-        margin-left: 25%;
-        border: 1px solid yellow
+        margin-left: 25%
     }
     .col-xl-4 {
         width: 33.333333333333336%
@@ -1124,8 +1249,7 @@
         right: 33.333333333333336%
     }
     .off-xl-4 {
-        margin-left: 33.333333333333336%;
-        border: 1px solid yellow
+        margin-left: 33.333333333333336%
     }
     .col-xl-5 {
         width: 41.66666666666667%
@@ -1140,8 +1264,7 @@
         left: 41.66666666666667%
     }
     .pull-xl-5 {
-        right: 41.66666666666667%;
-        border: 1px solid yellow
+        right: 41.66666666666667%
     }
     .off-xl-5 {
         margin-left: 41.66666666666667%
@@ -1159,8 +1282,7 @@
         left: 50%
     }
     .pull-xl-6 {
-        right: 50%;
-        border: 1px solid yellow
+        right: 50%
     }
     .off-xl-6 {
         margin-left: 50%
@@ -1175,8 +1297,7 @@
         margin: 0 -15px
     }
     .push-xl-7 {
-        left: 58.333333333333336%;
-        border: 1px solid yellow
+        left: 58.333333333333336%
     }
     .pull-xl-7 {
         right: 58.333333333333336%
@@ -1194,8 +1315,7 @@
         margin: 0 -15px
     }
     .push-xl-8 {
-        left: 66.66666666666667%;
-        border: 1px solid yellow
+        left: 66.66666666666667%
     }
     .pull-xl-8 {
         right: 66.66666666666667%
