@@ -1,16 +1,12 @@
 {
 	"name": "postcss-mesh",
-	"version": "1.0.2",
+	"version": "1.1.0",
 	"description": "Powerful Grid Compiler for PostCSS",
 	"main": "index.js",
 	"scripts": {
 		"start": "postcss examples/input.scss -o examples/output.css --config postcss.config.js --no-map"
 	},
-	"keywords": [
-		"scss",
-		"grid",
-		"layout"
-	],
+	"keywords": ["scss", "grid", "layout"],
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/SlimMarten/postcss-mesh.git"
