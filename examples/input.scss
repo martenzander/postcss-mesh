@@ -1,6 +1,7 @@
 @mesh-grid {
 	column-count: 12;
 	compile: true;
+	container-base-width-unit: %;
 	container-width: 100%;
 	debug-property: border;
 	debug-value: 1px solid yellow;
