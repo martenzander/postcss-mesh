@@ -9,7 +9,7 @@
 		"options": ["inline-block", "flex", "float"]
 	},
 	"gutterOnOutside": false,
-	"responsiveGutter": true,
+	"responsiveGutter": false,
 	"gutter": 15,
 	"gutterUnit": "px",
 	"name": "mesh",
