@@ -1,12 +1,16 @@
 {
 	"name": "postcss-mesh",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "Powerful Grid Compiler for PostCSS",
 	"main": "index.js",
 	"scripts": {
 		"start": "postcss examples/input.scss -o examples/output.css --config postcss.config.js --no-map"
 	},
-	"keywords": ["scss", "grid", "layout"],
+	"keywords": [
+		"scss",
+		"grid",
+		"layout"
+	],
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/SlimMarten/postcss-mesh.git"
@@ -23,12 +27,13 @@
 		"postcss": "^7.0.2"
 	},
 	"devDependencies": {
+		"eslint": "^5.6.0",
 		"eslint-config-standard": "^12.0.0",
 		"eslint-plugin-import": "^2.14.0",
 		"eslint-plugin-node": "^7.0.1",
 		"eslint-plugin-promise": "^4.0.1",
 		"eslint-plugin-standard": "^4.0.0",
-		"eslint": "^5.6.0",
+		"mesh-helper": "^1.0.1",
 		"postcss-cli": "^6.0.0",
 		"postcss-scss": "^2.0.0"
 	}
