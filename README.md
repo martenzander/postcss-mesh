@@ -4,7 +4,7 @@
 Mesh
 </h3>
 <p align="center">
-Powerful Grid Compiler for <a href="https://github.com/postcss/postcss">PostCSS</a>
+The powerful Grid System for <a href="https://github.com/postcss/postcss">PostCSS</a>
 </p>
 <p align="center">
 <a href="https://www.npmjs.com/package/postcss-mesh" rel="nofollow"><img src="https://img.shields.io/npm/v/postcss-mesh.svg" alt="Slack" data-canonical-src="https://img.shields.io/npm/v/postcss-mesh.svg" style="max-width:100%;"></a>
