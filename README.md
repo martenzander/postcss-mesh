@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="https://raw.githubusercontent.com/SlimMarten/postcss-mesh/development/assets/img/logo.png" align="center">
+	<a href="https://www.postcss-mesh.org" rel="nofollow"><img src="https://raw.githubusercontent.com/SlimMarten/postcss-mesh/development/assets/img/logo.png" align="center"></a>
 <h3 align="center">
 Mesh
 </h3>
