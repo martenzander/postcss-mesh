@@ -1,4 +1,4 @@
-const settings = require("./../lib/settings.json");
+const settings = require("./../lib/settings.js");
 const inlineSettings = {};
 
 module.exports = function(input) {
