@@ -2,7 +2,7 @@ const postcss = require("postcss");
 const meta = require("./package.json");
 const mesh = postcss.root();
 const name = meta.name;
-const settings = require("./lib/settings.json");
+const defaultSettings = require("./lib/settings.js");
 const version = meta.version;
 const author = meta.author.name;
 const license = meta.license;
@@ -11,6 +11,7 @@ const getCalcedContainerWidth = require("./utils/getCalcedContainerWidth");
 const getInlineSettings = require("./utils/getInlineSettings");
 const valueConversion = require("./lib/valueConversion.json");
 const basicComponents = ["push", "push-basic", "pull", "pull-basic", "column", "offset", "void:after"];
+let settings = {};
 
 function updateSettings(obj, viewportRelevant) {
 	// columnAlign
@@ -551,6 +552,7 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 			mesh.append(licenseNotification);
 
 			for (const key in inlineSettings) {
+				settings = JSON.parse(JSON.stringify(defaultSettings));
 				const curGrid = inlineSettings[key];
 
 				// set name

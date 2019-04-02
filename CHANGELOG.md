@@ -1,3 +1,8 @@
+## **v1.1.3** _- 2019-04-02_
+
+- fix settings reset problem on recompile
+- minor changes
+
 ## **v1.1.0** _- 2019-02-20_
 
 - custom classNames
