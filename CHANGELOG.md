@@ -1,3 +1,7 @@
+## **v1.1.4** _- 2019-04-03_
+
+- fixes multiple grid generation if using CSS Modules
+
 ## **v1.1.3** _- 2019-04-02_
 
 - fix settings reset problem on recompile
