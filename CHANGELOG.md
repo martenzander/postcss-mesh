@@ -1,6 +1,7 @@
-## **v1.1.4** _- 2019-04-03_
+## **v1.1.5** _- 2019-04-03_
 
 - fixes multiple grid generation if using CSS Modules
+- update mesh-helper to v1.0.3
 
 ## **v1.1.3** _- 2019-04-02_
 
