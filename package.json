@@ -1,6 +1,6 @@
 {
 	"name": "postcss-mesh",
-	"version": "1.1.4",
+	"version": "1.1.5",
 	"description": "Powerful Grid Compiler for PostCSS",
 	"main": "index.js",
 	"scripts": {
@@ -20,7 +20,7 @@
 	},
 	"homepage": "http://www.postcss-mesh.org/",
 	"dependencies": {
-		"mesh-helper": "^1.0.1",
+		"mesh-helper": "^1.0.3",
 		"postcss": "^7.0.2"
 	},
 	"devDependencies": {
