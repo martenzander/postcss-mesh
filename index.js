@@ -575,7 +575,7 @@ module.exports = postcss.plugin("postcss-mesh", function() {
 		// main init
 		function init() {
 			inlineSettings = getInlineSettings(input);
-			generateCSS();
+			if (Object.keys(inlineSettings).length !== 0) generateCSS();
 		}
 
 		/*=====  End of global function  ======*/
