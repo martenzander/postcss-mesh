@@ -20,7 +20,7 @@
 	},
 	"homepage": "http://www.postcss-mesh.org/",
 	"dependencies": {
-		"mesh-helper": "^1.0.4",
+		"mesh-helper": "^1.0.5",
 		"postcss": "^7.0.2"
 	},
 	"devDependencies": {
